@@ -2,36 +2,42 @@ package main
 
 import (
 	"archive/zip"
-	"context"
 	"fmt"
-	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/copy"
-	"github.com/yosssi/gohtml"
+
+	// arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
 	"io"
 	"log"
 	"os"
+
+	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
+	"github.com/yosssi/gohtml"
 )
 
 func main() {
-	unzip("./bundles.zip")
-	CreatePhpDirectories()
-	WriteHtmlToPhp("./bundles/index.html", "./exported/views/index.php")
-	WriteHtmlToPhp("./bundles/tienda/index.html", "./exported/views/shop/index.php")
-	WriteHtmlToPhp("./bundles/menu-malecon/index.html", "./exported/views/menus/menu_malecon.php")
-	popo.Copy(context.TODO(), "./bundles/css/", "./exported/public/")
-	popo.Copy(context.TODO(), "./bundles/js/", "./exported/public/")
-	popo.Copy(context.TODO(), "./bundles/facturar/index.html", "./exported/public/files/")
-	popo.Copy(context.TODO(), "./bundles/images/", "./exported/public/")
+	// Create a new ArrayList with capacity 5
+	web_files_manipulation.Init("./out")
+}
+
+func scannDirectory(directory string) error {
+	entries, err := os.ReadDir(directory)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, e := range entries {
+		fmt.Println(e.Name())
+	}
+	return nil
 }
 
 func WriteHtmlToPhp(fileSource string, fileDestiny string) {
 	dat, _ := os.ReadFile(fileSource)
 	CreatePhpDirectories()
 	formattedHtml := gohtml.FormatBytes((dat))
+	// check if permissions should be like this, because maybe we fuck it up
 	os.WriteFile(fileDestiny, formattedHtml, 0777)
 }
 
 func CreatePhpDirectories() {
-
 	// views directories
 	os.MkdirAll("./exported", 0777)
 	os.MkdirAll("./exported/views/account", 0777)
@@ -39,7 +45,6 @@ func CreatePhpDirectories() {
 	os.MkdirAll("./exported/views/menus", 0777)
 	os.MkdirAll("./exported/views/shop", 0777)
 	os.MkdirAll("./exported/views/shop", 0777)
-
 	// public directories
 	os.MkdirAll("./exported/public/css", 0777)
 	os.MkdirAll("./exported/public/files", 0777)
@@ -52,13 +57,14 @@ func unzip(path string) {
 	if err != nil {
 		log.Fatalf("impossible to open zip reader: %s", err)
 	}
+
 	defer r.Close()
 
 	// Iterate through the files in the archive,
 	for k, f := range r.File {
 		rc, err := f.Open()
 		if err != nil {
-			log.Fatalf("impossible to open file n°%d in archine: %s", k, err)
+			log.Fatalf("impossible to open file n°%d in archive: %s", k, err)
 		}
 		defer rc.Close()
 		// define the new file path

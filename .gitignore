@@ -53,3 +53,5 @@ Temporary Items
 bundles.zip
 bundles/
 exported/*
+out/
+*.zip
