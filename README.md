@@ -59,14 +59,12 @@ Se deberian de copiar en sus propias carpetas espejo
     y sobre ese item colocar el código siguiente: 
 
     ``` 
-     
-                                    
 	<?php include "layouts/cart_mobile.template.php"; ?>
-
-	 
 	``` 
 
-	para los archivos de un nivel más profundo colocar un extra ../
+	para los archivos de un nivel más profundo colocar un extra ../ <-- this is the reason why this is all for today
+
+// this is all for today
 
 ### Paso 4:
 
