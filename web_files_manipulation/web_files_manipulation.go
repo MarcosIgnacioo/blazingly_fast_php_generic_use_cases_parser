@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
+	"github.com/sunshineplan/node"
+	"golang.org/x/net/html"
 )
 
 func Init(sourceDirectory string) {
@@ -68,6 +70,18 @@ func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.Arr
 		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel}
 		files.Enqueue(newFile)
 	}
+}
+
+func insertRawTextBeforeNode(text string, beforeNode node.Node) {
+	textNodeToInsert := &html.Node{
+		Parent:      nil,
+		PrevSibling: nil,
+		NextSibling: nil,
+		Data:        text,
+		Type:        html.RawNode, // XD
+		Attr:        []html.Attribute{},
+	}
+	beforeNode.Raw().InsertBefore(textNodeToInsert, beforeNode.Raw())
 }
 
 // func scannDirectory() error {

@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
+	// "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
@@ -17,8 +17,7 @@ import (
 )
 
 func main() {
-	web_files_manipulation.Init("./out")
-	return
+	// web_files_manipulation.Init("./out")
 	file, _ := os.ReadFile("./out/index.html")
 	htmlContent := string(file)
 	doc, err := node.ParseHTML(htmlContent)
@@ -26,9 +25,24 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	poop := doc.Find(node.Descendant, node.Div, node.Class("separator_initial_cart"))
-	insertRawTextBeforeNode("<?php include \"layouts/cart_mobile.template.php\"; ?>", poop)
-	fmt.Println(gohtml.Format(doc.HTML()))
+	doc.Find(node.Descendant, node.Div)
+	os.WriteFile("popo.html", []byte(insertingIndexPHPHead(doc)), 0777)
+	// poop := doc.Find(node.Descendant, node.Div, node.Class("separator_initial_cart"))
+	// insertRawTextBeforeNode("<?php include \"layouts/cart_mobile.template.php\"; ?>", poop)
+	// fmt.Println(gohtml.Format(doc.HTML()))
+}
+
+func insertingIndexPHPHead(doc node.Node) string {
+	ogHtml := gohtml.Format(doc.HTML())
+	phpHead := `<?php 
+	  include_once "app/config.php"; 
+	  include_once "app/ProductsController.php"; 
+	  $productsController = new ProductsController();   
+	  $cafes = $productsController->getByCategory('cafe');
+	  $merchs = $productsController->getByCategory('merch');
+?>
+`
+	return fmt.Sprintf("%s%s", phpHead, ogHtml)
 }
 
 func insertRawTextBeforeNode(text string, beforeNode node.Node) {
