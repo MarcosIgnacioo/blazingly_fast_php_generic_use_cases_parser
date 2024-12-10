@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
@@ -16,6 +17,8 @@ import (
 )
 
 func main() {
+	web_files_manipulation.Init("./out")
+	return
 	file, _ := os.ReadFile("./out/index.html")
 	htmlContent := string(file)
 	doc, err := node.ParseHTML(htmlContent)

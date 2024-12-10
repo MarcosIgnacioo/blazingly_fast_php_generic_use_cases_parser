@@ -2,7 +2,10 @@ package web_files_manipulation
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
+	"path/filepath"
+	"strings"
 
 	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
 )
@@ -17,8 +20,12 @@ func Init(sourceDirectory string) {
 
 func contentTransformation(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
 	// html a php
-	fmt.Println(directories)
-	fmt.Println(files)
+
+	for i := 0; i < int(files.Length); i++ {
+		file := files.ArrayList[i].(*File)
+		fmt.Println(file.String())
+	}
+
 	for i := 0; i < int(directories.Length); i++ {
 		directory := directories.ArrayList[i]
 		innerDirectories, innerFiles, err := getFilesInDirectory(directory.(string))
@@ -44,10 +51,23 @@ func getFilesInDirectory(directory string) (directories *arraylist.ArrayList, fi
 		if e.IsDir() {
 			directories.Enqueue(fmt.Sprintf("%s/%s", directory, e.Name()))
 		} else {
-			files.Enqueue(e.Name())
+			storeFilesInArray(e, directory, files)
 		}
 	}
 	return
+}
+
+func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.ArrayList) {
+	fileExtension := filepath.Ext(entry.Name())
+	switch fileExtension {
+	case ".html":
+		fileName := entry.Name()
+		fullFilePath := fmt.Sprintf("%s/%s", directory, fileName)
+		fileExtension = filepath.Ext(fileName)
+		nestedLevel := (len(strings.Split(fullFilePath, "/"))/2 - 1)
+		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel}
+		files.Enqueue(newFile)
+	}
 }
 
 // func scannDirectory() error {
