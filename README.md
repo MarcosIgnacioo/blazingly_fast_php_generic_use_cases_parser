@@ -69,19 +69,19 @@ Se deberian de copiar en sus propias carpetas espejo
 ### Paso 4:
 
 - En el index.php de la raiz colocar el siguiente código en la línea principal: 
-	```
-	<?php
+```php
+<?php
 
-	  include_once "app/config.php"; 
-	  include_once "app/ProductsController.php"; 
+  include_once "app/config.php"; 
+  include_once "app/ProductsController.php"; 
 
-	  $productsController = new ProductsController();   
+  $productsController = new ProductsController();   
 
-	  $cafes = $productsController -> getByCategory('cafe');
-	  $merchs = $productsController -> getByCategory('merch');
+  $cafes = $productsController -> getByCategory('cafe');
+  $merchs = $productsController -> getByCategory('merch');
 
-	?>
-	```
+?>
+```
 - Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` product_item_coffe  ```
 - Se deben borrar o comentar los últimos 3 items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
 	```

@@ -12,7 +12,44 @@ import (
 	"os"
 )
 
+var testhtml = `<div class="ed-element ed-container columns-box wv-overflow_visible product_item_all" id="ed-456730256"><div class="inner"><div class="ed-element ed-image" id="ed-456730259"><a href="/tienda/cafe/diablo"><img src="/images/1024/9706732/Coyote-Over.jpg" alt="" srcset="/images/576/9706732/Coyote-Over.jpg 576w, /images/975/9706732/Coyote-Over.jpg 975w"></a></div><div class="ed-element ed-text custom-theme" id="ed-456730262"><p style="line-height: 1.15; text-align: center;"><span style="font-size: 18px; font-family: &quot;daisywhl&quot;;"><a href="/tienda/cafe/diablo" title="">MEZCLA COYOTE</a></span></p><p style="line-height: 1; text-align: center;"><span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &quot;daisywhl&quot;;">DESDE $240</span></p></div></div></div>`
+
+func p(a ...any) {
+	fmt.Println(a)
+}
+
+// possible improvement make this function return true or false if it can change it or not
+func setAttribute(htmlNode *node.Node, attribute string, value string) {
+	attributes := (*htmlNode).Raw().Attr
+	// c goat
+	for i := 0; i < len(attributes); i++ {
+		attr := &attributes[i]
+		if attr.Key == attribute {
+			attr.Val = value
+			break
+		}
+	}
+}
+
 func main() {
+	run()
+	// doc, _ := node.ParseHTML(testhtml)
+	// anchors := doc.FindAll(node.Descendant, node.A)
+	// // imgs := doc.FindAll(node.Descendant, node.Img)
+	// for _, a := range anchors {
+	// 	setAttribute(&a, "href", "caca")
+	// }
+	//
+	// for _, a := range anchors {
+	// 	fmt.Println(a.Raw().Attr)
+	// }
+}
+
+func printHtml(doc node.Node) {
+	fmt.Println(gohtml.Format(doc.HTML()))
+}
+
+func run() {
 	unzip("./1240.zip", "./app")
 	web_files_manipulation.Init("./app")
 }
