@@ -9,6 +9,7 @@ import (
 
 	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
 	"github.com/sunshineplan/node"
+	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
 )
 
@@ -20,12 +21,33 @@ func Init(sourceDirectory string) {
 	contentTransformation(directories, files)
 }
 
+func InsertHeader() {
+}
+
 func contentTransformation(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
 	// html a php
 
 	for i := 0; i < int(files.Length); i++ {
 		file := files.ArrayList[i].(*File)
-		fmt.Println(file.String())
+		if instructions[file.fileParentDir] != nil {
+			fmt.Println(file.filePath)
+			fileReaded, err := os.ReadFile(file.filePath)
+			fileContent := gohtml.Format(string(fileReaded))
+			if err != nil {
+				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
+			}
+
+			for _, instruction := range instructions[file.fileParentDir] {
+				classToSearch := instruction["class"]
+				htmlToInsert := instruction["htmlToInsert"]
+				// switch classToSearch {
+				// case "head":
+				// }
+				fmt.Println(fileContent)
+				fmt.Println("class", classToSearch)
+				fmt.Println("html", htmlToInsert)
+			}
+		}
 	}
 
 	for i := 0; i < int(directories.Length); i++ {
@@ -67,7 +89,8 @@ func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.Arr
 		fullFilePath := fmt.Sprintf("%s/%s", directory, fileName)
 		fileExtension = filepath.Ext(fileName)
 		nestedLevel := (len(strings.Split(fullFilePath, "/"))/2 - 1)
-		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel}
+		parentDirectory := filepath.Base(directory)
+		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel, fileParentDir: parentDirectory}
 		files.Enqueue(newFile)
 	}
 }

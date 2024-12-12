@@ -54,4 +54,7 @@ bundles.zip
 bundles/
 exported/*
 out/
+app/
 *.zip
+*.php
+*.html

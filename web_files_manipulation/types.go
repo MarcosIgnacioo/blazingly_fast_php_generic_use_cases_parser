@@ -28,14 +28,15 @@ const (
 )
 
 type File struct {
-	fileName    string
-	filePath    string
-	fileType    FileType
-	nestedLevel int
+	fileName      string
+	filePath      string
+	fileParentDir string
+	fileType      FileType
+	nestedLevel   int
 }
 
 func (f *File) String() string {
-	return fmt.Sprintf("file_name:\t%s\nfile_path:\t%s\nfile_type:\t%v\nnested_level:\t%d\n", f.fileName, f.filePath, f.fileType, f.nestedLevel)
+	return fmt.Sprintf("file_name:\t%s\nfile_path:\t%s\nfile_type:\t%v\nnested_level:\t%d\nparent_dir:\t%s\n", f.fileName, f.filePath, f.fileType, f.nestedLevel, f.fileParentDir)
 }
 
 func (self *readingFilesInDirectoryError) Error() string {
