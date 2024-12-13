@@ -55,6 +55,7 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 				case "html":
 					targetDiv = doc.Find(node.Descendant, node.Html)
 					insertRawTextBeforeNode(htmlToInsert, targetDiv)
+				// poner que en vez de que el realizar el reemplazo de productos sea el default que sea la cosa que reemplaza la default nomas que no se como hacerle bien porque
 				default:
 					productHref := instruction["href"]
 					productName := instruction["productName"]
