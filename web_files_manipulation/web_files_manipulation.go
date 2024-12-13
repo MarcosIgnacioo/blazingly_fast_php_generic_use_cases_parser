@@ -2,15 +2,13 @@ package web_files_manipulation
 
 import (
 	"fmt"
+	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
+	"github.com/sunshineplan/node"
+	"github.com/yosssi/gohtml"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
-
-	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
-	"github.com/sunshineplan/node"
-	"github.com/yosssi/gohtml"
-	"golang.org/x/net/html"
 )
 
 func p(a ...any) {
@@ -51,46 +49,48 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 				var targetDiv node.Node
 				var deletingDivs []node.Node
 				var parent node.Node
+				// var htmlContent string
 
 				switch classToSearch {
 				case "html":
 					targetDiv = doc.Find(node.Descendant, node.Html)
+					insertRawTextBeforeNode(htmlToInsert, targetDiv)
 				default:
 					productHref := instruction["href"]
 					productName := instruction["productName"]
 					productImg := instruction["img"]
+					productPrice := instruction["price"]
+					productForeach := instruction["foreach"]
+					productClassForName := instruction["className"]
+					productClassForPrice := instruction["classPrice"]
+
 					deletingDivs = doc.FindAll(node.Descendant, node.Div, node.Class(classToSearch))
 					targetDiv = deletingDivs[0]
+					// targetDiv.Find(node.Descendant, node.A, node.Class("product_name"))
 					anchors := targetDiv.FindAll(node.Descendant, node.A)
 					imgs := targetDiv.FindAll(node.Descendant, node.Img)
-					for _, anchor := range anchors {
-						setAttribute(&anchor, "href", productHref)
-						setAttribute(&anchor, "title", productName)
-						fmt.Println(anchor.Raw().Attr)
-					}
+					setUpAnchors(&anchors, productHref, productName)
+					setUpImages(&imgs, productImg, productName)
 
-					for _, img := range imgs {
-						setAttribute(&img, "src", productImg)
-						setAttribute(&img, "srcset", productImg)
-						setAttribute(&img, "alt", productName)
-						fmt.Println(img.Raw().Attr)
-					}
+					// bruhhhh
+					priceSpan := targetDiv.Find(node.Descendant, node.Span, node.Class(productClassForPrice))
+					removeAllChildren(&priceSpan)
+					priceSpan.Raw().AppendChild(newTextHtmlNode(fmt.Sprintf("DESDE $%s", productPrice)))
+
+					nameAnchor := targetDiv.Find(node.Descendant, nil, node.Class(productClassForName))
+					removeAllChildren(&nameAnchor)
+					nameAnchor.Raw().AppendChild(newTextHtmlNode(productName))
+
 					parent = targetDiv.Parent()
+					htmlToInsert = fmt.Sprintf(productForeach, targetDiv.HTML())
+					removeAllChildren(&parent)
+					parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
 				}
 
-				if targetDiv != nil {
-					insertRawTextBeforeNode(htmlToInsert, targetDiv)
-				}
+				// parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
+				fmt.Println(parent, classToSearch)
 
-				if deletingDivs != nil && len(deletingDivs) > 1 {
-					for i := 1; i < len(deletingDivs); i++ {
-						// alomejor ocupa ser un pointer esto
-						div := deletingDivs[i]
-						parent.Raw().RemoveChild(div.Raw())
-					}
-				}
-
-				os.WriteFile("test.php", []byte(doc.HTML()), 0777)
+				os.WriteFile(file.filePath, prepareHTMLForFile(doc), 0777)
 			}
 		}
 	}
@@ -104,6 +104,12 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 		}
 		contentTransformation(innerDirectories, innerFiles)
 	}
+}
+
+func prepareHTMLForFile(doc node.Node) []byte {
+	html := gohtml.Format(doc.HTML())
+	coolerHtml := strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1)
+	return []byte(coolerHtml)
 }
 
 func getFilesInDirectory(directory string) (directories *arraylist.ArrayList, files *arraylist.ArrayList, err error) {
@@ -139,35 +145,3 @@ func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.Arr
 		files.Enqueue(newFile)
 	}
 }
-
-func insertRawTextBeforeNode(text string, beforeNode node.Node) {
-	textNodeToInsert := &html.Node{
-		Parent:      nil,
-		PrevSibling: nil,
-		NextSibling: nil,
-		Data:        text,
-		Type:        html.RawNode, // XD
-		Attr:        []html.Attribute{},
-	}
-	beforeNode.Raw().InsertBefore(textNodeToInsert, beforeNode.Raw())
-}
-
-// possible improvement make this function return true or false if it can change it or not
-func setAttribute(htmlNode *node.Node, attribute string, value string) {
-	attributes := (*htmlNode).Raw().Attr
-	// c goat
-	for i := 0; i < len(attributes); i++ {
-		attr := &attributes[i]
-		if attr.Key == attribute {
-			attr.Val = value
-			break
-		}
-	}
-}
-
-// func scannDirectory() error {
-// 	// scannDirectory(directories[i])
-// }
-
-// func HTMLToPHP(FILE* file) void {
-// }

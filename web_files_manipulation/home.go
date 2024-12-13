@@ -12,29 +12,28 @@ var homeHeader = `
 	?>
 `
 
-var homeProducts = `
-	<?php if (isset($cafes) && count($cafes)): ?>
-        <?php foreach (array_slice($cafes, 0, 4) as $cafe): ?> 
-            <?php $product = $productsController->getQuickView($cafe) ?>
-                    <div class="inner">
-                        <div class="ed-element ed-image product_coffe_home_item" id="ed-456729788">
-                        <a href="<?= $product->url ?>">
-                            <img src="<?= $cafe->cover->full_path ?>" alt="<?= $product->name ?>" title="<?= $product->name ?>" />
-                          </a>
-                        </div>
-                        <div class="ed-element ed-text custom-theme product_coffe_home_item" id="ed-456729791">
-                          <p style="line-height: 1.15; text-align: center;">
-                            <span style="font-size: 18px; font-family: 'daisywhl';">
-                              <a href="<?= $product->url ?>"><?= $product->name ?></a>
-                            </span>
-                          </p>
-                          <p style="line-height: 1; text-align: center;">
-                            <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: 'daisywhl';" class="product_price_home">
-                              DESDE $<?= $product->price ?>
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-        <?php endforeach ?>
-    <?php endif ?>
+var homeProductHref = `<?= $product->url ?>`
+var homeProductName = `<?= $product->name ?>`
+var homeProductIMG = `<?= $cafe->cover->full_path ?>`
+var homeProductPrice = `<?= $product->price ?>`
+var homeForeachWrapper = `
+<?php if (isset($cafes) && count($cafes)): ?>
+	<?php foreach (array_slice($cafes, 0, 4) as $cafe): ?> 
+		<?php $product = $productsController->getQuickView($cafe) ?>
+			%s
+	<?php endforeach ?>
+<?php endif ?>
+`
+
+var homeProductFavHref = `<?= $product->url ?>`
+var homeProductFavName = `<?= $product->name ?>`
+var homeProductFavIMG = `<?= $product->thumbnail_path ?>`
+var homeProductFavPrice = `<?= $product->price ?>`
+var homeForeachFavWrapper = `
+<?php if (isset($merchs) && count($merchs)): ?>
+	<?php foreach (array_slice($merchs, 0, 3) as $merch): ?> 
+		<?php $product = $productsController->getQuickView($merch) ?>
+			%s
+	<?php endforeach ?>
+<?php endif ?>
 `

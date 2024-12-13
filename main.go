@@ -12,7 +12,20 @@ import (
 	"os"
 )
 
-var testhtml = `<div class="ed-element ed-container columns-box wv-overflow_visible product_item_all" id="ed-456730256"><div class="inner"><div class="ed-element ed-image" id="ed-456730259"><a href="/tienda/cafe/diablo"><img src="/images/1024/9706732/Coyote-Over.jpg" alt="" srcset="/images/576/9706732/Coyote-Over.jpg 576w, /images/975/9706732/Coyote-Over.jpg 975w"></a></div><div class="ed-element ed-text custom-theme" id="ed-456730262"><p style="line-height: 1.15; text-align: center;"><span style="font-size: 18px; font-family: &quot;daisywhl&quot;;"><a href="/tienda/cafe/diablo" title="">MEZCLA COYOTE</a></span></p><p style="line-height: 1; text-align: center;"><span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &quot;daisywhl&quot;;">DESDE $240</span></p></div></div></div>`
+var testhtml = `<div class="ed-element ed-text custom-theme" id="ed-456730253">
+              <p style="line-height: 1.15; text-align: center;">
+                <span style="font-size: 18px; font-family: &#34;daisywhl&#34;;" class="product_name">
+                  <a href="<?= $product->url ?>" title="<?= $product->name ?>">
+                    GUACHIPIL, OAX
+                  </a>
+                </span>
+              </p>
+              <p style="line-height: 1; text-align: center;">
+                <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price">
+                  DESDE $240
+                </span>
+              </p>
+            </div>`
 
 func p(a ...any) {
 	fmt.Println(a)
@@ -32,17 +45,21 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 }
 
 func main() {
+	// foo := `asdf %d asdf`
+	// fmt.Printf(foo, 123)
 	run()
-	// doc, _ := node.ParseHTML(testhtml)
-	// anchors := doc.FindAll(node.Descendant, node.A)
-	// // imgs := doc.FindAll(node.Descendant, node.Img)
-	// for _, a := range anchors {
-	// 	setAttribute(&a, "href", "caca")
+	// return
+	// textNodeToInsert := &html.Node{
+	// 	Parent:      nil,
+	// 	PrevSibling: nil,
+	// 	NextSibling: nil,
+	// 	Data:        "DESDE $<?= $product->price ?>",
+	// 	Type:        html.RawNode, // XD
+	// 	Attr:        []html.Attribute{},
 	// }
 	//
-	// for _, a := range anchors {
-	// 	fmt.Println(a.Raw().Attr)
-	// }
+	// span.Raw().AppendChild(textNodeToInsert)
+	// println(a)
 }
 
 func printHtml(doc node.Node) {
@@ -77,6 +94,18 @@ func insertRawTextBeforeNode(text string, beforeNode node.Node) {
 		Attr:        []html.Attribute{},
 	}
 	beforeNode.Raw().InsertBefore(textNodeToInsert, beforeNode.Raw())
+}
+
+func insertRawTextInsideTag(text string, tag node.Node) {
+	textNodeToInsert := &html.Node{
+		Parent:      nil,
+		PrevSibling: nil,
+		NextSibling: nil,
+		Data:        text,
+		Type:        html.RawNode, // XD
+		Attr:        []html.Attribute{},
+	}
+	tag.Raw().AppendChild(textNodeToInsert)
 }
 
 func scannDirectory(directory string) error {
