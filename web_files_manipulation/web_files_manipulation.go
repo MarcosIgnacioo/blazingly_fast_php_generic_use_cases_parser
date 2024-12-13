@@ -57,28 +57,44 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 					insertRawTextBeforeNode(htmlToInsert, targetDiv)
 				// poner que en vez de que el realizar el reemplazo de productos sea el default que sea la cosa que reemplaza la default nomas que no se como hacerle bien porque
 				default:
-					productHref := instruction["href"]
-					productName := instruction["productName"]
-					productImg := instruction["img"]
-					productPrice := instruction["price"]
-					productForeach := instruction["foreach"]
-					productClassForName := instruction["className"]
-					productClassForPrice := instruction["classPrice"]
+					productHref := getData(instruction, "href")
+					productName := getData(instruction, "productName")
+					productImg := getData(instruction, "img")
+					productPrice := getData(instruction, "price")
+					productForeach := getData(instruction, "foreach") // ocd tockin rn fr
+					productClassForName := getData(instruction, "className")
+					productClassForPrice := getData(instruction, "classPrice")
 
 					deletingDivs = doc.FindAll(node.Descendant, node.Div, node.Class(classToSearch))
+					if deletingDivs == nil || len(deletingDivs) == 0 {
+						panic(fmt.Sprintf("deletingDivs are nil or zero len in this instruction %s", classToSearch))
+					}
 					targetDiv = deletingDivs[0]
 					// targetDiv.Find(node.Descendant, node.A, node.Class("product_name"))
 					anchors := targetDiv.FindAll(node.Descendant, node.A)
+					if anchors == nil || len(anchors) == 0 {
+						panic(fmt.Sprintf("anchors are nil or zero len in this instruction %s", classToSearch))
+					}
 					imgs := targetDiv.FindAll(node.Descendant, node.Img)
+					if imgs == nil || len(imgs) == 0 {
+						panic(fmt.Sprintf("imgs are nil or zero len in this instruction %s", classToSearch))
+					}
 					setUpAnchors(&anchors, productHref, productName)
 					setUpImages(&imgs, productImg, productName)
 
 					// bruhhhh
 					priceSpan := targetDiv.Find(node.Descendant, node.Span, node.Class(productClassForPrice))
+					if priceSpan == nil {
+						panic(fmt.Sprintf("priceSpan is nil, check the value of the `classPrice` field in this instruction %s", classToSearch))
+					}
 					removeAllChildren(&priceSpan)
 					priceSpan.Raw().AppendChild(newTextHtmlNode(fmt.Sprintf("DESDE $%s", productPrice)))
 
 					nameAnchor := targetDiv.Find(node.Descendant, nil, node.Class(productClassForName))
+					if nameAnchor == nil {
+						panic(fmt.Sprintf("nameAnchor is nil, check the value of the `className` field in this instruction %s", classToSearch))
+					}
+
 					removeAllChildren(&nameAnchor)
 					nameAnchor.Raw().AppendChild(newTextHtmlNode(productName))
 
@@ -89,7 +105,6 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 				}
 
 				// parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
-				fmt.Println(parent, classToSearch)
 
 				os.WriteFile(file.filePath, prepareHTMLForFile(doc), 0777)
 			}
@@ -108,7 +123,7 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 }
 
 func prepareHTMLForFile(doc node.Node) []byte {
-	html := gohtml.Format(doc.HTML())
+	html := (doc.HTML())
 	coolerHtml := strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1)
 	return []byte(coolerHtml)
 }

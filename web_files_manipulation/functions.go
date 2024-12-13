@@ -1,10 +1,9 @@
 package web_files_manipulation
 
 import (
-	"strings"
-
 	"github.com/sunshineplan/node"
 	"golang.org/x/net/html"
+	"strings"
 )
 
 func newTextHtmlNode(text string) *html.Node {
@@ -33,7 +32,7 @@ func removeChildrenWithClassName(tag *node.Node, class string) {
 }
 
 func removeAllChildren(tag *node.Node) {
-	if tag == nil {
+	if tag == nil || *tag == nil {
 		return
 	}
 	children := (*tag).Children()
@@ -86,4 +85,22 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 			break
 		}
 	}
+}
+
+func getData(instruction map[string]string, attribute string) string {
+	attributeData := instruction[attribute]
+	if attributeData != "" {
+		return attributeData
+	}
+	switch attribute {
+	case "href":
+		return productHref
+	case "productName":
+		return productName
+	case "img":
+		return productThumbnail
+	case "price":
+		return productPrice
+	}
+	return attributeData
 }
