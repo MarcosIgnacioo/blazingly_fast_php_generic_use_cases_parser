@@ -1,9 +1,64 @@
 package web_files_manipulation
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/sunshineplan/node"
+)
 
 type readingFilesInDirectoryError struct {
 	fileName string
+}
+
+// "accesorios": {
+// 	{
+// 		"class":        "html",
+// 		"htmlToInsert": accesoriesHeader,
+// 	},
+// 	{
+// 		"class":      "product_item_accessories",
+// 		"foreach":    accesoriesForeachWrapper,
+// 		"classPrice": "product_price",
+// 		"className":  "product_name",
+// 		"attributesManipulation" : {
+// 			"tagsToChangeAttributes":{"aasdf,asdf,asdf"},
+// 			"attributesInTagsToChange":{"href":"asdf"},
+// 		},
+// 		"innerHtmlReplacements" : {
+// 			"product_price": "<?=$product->details?>"
+// 			"product_name" : "<?=$foo?>"
+// 		}
+// 	},
+// },
+
+type Instruction struct {
+	Class                 string            `json:"class"`
+	InnerHTML             string            `json:"inner_html"`
+	OuterHTML             string            `json:"outer_html"`
+	AppendHTML            string            `json:"append_html"`
+	PrependHTML           string            `json:"prepend_html"`
+	ForEach               string            `json:"for_each"`
+	TagsAttributes        []TagAttribute    `json:"tags_attributes"`
+	InnerHtmlReplacements []HTMLReplacement `json:"inner_html_replacements"`
+}
+
+type Attribute struct {
+	Name  string
+	Value string
+}
+
+type TagAttribute struct {
+	Tag  node.TagFilter
+	Attr Attribute
+}
+
+type HTMLReplacement struct {
+	ClassName string
+	HTML      string
+}
+
+type InnerHTMLReplacement struct {
+	ClassNameReplacementHTML map[string]string
 }
 
 type FileType string
@@ -46,3 +101,18 @@ func (self *readingFilesInDirectoryError) Error() string {
 const (
 	default_array_size = 12
 )
+
+// file:///home/happy/Downloads/%3C?=%20$image-%3Efull_path%20?%3E
+// "diablo": {
+// {
+// 	"class" :"product_description_details"
+// 	"foreach":    accesoriesForeachWrapper,
+// 	"attributesManipulation" : {
+// 		"tagsToChangeAttributes":{node.A, node.Img}
+// 		"attributesInTagsToChange":{"href":"asdf"}
+// 	},
+// 	"innerHtmlReplacements" : {
+// 		"product_description_details": {"<?=$product->details?>"}
+// 	}
+// }
+// }

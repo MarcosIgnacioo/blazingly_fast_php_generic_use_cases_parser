@@ -20,7 +20,7 @@ func Init(sourceDirectory string) {
 	if err != nil {
 		panic(fmt.Sprintf("Failed at initial directory %s", sourceDirectory))
 	}
-	contentTransformation(directories, files)
+	contentTransformation3D(directories, files)
 }
 
 func InsertHeader() {
@@ -32,7 +32,6 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 	for i := 0; i < int(files.Length); i++ {
 		file := files.ArrayList[i].(*File)
 		if instructions[file.fileParentDir] != nil {
-			fmt.Println(file.filePath)
 			fileReaded, err := os.ReadFile(file.filePath)
 			fileContent := gohtml.Format(string(fileReaded))
 			if err != nil {
@@ -54,7 +53,7 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 				switch classToSearch {
 				case "html":
 					targetDiv = doc.Find(node.Descendant, node.Html)
-					insertRawTextBeforeNode(htmlToInsert, targetDiv)
+					preppendHTMLToNode(htmlToInsert, targetDiv)
 				// poner que en vez de que el realizar el reemplazo de productos sea el default que sea la cosa que reemplaza la default nomas que no se como hacerle bien porque
 				default:
 					productHref := getData(instruction, "href")
@@ -75,6 +74,7 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 					if anchors == nil || len(anchors) == 0 {
 						panic(fmt.Sprintf("anchors are nil or zero len in this instruction %s", classToSearch))
 					}
+
 					imgs := targetDiv.FindAll(node.Descendant, node.Img)
 					if imgs == nil || len(imgs) == 0 {
 						panic(fmt.Sprintf("imgs are nil or zero len in this instruction %s", classToSearch))
@@ -83,7 +83,7 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 					setUpImages(&imgs, productImg, productName)
 
 					// bruhhhh
-					priceSpan := targetDiv.Find(node.Descendant, node.Span, node.Class(productClassForPrice))
+					priceSpan := targetDiv.Find(node.Descendant, nil, node.Class(productClassForPrice))
 					if priceSpan == nil {
 						panic(fmt.Sprintf("priceSpan is nil, check the value of the `classPrice` field in this instruction %s", classToSearch))
 					}
@@ -105,8 +105,11 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 				}
 
 				// parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
-
-				os.WriteFile(file.filePath, prepareHTMLForFile(doc), 0777)
+				phpFileName := strings.Replace(file.filePath, "html", "php", -1)
+				os.Rename(file.filePath, phpFileName)
+				file.filePath = phpFileName
+				os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
+				fmt.Println(file.filePath)
 			}
 		}
 	}
@@ -119,6 +122,68 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 			panic(fmt.Sprintf("Failed at directory: %s", directory))
 		}
 		contentTransformation(innerDirectories, innerFiles)
+	}
+}
+
+func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
+	for i := 0; i < int(files.Length); i++ {
+		file := files.ArrayList[i].(*File)
+		if instructionsTYPED[file.fileParentDir] != nil {
+			fileReaded, err := os.ReadFile(file.filePath)
+			fileContent := gohtml.Format(string(fileReaded))
+			if err != nil {
+				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
+			}
+			doc, err := node.ParseHTML(fileContent)
+			if err != nil {
+				panic(fmt.Sprintf("error parsing this file", file.filePath))
+			}
+			for _, instruction := range instructionsTYPED[file.fileParentDir] {
+				classToSearch := instruction.Class
+
+				var targetDiv node.Node
+				var parent node.Node
+
+				switch classToSearch {
+				case "html":
+					targetDiv = doc.Find(node.Descendant, node.Html)
+					// we PREPEND the html in this case instead of replacing the innerhtml
+					if instruction.PrependHTML == "" {
+						panic(fmt.Sprintf("preppending html for header doesnt exist in file %", file.filePath))
+					}
+					preppendHTMLToNode(instruction.PrependHTML, targetDiv)
+				default:
+					targetDiv = doc.Find(node.Descendant, nil, node.Class(classToSearch))
+
+					if targetDiv == nil {
+						panic(fmt.Sprintf(" targetDiv is nil probably wrong class for the wrong directory\nthis is the class we are trying to look for: `%s`", classToSearch))
+					}
+					HTMLManipulation(instruction, targetDiv)
+
+					if instruction.TagsAttributes != nil {
+						attributesManipulation(instruction, classToSearch, targetDiv)
+					}
+
+					if instruction.InnerHtmlReplacements != nil {
+						innerHTMLManipulation(instruction, classToSearch, targetDiv)
+					}
+
+					constructHTML(&parent, targetDiv, instruction)
+				}
+
+				buildPHPFile(file, doc)
+			}
+		}
+	}
+
+	for i := 0; i < int(directories.Length); i++ {
+		directory := directories.ArrayList[i]
+		innerDirectories, innerFiles, err := getFilesInDirectory(directory.(string))
+		if err != nil {
+			// TODO: manage a better error recovery here in c i should free all the memory or just keep going and just log it idrk
+			panic(fmt.Sprintf("Failed at directory: %s", directory))
+		}
+		contentTransformation3D(innerDirectories, innerFiles)
 	}
 }
 

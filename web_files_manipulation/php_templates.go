@@ -78,22 +78,7 @@ var authorForeachWrapper = `
 <?php endif ?>
 `
 
-// merch
-var merchHeader = `
-<?php
-
-	  include_once "../../app/config.php"; 
-	  include_once "../../app/ProductsController.php";
-	  include_once "../../app/CategoriesController.php";
-
-	  $productsController = new ProductsController(); 
-	  
-	  $products = $productsController -> getByCategory('merch');
-
-	?>
-`
-
-// coffee
+// # Coffee
 
 var coffeeHeader = `
 <?php
@@ -119,4 +104,87 @@ var coffeeMixesForeachWrapper = `
 			%s
 	<?php endforeach ?>
 <?php endif ?>
+`
+
+// # Merch
+
+var merchHeader = `
+<?php
+
+	  include_once "../../app/config.php"; 
+	  include_once "../../app/ProductsController.php";
+	  include_once "../../app/CategoriesController.php";
+
+	  $productsController = new ProductsController(); 
+	  
+	  $products = $productsController -> getByCategory('merch');
+
+	?>
+`
+var merchForeachWrapper = `
+<?php if (isset($products) && count($products)): ?>
+	<?php foreach ($products as $product): ?> 
+		<?php $product = $productsController->getQuickView($product) ?>
+			%s
+	<?php endforeach ?>
+<?php endif ?>
+`
+
+// # Accesories
+var accesoriesHeader = `
+<?php
+
+	  include_once "../../app/config.php"; 
+	  include_once "../../app/ProductsController.php";
+	  include_once "../../app/CategoriesController.php";
+
+	  $productsController = new ProductsController(); 
+	  
+	  $products = $productsController -> getByCategory('accesorios');
+
+	?>
+`
+var accesoriesForeachWrapper = `
+<?php if (isset($products) && count($products)): ?>
+	<?php foreach ($products as $product): ?> 
+		<?php $product = $productsController->getQuickView($product) ?>
+			%s
+	<?php endforeach ?>
+<?php endif ?>
+`
+
+// # devil
+
+var devilHeader = `
+<?php
+
+  include_once "../../../app/config.php"; 
+  include_once "../../../app/ProductsController.php";
+  include_once "../../../app/CategoriesController.php";
+
+  $productsController = new ProductsController(); 
+  $categoriesController = new CategoriesController(); 
+
+  if(isset($_GET['slug'])) {
+
+    $grand_product = $productsController -> getBySlug($_GET['slug']); 
+
+  }else{
+    header("Location:".$_SERVER['HTTP_REFERER']);
+  }
+
+  if (is_null($grand_product)) {
+    header("Location:".$_SERVER['HTTP_REFERER']);
+  } 
+
+  $features = $productsController ->getFeatures($grand_product,"molienda");
+  $backgroud = $productsController ->getFile($grand_product,"background_".$_GET['slug']);
+  $stock = $productsController ->getStock($grand_product->presentations);;
+
+
+  $tueste = $productsController ->getFile($grand_product,"tueste_".$_GET['slug']);
+
+  $perfil_de_sabor = $productsController ->getFile($grand_product,"perfil_de_sabor_".$_GET['slug']); 
+
+?>
 `

@@ -1,8 +1,10 @@
 package web_files_manipulation
 
 import (
+	"fmt"
 	"github.com/sunshineplan/node"
 	"golang.org/x/net/html"
+	"os"
 	"strings"
 )
 
@@ -31,6 +33,17 @@ func removeChildrenWithClassName(tag *node.Node, class string) {
 	}
 }
 
+func removeChildren(tag node.Node) {
+	if tag == nil || tag == nil {
+		return
+	}
+	children := (tag).Children()
+	for i := 0; i < len(children); i++ {
+		child := children[i].Raw()
+		(tag).Raw().RemoveChild(child)
+	}
+}
+
 func removeAllChildren(tag *node.Node) {
 	if tag == nil || *tag == nil {
 		return
@@ -42,16 +55,57 @@ func removeAllChildren(tag *node.Node) {
 	}
 }
 
-func insertRawTextBeforeNode(text string, beforeNode node.Node) {
-	textNodeToInsert := &html.Node{
-		Parent:      nil,
-		PrevSibling: nil,
-		NextSibling: nil,
-		Data:        text,
-		Type:        html.RawNode, // XD
-		Attr:        []html.Attribute{},
+func removeAllChildrenExceptFirst(tag *node.Node) {
+	if tag == nil || *tag == nil {
+		return
 	}
-	beforeNode.Raw().InsertBefore(textNodeToInsert, beforeNode.Raw())
+	children := (*tag).Children()
+	for i := 1; i < len(children); i++ {
+		child := children[i].Raw()
+		(*tag).Raw().RemoveChild(child)
+	}
+}
+
+func preppendHTMLToNode(text string, beforeNode node.Node) {
+	if beforeNode == nil {
+		panic("beforeNode nil in preppendHTML")
+	}
+	if beforeNode.Raw().Parent == nil {
+		panic("parent nil in preppendHTML")
+	}
+	beforeNode.Raw().InsertBefore(newTextHtmlNode(text), beforeNode.Raw())
+}
+
+func apendHTMLToNode(text string, beforeNode node.Node) {
+	if beforeNode == nil {
+		panic("beforeNode nil in appendingHMTL")
+	}
+	if beforeNode.Raw().Parent == nil {
+		panic("parent nil in appendingHMTL")
+	}
+	beforeNode.Parent().Raw().InsertBefore(newTextHtmlNode(text), beforeNode.Raw().NextSibling)
+}
+
+func replaceInnerHTMLFromNode(text string, tag node.Node) {
+	if tag == nil {
+		panic("tag nil in replacing innerHTML")
+	}
+	if tag.Raw().Parent == nil {
+		panic("parent nil in replacing innerHTML")
+	}
+	removeChildren(tag)
+	tag.Raw().AppendChild(newTextHtmlNode(text))
+}
+
+func replaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
+	if tag == nil {
+		panic("tag nil in replacing outerHTML")
+	}
+	if tag.Raw().Parent == nil {
+		panic("parent nil in replacing outerHTML")
+	}
+	tag.Raw().Parent.InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	tag.Raw().Parent.RemoveChild(tag.Raw())
 }
 
 func setUpAnchors(anchors *[]node.Node, productHref string, productName string) {
@@ -87,6 +141,18 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 	}
 }
 
+func appendAttribute(htmlNode *node.Node, attribute string, value string) {
+	attributes := (*htmlNode).Raw().Attr
+	// c goat
+	for i := 0; i < len(attributes); i++ {
+		attr := &attributes[i]
+		if attr.Key == attribute {
+			attr.Val += " " + value
+			break
+		}
+	}
+}
+
 func getData(instruction map[string]string, attribute string) string {
 	attributeData := instruction[attribute]
 	if attributeData != "" {
@@ -103,4 +169,82 @@ func getData(instruction map[string]string, attribute string) string {
 		return productPrice
 	}
 	return attributeData
+}
+
+func dirToJson() map[string][]map[string]string {
+	return map[string][]map[string]string{
+		"DIRNAME": {
+			{
+				"class":        "html",
+				"htmlToInsert": merchHeader,
+			},
+			{
+				"class":      "product_item_merch",
+				"foreach":    merchForeachWrapper,
+				"classPrice": "product_price",
+				"className":  "product_name",
+			},
+		},
+	}
+}
+
+func setUpTags(tags *[]node.Node, tagAttribute Attribute) {
+	for i := 0; i < len(*tags); i++ {
+		tag := &(*tags)[i]
+		setAttribute(tag, tagAttribute.Name, tagAttribute.Value)
+	}
+}
+
+func HTMLManipulation(instruction Instruction, targetDiv node.Node) {
+	if instruction.InnerHTML != "" {
+		replaceInnerHTMLFromNode(instruction.InnerHTML, targetDiv)
+	}
+
+	if instruction.PrependHTML != "" {
+		preppendHTMLToNode(instruction.PrependHTML, targetDiv)
+	}
+
+	if instruction.AppendHTML != "" {
+		apendHTMLToNode(instruction.AppendHTML, targetDiv)
+	}
+
+	if instruction.OuterHTML != "" {
+		replaceOuterHTMLFromNode(instruction.OuterHTML, targetDiv)
+	}
+}
+
+func attributesManipulation(instruction Instruction, classToSearch string, targetDiv node.Node) {
+	for _, tagAttribute := range instruction.TagsAttributes {
+		tags := targetDiv.FindAll(node.Descendant, tagAttribute.Tag)
+		if tags == nil || len(tags) == 0 {
+			panic(fmt.Sprintf("%s are nil or zero len in this instruction %s", classToSearch, tagAttribute.Tag))
+		}
+		setUpTags(&tags, tagAttribute.Attr)
+	}
+}
+
+func innerHTMLManipulation(instruction Instruction, classToSearch string, targetDiv node.Node) {
+	for _, htmlReplacement := range instruction.InnerHtmlReplacements {
+		oldHtmlContainer := targetDiv.Find(node.Descendant, nil, node.Class(htmlReplacement.ClassName))
+		if oldHtmlContainer == nil {
+			panic(fmt.Sprintf(" oldHtmlContainer is nil\nthis is the classname we are looking for `%s`", htmlReplacement.ClassName))
+		}
+		removeAllChildren(&oldHtmlContainer)
+		replaceInnerHTMLFromNode(htmlReplacement.HTML, oldHtmlContainer)
+	}
+}
+
+func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction) {
+	*parent = targetDiv.Parent()
+	htmlToInsert := fmt.Sprintf(instruction.ForEach, targetDiv.HTML())
+	removeAllChildren(parent)
+	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
+}
+
+func buildPHPFile(file *File, doc node.Node) {
+	phpFileName := strings.Replace(file.filePath, "html", "php", -1)
+	os.Rename(file.filePath, phpFileName)
+	file.filePath = phpFileName
+	os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
+	fmt.Println(file.filePath)
 }
