@@ -2,10 +2,12 @@ package web_files_manipulation
 
 import (
 	"fmt"
-	"github.com/sunshineplan/node"
-	"golang.org/x/net/html"
 	"os"
 	"strings"
+
+	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
+	"github.com/sunshineplan/node"
+	"golang.org/x/net/html"
 )
 
 func newTextHtmlNode(text string) *html.Node {
@@ -216,6 +218,7 @@ func HTMLManipulation(instruction Instruction, targetDiv node.Node) {
 func attributesManipulation(instruction Instruction, classToSearch string, targetDiv node.Node) {
 	for _, tagAttribute := range instruction.TagsAttributes {
 		tags := targetDiv.FindAll(node.Descendant, tagAttribute.Tag)
+		fmt.Println(targetDiv.HTML())
 		if tags == nil || len(tags) == 0 {
 			panic(fmt.Sprintf("%s are nil or zero len in this instruction %s", classToSearch, tagAttribute.Tag))
 		}
@@ -236,7 +239,10 @@ func innerHTMLManipulation(instruction Instruction, classToSearch string, target
 
 func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction) {
 	*parent = targetDiv.Parent()
-	htmlToInsert := fmt.Sprintf(instruction.ForEach, targetDiv.HTML())
+	htmlToInsert := targetDiv.HTML()
+	if instruction.ForEach != "" {
+		htmlToInsert = fmt.Sprintf(instruction.ForEach, htmlToInsert)
+	}
 	removeAllChildren(parent)
 	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
 }
@@ -246,9 +252,10 @@ func buildPHPFile(file *File, doc node.Node) {
 	os.Rename(file.filePath, phpFileName)
 	file.filePath = phpFileName
 	os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
+	fmt.Println(file.filePath)
 }
 
-func getBasicInstruction(className string, forEachWrapper string, priceClassName string, productNameClassName string, imgs ...TagAttribute) Instruction {
+func getBasicInstruction(className string, forEachWrapper string, priceClassName string, productNameClassName string, productPriceHTML string, productNameHTML string, imgs ...TagAttribute) Instruction {
 	imgSrc := productImgSrcTagAtrr
 	imgSrcSet := productImgSrcSetTagAtrr
 	if len(imgs) > 1 {
@@ -268,11 +275,11 @@ func getBasicInstruction(className string, forEachWrapper string, priceClassName
 		InnerHtmlReplacements: []HTMLReplacement{
 			HTMLReplacement{
 				ClassName: priceClassName,
-				HTML:      productPrice,
+				HTML:      productPriceHTML,
 			},
 			HTMLReplacement{
 				ClassName: productNameClassName,
-				HTML:      productName,
+				HTML:      productNameHTML,
 			},
 		},
 	}
@@ -292,6 +299,80 @@ func getNestedPath(nestedLevel int) string {
 		}
 	}
 	return nesting
+}
+
+// doesnt do shit XD pero ya k hueva quiero acabarrr
+func QuerySelectorAll(document node.Node, query string) []node.Node {
+	queries := parseQuery(query)
+	if len(queries) <= 0 {
+		return nil
+	}
+	elements := searchElements(queries[0], document)
+	elementsFound := arraylist.NewArrayList(default_array_size)
+	elementsFound.Enqueue(elements[0])
+	fmt.Println(queries)
+	for i := 1; i < len(queries); i++ {
+		for _, element := range elements {
+			found := searchElement(queries[i], element)
+			fmt.Println("huh", found)
+			if found != nil {
+				elementsFound.Enqueue(found)
+			}
+		}
+	}
+
+	// XD
+	clonnedArr := make([]node.Node, elementsFound.Length)
+	for i := 0; i < int(elementsFound.Length); i++ {
+		clonnedArr[i] = elementsFound.ArrayList[i].(node.Node)
+	}
+
+	return clonnedArr
+}
+
+func QuerySelector(document node.Node, query string) node.Node {
+	queries := parseQuery(query)
+	if len(queries) <= 0 {
+		return nil
+	}
+	elements := searchElements(queries[0], document)
+
+	if len(elements) == 0 {
+		panic(fmt.Sprintf(" elements is nil when trying to select\nthis query: `%s`\nprobably forgot to put a `.` for the className", query))
+		// return nil
+	}
+
+	needleElement := elements[0]
+
+	for i := 1; i < len(queries); i++ {
+		for _, element := range elements {
+			needleElement = searchElement(queries[i], element)
+			if needleElement != nil {
+				break
+			}
+		}
+	}
+	return needleElement
+}
+
+func parseQuery(query string) []string {
+	return strings.Split(query, " ")
+}
+
+func searchElements(name string, where node.Node) []node.Node {
+	if name[0] == '.' {
+		return where.FindAll(node.Descendant, nil, node.Class(name[1:]))
+	} else {
+		return where.FindAll(node.Descendant, node.Tag(name))
+	}
+}
+
+func searchElement(name string, where node.Node) node.Node {
+	if name[0] == '.' {
+		return where.Find(node.Descendant, nil, node.Class(name[1:]))
+	} else {
+		return where.Find(node.Descendant, node.Tag(name))
+	}
 }
 
 // func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {

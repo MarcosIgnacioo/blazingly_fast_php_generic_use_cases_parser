@@ -14,17 +14,20 @@ import (
 
 var testhtml = `<div class="ed-element ed-text custom-theme" id="ed-456730253">
               <p style="line-height: 1.15; text-align: center;">
-                <span style="font-size: 18px; font-family: &#34;daisywhl&#34;;" class="product_name">
+                <span style="font-size: 18px; font-family: &#34;daisywhl&#34;;" class="product_name poop">
                   <a href="<?= $product->url ?>" title="<?= $product->name ?>">
                     GUACHIPIL, OAX
                   </a>
                 </span>
               </p>
               <p style="line-height: 1; text-align: center;">
-                <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price">
+                <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price poop">
                   DESDE $240
                 </span>
               </p>
+<span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price poop">
+                  DESDE $240
+                </span>
             </div>`
 
 func p(a ...any) {
@@ -45,6 +48,11 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 }
 
 func main() {
+	// doc, _ := node.ParseHTML(testhtml)
+	// popo := web_files_manipulation.QuerySelectorAll(doc, ".poop")
+	// for _, v := range popo {
+	// 	fmt.Println(v.HTML())
+	// }
 	// foo := `asdf %d asdf`
 	// fmt.Printf(foo, 123)
 	run()

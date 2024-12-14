@@ -146,6 +146,7 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 				var parent node.Node
 
 				switch classToSearch {
+
 				case "html":
 					targetDiv = doc.Find(node.Descendant, node.Html)
 					// we PREPEND the html in this case instead of replacing the innerhtml
@@ -153,12 +154,14 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 						panic(fmt.Sprintf("preppending html for header doesnt exist in file %", file.filePath))
 					}
 					preppendHTMLToNode(instruction.PrependHTML, targetDiv)
+
 				default:
 					targetDiv = doc.Find(node.Descendant, nil, node.Class(classToSearch))
 
 					if targetDiv == nil {
 						panic(fmt.Sprintf(" targetDiv is nil probably wrong class for the wrong directory\nthis is the class we are trying to look for: `%s`", classToSearch))
 					}
+
 					HTMLManipulation(instruction, targetDiv)
 
 					if instruction.TagsAttributes != nil {
