@@ -128,13 +128,14 @@ func contentTransformation(directories *arraylist.ArrayList, files *arraylist.Ar
 func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
 	for i := 0; i < int(files.Length); i++ {
 		file := files.ArrayList[i].(*File)
+		fileReaded, err := os.ReadFile(file.filePath)
+		fileContent := gohtml.Format(string(fileReaded))
+		doc, err := node.ParseHTML(fileContent)
+		insertCartMobile(doc, file.nestedLevel)
 		if instructionsTYPED[file.fileParentDir] != nil {
-			fileReaded, err := os.ReadFile(file.filePath)
-			fileContent := gohtml.Format(string(fileReaded))
 			if err != nil {
 				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
 			}
-			doc, err := node.ParseHTML(fileContent)
 			if err != nil {
 				panic(fmt.Sprintf("error parsing this file", file.filePath))
 			}
@@ -170,7 +171,6 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 
 					constructHTML(&parent, targetDiv, instruction)
 				}
-
 				buildPHPFile(file, doc)
 			}
 		}
@@ -220,7 +220,7 @@ func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.Arr
 		fileName := entry.Name()
 		fullFilePath := fmt.Sprintf("%s/%s", directory, fileName)
 		fileExtension = filepath.Ext(fileName)
-		nestedLevel := (len(strings.Split(fullFilePath, "/"))/2 - 1)
+		nestedLevel := (len(strings.Split(fullFilePath, "/")) / 2)
 		parentDirectory := filepath.Base(directory)
 		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel, fileParentDir: parentDirectory}
 		files.Enqueue(newFile)

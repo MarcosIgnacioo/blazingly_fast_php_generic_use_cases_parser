@@ -49,9 +49,9 @@ var storeHeader = `
 ?>
 `
 var productItemAllForeachWrapper = `
-<?php if (isset($cafes) && count($cafes)): ?>
-  <?php foreach (array_slice($cafes, 0, 4) as $cafe): ?>
-    <?php $product = $productsController->getQuickView($cafe) ?>
+<?php if (isset($products) && count($products)): ?>
+	<?php foreach ($products as $product): ?> 
+		<?php $product = $productsController->getQuickView($product) ?>
 				%s
   <?php endforeach ?>
 <?php endif ?>

@@ -36,6 +36,22 @@ var productImgSrcSetTagAtrr = TagAttribute{
 	},
 }
 
+var productImgCoffeCoverFullPathSrcSetTagAtrr = TagAttribute{
+	Tag: node.Img,
+	Attr: Attribute{
+		Name:  "srcset",
+		Value: productItemCoffeCoverFullPath,
+	},
+}
+
+var productImgCoffeCoverFullPathSrcTagAtrr = TagAttribute{
+	Tag: node.Img,
+	Attr: Attribute{
+		Name:  "src",
+		Value: productItemCoffeCoverFullPath,
+	},
+}
+
 var productImgAltTagAtrr = TagAttribute{
 	Tag: node.Img,
 	Attr: Attribute{
@@ -254,36 +270,89 @@ var htmlManipulationInstructionSet = map[string][]map[string]string{
 var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 	"app": {
 		Instruction{
-			Class:                 "html",
-			PrependHTML:           storeHeader,
-			ForEach:               "",
-			TagsAttributes:        nil,
-			InnerHtmlReplacements: nil,
+			Class:       "html",
+			PrependHTML: homeHeader,
 		},
-		Instruction{
-			Class:   "product_item_coffe",
-			ForEach: productItemAllForeachWrapper,
-			TagsAttributes: []TagAttribute{
-				productAnchorHrefTagAtrr,
-				productAnchorTitleTagAtrr,
-				productImgSrcSetTagAtrr,
-				productImgSrcTagAtrr,
-				productImgAltTagAtrr,
-			},
-			// HTMLManipulation: []Manipulation { {ClassName:string, inner:string, outer:string, append:string, prepend:string}}
-			InnerHtmlReplacements: []HTMLReplacement{
-				HTMLReplacement{
-					ClassName: "product_price_home",
-					HTML:      productPrice,
-				},
-				HTMLReplacement{
-					ClassName: "product_name_home",
-					HTML:      productName,
-				},
-			},
-		},
+		getBasicInstruction(
+			"product_item_coffe",
+			productItemCoffeeForeachWrapper,
+			"product_price_home",
+			"product_name_home",
+			productImgCoffeCoverFullPathSrcSetTagAtrr,
+			productImgCoffeCoverFullPathSrcTagAtrr,
+		),
+		getBasicInstruction(
+			"product_item_favorite",
+			productItemAllForeachWrapper,
+			"product_price_home",
+			"product_name_home"),
 	},
+
+	"tienda": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: storeHeader,
+		},
+		getBasicInstruction(
+			"product_item_all",
+			productItemAllForeachWrapper,
+			"product_price",
+			"product_name"),
+	},
+
+	"cafe": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: coffeeHeader,
+		},
+		getBasicInstruction(
+			"product_item_coffee_mezclas",
+			coffeeMixesForeachWrapper,
+			"product_price",
+			"product_name"),
+		getBasicInstruction(
+			"product_item_coffee_autor",
+			authorForeachWrapper,
+			"product_price",
+			"product_name"),
+		getBasicInstruction(
+			"product_item_coffee_origen",
+			originForeachWrapper,
+			"product_price",
+			"product_name"),
+		getBasicInstruction(
+			"product_item_favorite",
+			productItemFavoriteForeachWrapper,
+			"product_price",
+			"product_name"),
+	},
+	"merch": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: merchHeader,
+		},
+		getBasicInstruction(
+			"product_item_merch",
+			merchForeachWrapper,
+			"product_price",
+			"product_name"),
+	},
+
+	// DIRECTORY: {
+	// 	Instruction{
+	// 		Class:       "html",
+	// 		PrependHTML: HEADER,
+	// 	},
+	// 	getBasicInstruction(
+	// 		productClass,
+	// 		forEachWrapper,
+	// 		"product_price",
+	// 		"product_name"),
+	// },
+
 }
+
+// HTMLManipulation: []Manipulation { {ClassName:string, inner:string, outer:string, append:string, prepend:string}}
 
 // {
 // 	"class":        "html",

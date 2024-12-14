@@ -246,5 +246,61 @@ func buildPHPFile(file *File, doc node.Node) {
 	os.Rename(file.filePath, phpFileName)
 	file.filePath = phpFileName
 	os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
-	fmt.Println(file.filePath)
 }
+
+func getBasicInstruction(className string, forEachWrapper string, priceClassName string, productNameClassName string, imgs ...TagAttribute) Instruction {
+	imgSrc := productImgSrcTagAtrr
+	imgSrcSet := productImgSrcSetTagAtrr
+	if len(imgs) > 1 {
+		imgSrc = imgs[0]
+		imgSrcSet = imgs[1]
+	}
+	return Instruction{
+		Class:   className,
+		ForEach: forEachWrapper,
+		TagsAttributes: []TagAttribute{
+			productAnchorHrefTagAtrr,
+			productAnchorTitleTagAtrr,
+			productImgAltTagAtrr,
+			imgSrc,
+			imgSrcSet,
+		},
+		InnerHtmlReplacements: []HTMLReplacement{
+			HTMLReplacement{
+				ClassName: priceClassName,
+				HTML:      productPrice,
+			},
+			HTMLReplacement{
+				ClassName: productNameClassName,
+				HTML:      productName,
+			},
+		},
+	}
+}
+
+func insertCartMobile(doc node.Node, nestedLevel int) {
+	cartMobile := fmt.Sprintf("<?php include \"%slayouts/cart_mobile.template.php\"; ?>\n", getNestedPath(nestedLevel))
+	separatorCart := doc.Find(node.Descendant, nil, node.Class("separator_initial_cart"))
+	preppendHTMLToNode(cartMobile, separatorCart)
+}
+
+func getNestedPath(nestedLevel int) string {
+	nesting := ""
+	if nestedLevel > 1 {
+		for i := 0; i < nestedLevel; i++ {
+			nesting += "../"
+		}
+	}
+	return nesting
+}
+
+// func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {
+// 	productPriceClass := "productPrice"
+// 	productNameClass := "productName"
+// 	if len(classNames) > 1 {
+// 		productPriceClass = classNames[0]
+// 		productNameClass = classNames[1]
+// 	}
+// 	return map[string][]Instruction
+
+// }
