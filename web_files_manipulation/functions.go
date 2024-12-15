@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
 	"github.com/sunshineplan/node"
 	"golang.org/x/net/html"
 )
@@ -78,14 +77,15 @@ func preppendHTMLToNode(text string, beforeNode node.Node) {
 	beforeNode.Raw().InsertBefore(newTextHtmlNode(text), beforeNode.Raw())
 }
 
-func apendHTMLToNode(text string, beforeNode node.Node) {
-	if beforeNode == nil {
-		panic("beforeNode nil in appendingHMTL")
+// this doesnt work if the beforenode doesnt have a sibling lol
+// tofix
+func appendHTMLToNode(text string, where node.Node) {
+	if where == nil {
+		panic("where nil in appendingHMTL")
 	}
-	if beforeNode.Raw().Parent == nil {
-		panic("parent nil in appendingHMTL")
-	}
-	beforeNode.Parent().Raw().InsertBefore(newTextHtmlNode(text), beforeNode.Raw().NextSibling)
+	fmt.Println(IDS)
+	fmt.Println(text)
+	where.Raw().AppendChild(newTextHtmlNode(text))
 }
 
 func replaceInnerHTMLFromNode(text string, tag node.Node) {
@@ -138,9 +138,11 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 		attr := &attributes[i]
 		if attr.Key == attribute {
 			attr.Val = value
-			break
+			return
 		}
 	}
+	newAttribute := html.Attribute{Key: attribute, Val: value}
+	(*htmlNode).Raw().Attr = append(attributes, newAttribute)
 }
 
 func appendAttribute(htmlNode *node.Node, attribute string, value string) {
@@ -207,7 +209,7 @@ func HTMLManipulation(instruction Instruction, targetDiv node.Node) {
 	}
 
 	if instruction.AppendHTML != "" {
-		apendHTMLToNode(instruction.AppendHTML, targetDiv)
+		appendHTMLToNode(instruction.AppendHTML, targetDiv)
 	}
 
 	if instruction.OuterHTML != "" {
@@ -217,8 +219,12 @@ func HTMLManipulation(instruction Instruction, targetDiv node.Node) {
 
 func attributesManipulation(instruction Instruction, classToSearch string, targetDiv node.Node) {
 	for _, tagAttribute := range instruction.TagsAttributes {
-		tags := targetDiv.FindAll(node.Descendant, tagAttribute.Tag)
-		fmt.Println(targetDiv.HTML())
+		var tags []node.Node
+		if tagAttribute.Tag != "" {
+			tags = QuerySelectorAll(targetDiv, tagAttribute.Tag)
+		} else {
+			tags = []node.Node{targetDiv}
+		}
 		if tags == nil || len(tags) == 0 {
 			panic(fmt.Sprintf("%s are nil or zero len in this instruction %s", classToSearch, tagAttribute.Tag))
 		}
@@ -301,33 +307,24 @@ func getNestedPath(nestedLevel int) string {
 	return nesting
 }
 
-// doesnt do shit XD pero ya k hueva quiero acabarrr
-func QuerySelectorAll(document node.Node, query string) []node.Node {
-	queries := parseQuery(query)
-	if len(queries) <= 0 {
-		return nil
-	}
-	elements := searchElements(queries[0], document)
-	elementsFound := arraylist.NewArrayList(default_array_size)
-	elementsFound.Enqueue(elements[0])
-	fmt.Println(queries)
-	for i := 1; i < len(queries); i++ {
-		for _, element := range elements {
-			found := searchElement(queries[i], element)
-			fmt.Println("huh", found)
-			if found != nil {
-				elementsFound.Enqueue(found)
-			}
-		}
-	}
+func QuerySelectorAll(from node.Node, fullQuery string) []node.Node {
+	queries := strings.Split(fullQuery, " ")
+	return qRecurse(from, queries, 0)
+}
 
-	// XD
-	clonnedArr := make([]node.Node, elementsFound.Length)
-	for i := 0; i < int(elementsFound.Length); i++ {
-		clonnedArr[i] = elementsFound.ArrayList[i].(node.Node)
+func qRecurse(from node.Node, queries []string, queryIdx int) []node.Node {
+	currentQuery := queries[queryIdx]
+	// pre
+	fetchedNodes := searchElements(currentQuery, from)
+	if queryIdx == len(queries)-1 {
+		return fetchedNodes
 	}
-
-	return clonnedArr
+	// recurse
+	results := make([]node.Node, 1)
+	for _, fetchedNode := range fetchedNodes {
+		results = append(results, qRecurse(fetchedNode, queries, queryIdx+1)...)
+	}
+	return results
 }
 
 func QuerySelector(document node.Node, query string) node.Node {
@@ -341,9 +338,7 @@ func QuerySelector(document node.Node, query string) node.Node {
 		panic(fmt.Sprintf(" elements is nil when trying to select\nthis query: `%s`\nprobably forgot to put a `.` for the className", query))
 		// return nil
 	}
-
 	needleElement := elements[0]
-
 	for i := 1; i < len(queries); i++ {
 		for _, element := range elements {
 			needleElement = searchElement(queries[i], element)

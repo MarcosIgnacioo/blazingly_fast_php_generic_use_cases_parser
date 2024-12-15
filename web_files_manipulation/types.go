@@ -2,8 +2,6 @@ package web_files_manipulation
 
 import (
 	"fmt"
-
-	"github.com/sunshineplan/node"
 )
 
 type readingFilesInDirectoryError struct {
@@ -32,6 +30,7 @@ type readingFilesInDirectoryError struct {
 // },
 
 type Instruction struct {
+	// esto es query pero me da hueva hacer refactor xd
 	Class                 string            `json:"class"`
 	InnerHTML             string            `json:"inner_html"`
 	OuterHTML             string            `json:"outer_html"`
@@ -48,7 +47,7 @@ type Attribute struct {
 }
 
 type TagAttribute struct {
-	Tag  node.TagFilter
+	Tag  string
 	Attr Attribute
 }
 

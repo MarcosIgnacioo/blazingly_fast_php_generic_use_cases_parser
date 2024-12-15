@@ -12,23 +12,28 @@ import (
 	"os"
 )
 
-var testhtml = `<div class="ed-element ed-text custom-theme" id="ed-456730253">
-              <p style="line-height: 1.15; text-align: center;">
-                <span style="font-size: 18px; font-family: &#34;daisywhl&#34;;" class="product_name poop">
-                  <a href="<?= $product->url ?>" title="<?= $product->name ?>">
-                    GUACHIPIL, OAX
-                  </a>
-                </span>
-              </p>
-              <p style="line-height: 1; text-align: center;">
-                <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price poop">
-                  DESDE $240
-                </span>
-              </p>
-<span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price poop">
-                  DESDE $240
-                </span>
-            </div>`
+var testhtml = `
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title></title>
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <p>
+      <span><a href="">popipip</a></span>
+    </p>
+    <p>
+      <span><a href="">iopopo</a></span>
+    </p>
+    <p>
+      <span><a href="">iopopo</a></span>
+    </p>
+  </body>
+</html>
+	`
 
 func p(a ...any) {
 	fmt.Println(a)
@@ -48,11 +53,16 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 }
 
 func main() {
-	// doc, _ := node.ParseHTML(testhtml)
-	// popo := web_files_manipulation.QuerySelectorAll(doc, ".poop")
-	// for _, v := range popo {
+	// f, _ := os.ReadFile("./asdf.html")
+	// doc, _ := node.ParseHTML(string(f))
+	// fmt.Println(string(f))
+	// spans := doc.FindAll(node.Descendant, node.P)
+	// for _, v := range spans {
+	// 	fmt.Println("###########")
 	// 	fmt.Println(v.HTML())
 	// }
+
+	// popo := web_files_manipulation.QuerySelectorAll(doc, "p span a")
 	// foo := `asdf %d asdf`
 	// fmt.Printf(foo, 123)
 	run()

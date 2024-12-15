@@ -21,110 +21,13 @@ func Init(sourceDirectory string) {
 		panic(fmt.Sprintf("Failed at initial directory %s", sourceDirectory))
 	}
 	contentTransformation3D(directories, files)
+	fmt.Println(IDS)
 }
 
 func InsertHeader() {
 }
 
 // probablemente esta funcion pase a ser unicamente la que mete los productos en las tiendas, las otras cosas que se ocupan hacer son mas especificas y complicadas que encontrar una manera generica de hacerlo es algo que requiere bastante mas tiempo
-func contentTransformation(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
-	// html a php
-	for i := 0; i < int(files.Length); i++ {
-		file := files.ArrayList[i].(*File)
-		if instructions[file.fileParentDir] != nil {
-			fileReaded, err := os.ReadFile(file.filePath)
-			fileContent := gohtml.Format(string(fileReaded))
-			if err != nil {
-				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
-			}
-			doc, err := node.ParseHTML(fileContent)
-			if err != nil {
-				panic(fmt.Sprintf("error parsing this file", file.filePath))
-			}
-			for _, instruction := range instructions[file.fileParentDir] {
-				classToSearch := instruction["class"]
-				htmlToInsert := instruction["htmlToInsert"]
-
-				var targetDiv node.Node
-				var deletingDivs []node.Node
-				var parent node.Node
-				// var htmlContent string
-
-				switch classToSearch {
-				case "html":
-					targetDiv = doc.Find(node.Descendant, node.Html)
-					preppendHTMLToNode(htmlToInsert, targetDiv)
-				// poner que en vez de que el realizar el reemplazo de productos sea el default que sea la cosa que reemplaza la default nomas que no se como hacerle bien porque
-				default:
-					productHref := getData(instruction, "href")
-					productName := getData(instruction, "productName")
-					productImg := getData(instruction, "img")
-					productPrice := getData(instruction, "price")
-					productForeach := getData(instruction, "foreach") // ocd tockin rn fr
-					productClassForName := getData(instruction, "className")
-					productClassForPrice := getData(instruction, "classPrice")
-
-					deletingDivs = doc.FindAll(node.Descendant, node.Div, node.Class(classToSearch))
-					if deletingDivs == nil || len(deletingDivs) == 0 {
-						panic(fmt.Sprintf("deletingDivs are nil or zero len in this instruction %s", classToSearch))
-					}
-					targetDiv = deletingDivs[0]
-					// targetDiv.Find(node.Descendant, node.A, node.Class("product_name"))
-					anchors := targetDiv.FindAll(node.Descendant, node.A)
-					if anchors == nil || len(anchors) == 0 {
-						panic(fmt.Sprintf("anchors are nil or zero len in this instruction %s", classToSearch))
-					}
-
-					imgs := targetDiv.FindAll(node.Descendant, node.Img)
-					if imgs == nil || len(imgs) == 0 {
-						panic(fmt.Sprintf("imgs are nil or zero len in this instruction %s", classToSearch))
-					}
-					setUpAnchors(&anchors, productHref, productName)
-					setUpImages(&imgs, productImg, productName)
-
-					// bruhhhh
-					priceSpan := targetDiv.Find(node.Descendant, nil, node.Class(productClassForPrice))
-					if priceSpan == nil {
-						panic(fmt.Sprintf("priceSpan is nil, check the value of the `classPrice` field in this instruction %s", classToSearch))
-					}
-					removeAllChildren(&priceSpan)
-					priceSpan.Raw().AppendChild(newTextHtmlNode(fmt.Sprintf("DESDE $%s", productPrice)))
-
-					nameAnchor := targetDiv.Find(node.Descendant, nil, node.Class(productClassForName))
-					if nameAnchor == nil {
-						panic(fmt.Sprintf("nameAnchor is nil, check the value of the `className` field in this instruction %s", classToSearch))
-					}
-
-					removeAllChildren(&nameAnchor)
-					nameAnchor.Raw().AppendChild(newTextHtmlNode(productName))
-
-					parent = targetDiv.Parent()
-					htmlToInsert = fmt.Sprintf(productForeach, targetDiv.HTML())
-					removeAllChildren(&parent)
-					parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
-				}
-
-				// parent.Raw().AppendChild(newTextHtmlNode(htmlToInsert))
-				phpFileName := strings.Replace(file.filePath, "html", "php", -1)
-				os.Rename(file.filePath, phpFileName)
-				file.filePath = phpFileName
-				os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
-				fmt.Println(file.filePath)
-			}
-		}
-	}
-
-	for i := 0; i < int(directories.Length); i++ {
-		directory := directories.ArrayList[i]
-		innerDirectories, innerFiles, err := getFilesInDirectory(directory.(string))
-		if err != nil {
-			// TODO: manage a better error recovery here in c i should free all the memory or just keep going and just log it idrk
-			panic(fmt.Sprintf("Failed at directory: %s", directory))
-		}
-		contentTransformation(innerDirectories, innerFiles)
-	}
-}
-
 func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.ArrayList) {
 	for i := 0; i < int(files.Length); i++ {
 		file := files.ArrayList[i].(*File)
@@ -156,10 +59,13 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 					preppendHTMLToNode(instruction.PrependHTML, targetDiv)
 
 				default:
-					targetDiv = doc.Find(node.Descendant, nil, node.Class(classToSearch))
-
+					queries := parseQuery(classToSearch)
+					targetDiv = QuerySelector(doc, classToSearch)
+					firstQuery := queries[0][1:]
+					IDS[firstQuery], _ = targetDiv.Attrs().Get("id")
+					// targetDiv = doc.Find(node.Descendant, nil, node.Class(classToSearch))
 					if targetDiv == nil {
-						panic(fmt.Sprintf(" targetDiv is nil probably wrong class for the wrong directory\nthis is the class we are trying to look for: `%s`", classToSearch))
+						panic(fmt.Sprintf(" targetDiv is nil probably wrong class for the wrong directory\nthis is the class we are trying to look for: `%s`\n inside file: `%s`", classToSearch, file.filePath))
 					}
 
 					HTMLManipulation(instruction, targetDiv)
@@ -174,6 +80,7 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 
 					constructHTML(&parent, targetDiv, instruction)
 				}
+
 				buildPHPFile(file, doc)
 			}
 		}

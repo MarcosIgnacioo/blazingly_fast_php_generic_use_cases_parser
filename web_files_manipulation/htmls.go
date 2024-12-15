@@ -1,10 +1,14 @@
 package web_files_manipulation
 
-import "github.com/sunshineplan/node"
+import "fmt"
+
+var IDS map[string]string = map[string]string{
+	"": "",
+}
 
 // anchor tag attributes
 var productAnchorHrefTagAtrr = TagAttribute{
-	Tag: node.A,
+	Tag: "a",
 	Attr: Attribute{
 		Name:  "href",
 		Value: productHref,
@@ -12,7 +16,7 @@ var productAnchorHrefTagAtrr = TagAttribute{
 }
 
 var productAnchorTitleTagAtrr = TagAttribute{
-	Tag: node.A,
+	Tag: "a",
 	Attr: Attribute{
 		Name:  "title",
 		Value: productName,
@@ -20,7 +24,7 @@ var productAnchorTitleTagAtrr = TagAttribute{
 }
 
 var productImgSrcTagAtrr = TagAttribute{
-	Tag: node.Img,
+	Tag: "img",
 	Attr: Attribute{
 		Name:  "src",
 		Value: productThumbnail,
@@ -29,7 +33,7 @@ var productImgSrcTagAtrr = TagAttribute{
 
 // img tags attributes
 var productImgSrcSetTagAtrr = TagAttribute{
-	Tag: node.Img,
+	Tag: "img",
 	Attr: Attribute{
 		Name:  "srcset",
 		Value: productThumbnail,
@@ -37,7 +41,7 @@ var productImgSrcSetTagAtrr = TagAttribute{
 }
 
 var productImgCoffeCoverFullPathSrcSetTagAtrr = TagAttribute{
-	Tag: node.Img,
+	Tag: "img",
 	Attr: Attribute{
 		Name:  "srcset",
 		Value: productItemCoffeCoverFullPath,
@@ -45,7 +49,7 @@ var productImgCoffeCoverFullPathSrcSetTagAtrr = TagAttribute{
 }
 
 var productImgCoffeCoverFullPathSrcTagAtrr = TagAttribute{
-	Tag: node.Img,
+	Tag: "img",
 	Attr: Attribute{
 		Name:  "src",
 		Value: productItemCoffeCoverFullPath,
@@ -53,7 +57,7 @@ var productImgCoffeCoverFullPathSrcTagAtrr = TagAttribute{
 }
 
 var productImgAltTagAtrr = TagAttribute{
-	Tag: node.Img,
+	Tag: "img",
 	Attr: Attribute{
 		Name:  "alt",
 		Value: "<?= $product->name ?>",
@@ -65,107 +69,6 @@ var productPrice = `DESDE $<?= $product->price ?>`
 var productThumbnail = `<?= $product->thumbnail_path ?>`
 var productName = `<a href="<?= $product->url ?>"><?= $product->name ?></a>`
 
-var instructions = map[string][]map[string]string{
-	"app": {
-		{
-			"class":        "html",
-			"htmlToInsert": homeHeader,
-		},
-		{
-			"class":      "product_item_coffe",
-			"foreach":    productItemCoffeeForeachWrapper,
-			"img":        productItemCoffeCoverFullPath,
-			"classPrice": "product_price_home",
-			"className":  "product_name_home",
-		},
-		{
-			"class":      "product_item_favorite",
-			"foreach":    productItemFavoriteForeachWrapper,
-			"classPrice": "product_price_home",
-			"className":  "product_name_home",
-		},
-	},
-	"tienda": {
-		{
-			"class":        "html",
-			"htmlToInsert": storeHeader,
-		},
-		{
-			"class":      "product_item_all",
-			"foreach":    productItemAllForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-	},
-	"cafe": {
-		{
-			"class":        "html",
-			"htmlToInsert": coffeeHeader,
-		},
-		{
-			"class":      "product_item_coffee_mezclas",
-			"foreach":    coffeeMixesForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-		{
-			"class":      "product_item_coffee_autor",
-			"foreach":    authorForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-		{
-			"class":      "product_item_coffee_origen",
-			"foreach":    originForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-		{
-			"class":      "product_item_favorite",
-			"foreach":    productItemFavoriteForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-	},
-	"merch": {
-		{
-			"class":        "html",
-			"htmlToInsert": merchHeader,
-		},
-		{
-			"class":      "product_item_merch",
-			"foreach":    merchForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-	},
-	"accesorios": {
-		{
-			"class":        "html",
-			"htmlToInsert": accesoriesHeader,
-		},
-		{
-			"class":      "product_item_accessories",
-			"foreach":    accesoriesForeachWrapper,
-			"classPrice": "product_price",
-			"className":  "product_name",
-		},
-	},
-	// "diablo": {
-	// 	{
-	// 		"class":        "html",
-	// 		"htmlToInsert": devilHeader,
-	// 	},
-	// 	{
-	// 		"class":      "PRODUCT_CLASS",
-	// 		"foreach":    ForeachWrapper,
-	// 		"img":        "<?= $productsController->getCover($grand_product) ?>",
-	// 		"classPrice": "product_price",
-	// 		"className":  "product_name",
-	// 	},
-	// },
-}
-
 var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 	"app": {
 		Instruction{
@@ -173,7 +76,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: homeHeader,
 		},
 		getBasicInstruction(
-			"product_item_coffe",
+			".product_item_coffe",
 			productItemCoffeeForeachWrapper,
 			"product_price_home",
 			"product_name_home",
@@ -183,7 +86,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			productImgCoffeCoverFullPathSrcTagAtrr,
 		),
 		getBasicInstruction(
-			"product_item_favorite",
+			".product_item_favorite",
 			productItemAllForeachWrapper,
 			"product_price_home",
 			"product_name_home",
@@ -198,7 +101,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: storeHeader,
 		},
 		getBasicInstruction(
-			"product_item_all",
+			".product_item_all",
 			productItemAllForeachWrapper,
 			"product_price",
 			"product_name",
@@ -213,7 +116,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: coffeeHeader,
 		},
 		getBasicInstruction(
-			"product_item_coffee_mezclas",
+			".product_item_coffee_mezclas",
 			coffeeMixesForeachWrapper,
 			"product_price",
 			"product_name",
@@ -221,7 +124,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			`<a href="<?= $product->url ?>" title=""><span style="font-family: 'daisywhl';"><?= $product->name ?></span></a>`,
 		),
 		getBasicInstruction(
-			"product_item_coffee_autor",
+			".product_item_coffee_autor",
 			authorForeachWrapper,
 			"product_price",
 			"product_name",
@@ -229,7 +132,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			productName,
 		),
 		getBasicInstruction(
-			"product_item_coffee_origen",
+			".product_item_coffee_origen",
 			originForeachWrapper,
 			"product_price",
 			"product_name",
@@ -237,7 +140,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			productName,
 		),
 		getBasicInstruction(
-			"product_item_favorite",
+			".product_item_favorite",
 			productItemFavoriteForeachWrapper,
 			"product_price",
 			"product_name",
@@ -251,7 +154,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: merchHeader,
 		},
 		getBasicInstruction(
-			"product_item_merch",
+			".product_item_merch",
 			merchForeachWrapper,
 			"product_price",
 			"product_name",
@@ -265,7 +168,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: accesoriesHeader,
 		},
 		getBasicInstruction(
-			"product_item_accessories",
+			".product_item_accessories",
 			accesoriesForeachWrapper,
 			"product_price",
 			"product_name",
@@ -278,11 +181,13 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			Class:       "html",
 			PrependHTML: devilHeader,
 		},
+		// como lo reworkearia sweria que en la clase solamente estuviera el contenedor padre y dentro de los html manipulation inner outer append prepend meter la clase o tag de donde se va a meter ese html
 		Instruction{
 			Class: ".sizes_items_details select",
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
-					Tag: node.Select,
+					// with empty tag we use the Target div from above
+					Tag: "",
 					Attr: Attribute{
 						Name:  "onchange",
 						Value: "updateSelection(this)",
@@ -302,6 +207,177 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 					<?php
 				endif ?>
 			`,
+		},
+		Instruction{
+			Class: ".quantity_items_product select",
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag: "",
+					Attr: Attribute{
+						Name:  "class",
+						Value: "cantidad_producto",
+					},
+				},
+			},
+			InnerHTML: `
+			<?php if (isset($stock) && $stock > 0): ?>
+
+				<?php for ($i = 1; $i < $stock; $i++): ?>
+						<option value="<?= $i ?>">
+								<?= $i ?>
+						</option>
+						<?php if ($i > 9) { break; } ?>
+				<?php endfor; ?>
+
+			<?php endif; ?> 
+			`,
+		},
+		// FALTA el producttile detail product price details product description details PONERLO
+		Instruction{
+			Class: ".molienda_container select",
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag: "",
+					Attr: Attribute{
+						Name:  "class",
+						Value: "feature_product",
+					},
+				},
+			},
+			InnerHTML: `
+			<?php foreach ($features as $feature): ?>
+				<option value="<?= $feature  ?>">
+						<?= $feature  ?>
+				</option>
+			<?php endforeach ?> 
+			`,
+		},
+
+		Instruction{
+			Class: ".boton_add_to_cart a",
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag: "",
+					Attr: Attribute{
+						Name:  "onclick",
+						Value: "QuickAdd(this)",
+					},
+				},
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag: "",
+					Attr: Attribute{
+						Name:  "data-product",
+						Value: "<?= json_encode($productsController->getQuickView($grand_product)) ?>",
+					},
+				},
+			},
+		},
+		Instruction{
+			Class: ".tueste_item_details",
+			InnerHTML: `
+			<?php if ($tueste!=""): ?>
+				<img src="<?= $tueste ?>" alt="" />
+				<?php else: ?>
+				<img src="/images/250/10441024/escala_tueste.png" alt="" />
+			<?php endif ?> 
+			`,
+		},
+		Instruction{
+			Class: ".sabor_item_details",
+			InnerHTML: `
+			<?php if ($perfil_de_sabor!=""): ?>
+					<img src="<?= $perfil_de_sabor ?>" alt="" />
+				<?php else: ?>
+					<img src="/images/250/10441024/escala_tueste.png" alt="" />
+			<?php endif ?> 
+			`,
+		},
+		Instruction{
+			Class: ".ed-gallery-thumb",
+			ForEach: `
+				<?php if (isset($grand_product) && isset($grand_product->images)): ?>
+					<?php foreach ($grand_product->images as $image): ?>  
+						<?php if (!$image->is_cover): ?> 
+							%s
+						<?php endif ?>
+					<?php endforeach ?> 
+				<?php endif ?>
+			`,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					Tag: "a",
+					Attr: Attribute{
+						Name:  "href",
+						Value: "<?= $image->full_path ?>",
+					},
+				},
+				TagAttribute{
+					Tag: "img",
+					Attr: Attribute{
+						Name:  "src",
+						Value: "<?= $image->full_path ?>",
+					},
+				},
+				TagAttribute{
+					Tag: "img",
+					Attr: Attribute{
+						Name:  "srcset",
+						Value: "<?= $image->full_path ?>",
+					},
+				},
+			},
+		},
+		Instruction{
+			Class: ".product_item_recomendation",
+			ForEach: `
+		<?php if (isset($grand_product->related_products) && count($grand_product->related_products)): ?> 
+				<?php foreach ($grand_product->related_products as $product): ?>
+					<?php $product = $productsController->getQuickView($product) ?>
+				%s
+				<?php endforeach ?> 
+			<?php endif ?> 
+			`,
+			InnerHtmlReplacements: []HTMLReplacement{
+				HTMLReplacement{
+					ClassName: "item_recomendation_name",
+					HTML:      "<?= $product->name ?>",
+				},
+				HTMLReplacement{
+					ClassName: "item_recomendation_price",
+					HTML:      "DESDE $<?= $product->price ?>",
+				},
+			},
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					Tag: "a",
+					Attr: Attribute{
+						Name:  "href",
+						Value: "<?= $product->url ?>",
+					},
+				},
+				TagAttribute{
+					Tag: "img",
+					Attr: Attribute{
+						Name:  "src",
+						Value: "<?= $image->full_path ?>",
+					},
+				},
+				TagAttribute{
+					Tag: "img",
+					Attr: Attribute{
+						Name:  "srcset",
+						Value: "<?= $image->full_path ?>",
+					},
+				},
+			},
+		},
+		Instruction{
+			Class:      "body",
+			AppendHTML: fmt.Sprintf("<script type=\"text/javascript\"> document.getElementById('%s').onchange() </script>", IDS["sizes_items_details"]),
 		},
 	},
 
