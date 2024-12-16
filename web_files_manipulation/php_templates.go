@@ -188,3 +188,44 @@ var devilHeader = `
 
 ?>
 `
+
+// $ sudadera
+
+var sweaterHeader = `
+ 	<?php
+ 	    
+ 	  include_once "../../../app/config.php"; 
+ 	  include_once "../../../app/ProductsController.php";
+ 	  include_once "../../../app/CategoriesController.php";
+
+ 	  $productsController = new ProductsController(); 
+ 	  $categoriesController = new CategoriesController(); 
+
+ 	  if(isset($_GET['slug'])) {
+
+ 	    $grand_product = $productsController -> getBySlug($_GET['slug']); 
+
+ 	  }else{
+ 	    header("Location:".$_SERVER['HTTP_REFERER']);
+ 	  }
+
+ 	  if (is_null($grand_product)) {
+ 	    header("Location:".$_SERVER['HTTP_REFERER']);
+ 	  } 
+
+ 	  $stock = $productsController ->getStock($grand_product->presentations);;
+
+ 	?>
+`
+
+// # login
+
+var loginHeader = `
+	<?php
+		include_once "../app/config.php";    
+
+		if (isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'account/dashboard');
+		}
+	?>
+	`

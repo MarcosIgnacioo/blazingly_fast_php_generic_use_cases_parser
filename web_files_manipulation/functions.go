@@ -83,8 +83,6 @@ func appendHTMLToNode(text string, where node.Node) {
 	if where == nil {
 		panic("where nil in appendingHMTL")
 	}
-	fmt.Println(IDS)
-	fmt.Println(text)
 	where.Raw().AppendChild(newTextHtmlNode(text))
 }
 
@@ -106,8 +104,8 @@ func replaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
 	if tag.Raw().Parent == nil {
 		panic("parent nil in replacing outerHTML")
 	}
-	tag.Raw().Parent.InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
-	tag.Raw().Parent.RemoveChild(tag.Raw())
+	tag.Raw().InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	tag.Parent().Raw().RemoveChild(tag.Raw())
 }
 
 func setUpAnchors(anchors *[]node.Node, productHref string, productName string) {
@@ -243,13 +241,21 @@ func innerHTMLManipulation(instruction Instruction, classToSearch string, target
 	}
 }
 
-func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction) {
-	*parent = targetDiv.Parent()
+func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction, shouldRemoveChildren bool) {
+	// solamente quiero vacaciones
+	if !instruction.IsParent {
+		*parent = targetDiv.Parent()
+	} else {
+		*parent = targetDiv
+	}
 	htmlToInsert := targetDiv.HTML()
 	if instruction.ForEach != "" {
 		htmlToInsert = fmt.Sprintf(instruction.ForEach, htmlToInsert)
 	}
-	removeAllChildren(parent)
+	if shouldRemoveChildren {
+		removeAllChildren(parent)
+		// replaceInnerHTMLFromNode(htmlToInsert, targetDiv)
+	}
 	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
 }
 
@@ -269,8 +275,9 @@ func getBasicInstruction(className string, forEachWrapper string, priceClassName
 		imgSrcSet = imgs[1]
 	}
 	return Instruction{
-		Class:   className,
-		ForEach: forEachWrapper,
+		Class:                   className,
+		ShouldRemoveAllChildren: true,
+		ForEach:                 forEachWrapper,
 		TagsAttributes: []TagAttribute{
 			productAnchorHrefTagAtrr,
 			productAnchorTitleTagAtrr,
@@ -352,6 +359,14 @@ func QuerySelector(document node.Node, query string) node.Node {
 
 func parseQuery(query string) []string {
 	return strings.Split(query, " ")
+}
+
+func getClassNameOrTagName(query string) string {
+	if query[0] == '.' {
+		return query[1:]
+	} else {
+		return query
+	}
 }
 
 func searchElements(name string, where node.Node) []node.Node {

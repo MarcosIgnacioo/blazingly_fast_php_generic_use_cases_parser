@@ -2,17 +2,18 @@ package web_files_manipulation
 
 import (
 	"fmt"
-	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
-	"github.com/sunshineplan/node"
-	"github.com/yosssi/gohtml"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
+
+	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
+	"github.com/sunshineplan/node"
+	"github.com/yosssi/gohtml"
 )
 
 func p(a ...any) {
-	fmt.Println(a)
+	fmt.Println(a...)
 }
 
 func Init(sourceDirectory string) {
@@ -21,7 +22,6 @@ func Init(sourceDirectory string) {
 		panic(fmt.Sprintf("Failed at initial directory %s", sourceDirectory))
 	}
 	contentTransformation3D(directories, files)
-	fmt.Println(IDS)
 }
 
 func InsertHeader() {
@@ -60,9 +60,25 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 
 				default:
 					queries := parseQuery(classToSearch)
-					targetDiv = QuerySelector(doc, classToSearch)
-					firstQuery := queries[0][1:]
+					var targetDiv node.Node
+					if classToSearch == "" {
+						targetDiv = doc
+					} else {
+						targetDiv = QuerySelector(doc, classToSearch)
+					}
+					if instruction.TargetParent {
+						targetDiv = targetDiv.Parent()
+					}
+
+					firstQuery := getClassNameOrTagName(queries[0])
 					IDS[firstQuery], _ = targetDiv.Attrs().Get("id")
+					// change this at the end
+					// XDDDD
+					if firstQuery == "body" || firstQuery == "head" {
+						instruction.TargetItemID = IDS["sizes_items_details"]
+						instruction.AppendHTML = fmt.Sprintf(instruction.AppendHTML, instruction.TargetItemID)
+					}
+
 					// targetDiv = doc.Find(node.Descendant, nil, node.Class(classToSearch))
 					if targetDiv == nil {
 						panic(fmt.Sprintf(" targetDiv is nil probably wrong class for the wrong directory\nthis is the class we are trying to look for: `%s`\n inside file: `%s`", classToSearch, file.filePath))
@@ -77,8 +93,7 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 					if instruction.InnerHtmlReplacements != nil {
 						innerHTMLManipulation(instruction, classToSearch, targetDiv)
 					}
-
-					constructHTML(&parent, targetDiv, instruction)
+					constructHTML(&parent, targetDiv, instruction, instruction.ShouldRemoveAllChildren)
 				}
 
 				buildPHPFile(file, doc)
@@ -99,7 +114,11 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 
 func prepareHTMLForFile(doc node.Node) []byte {
 	html := (doc.HTML())
-	coolerHtml := strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1)
+	// var greaterThan = regexp.MustCompile(`(\?="*.)(&gt;)(?=.*")`)
+	// var lessThan = regexp.MustCompile(`(\?="*.)(&lt;)(?=.*")`)
+	// fixedGt := greaterThan.ReplaceAll([]byte(html), []byte(">"))
+	// finalHtml := lessThan.ReplaceAll(fixedGt, []byte("<"))
+	coolerHtml := strings.Replace(strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1), "&#39;", "'", -1)
 	return []byte(coolerHtml)
 }
 
