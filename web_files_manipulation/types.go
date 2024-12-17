@@ -31,18 +31,20 @@ type readingFilesInDirectoryError struct {
 
 type Instruction struct {
 	// esto es query pero me da hueva hacer refactor xd
-	Class                   string            `json:"class"`
-	ShouldRemoveAllChildren bool              `json:"should_removeall_children"`
-	TargetParent            bool              `json:"target_parent"`
-	IsParent                bool              `json:"is_parent"`
-	TargetItemID            string            `json:"target_item_id"`
-	InnerHTML               string            `json:"inner_html"`
-	OuterHTML               string            `json:"outer_html"`
-	AppendHTML              string            `json:"append_html"`
-	PrependHTML             string            `json:"prepend_html"`
-	ForEach                 string            `json:"for_each"`
-	TagsAttributes          []TagAttribute    `json:"tags_attributes"`
-	InnerHtmlReplacements   []HTMLReplacement `json:"inner_html_replacements"`
+	Class                              string            `json:"class"`
+	ShouldRemoveAllChildren            bool              `json:"should_removeall_children"`
+	ShouldRemoveAllChildrenExceptFirst bool              `json:"should_remove_all_childrene_xcept_first"`
+	ShouldAppendAttributes             bool              `json:"should_append_attributes"`
+	TargetParent                       bool              `json:"target_parent"`
+	IsParent                           bool              `json:"is_parent"`
+	TargetItemID                       string            `json:"target_item_id"`
+	InnerHTML                          string            `json:"inner_html"`
+	OuterHTML                          string            `json:"outer_html"`
+	AppendHTML                         string            `json:"append_html"`
+	PrependHTML                        string            `json:"prepend_html"`
+	ForEach                            string            `json:"for_each"`
+	TagsAttributes                     []TagAttribute    `json:"tags_attributes"`
+	InnerHtmlReplacements              []HTMLReplacement `json:"inner_html_replacements"`
 }
 
 type Attribute struct {

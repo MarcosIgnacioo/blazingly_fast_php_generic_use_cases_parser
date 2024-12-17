@@ -722,7 +722,6 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 				},
 			},
 		},
-
 		Instruction{
 			Class: ".register_phone",
 			TagsAttributes: []TagAttribute{
@@ -736,4 +735,319 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 	},
+
+	"dashboard": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: dashBoardHeader,
+		},
+		Instruction{
+			ShouldRemoveAllChildren: true,
+			Class:                   ".header_welcome",
+			InnerHTML:               `Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href="/clients?action=logout">Cerrar sesión</a> )`,
+		},
+	},
+	"details": generateInputTagAttributes(detailsInputs, "input", detailsHeader),
+
+	"addresses": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: addressesHeader,
+		},
+		Instruction{
+			ShouldRemoveAllChildren: true,
+			Class:                   ".address-data",
+			InnerHTML: `
+			<?php if (isset($addresses) && count($addresses)) : ?>
+				<?php foreach ($addresses as $address) : ?>
+						<div class="ed-element ed-container image-boxes-box wv-overflow_visible address-data" data-min-count="1" data-max-count="127" data-mappable="1" id="ed-456888664">
+							<div class="inner">       
+								<div class="ed-element ed-text custom-theme" data-min-count="0" data-max-count="1" data-mappable="1" id="ed-456888667">
+									<p id="isPasted"><strong>Nombre:&nbsp;</strong></p>
+									<p><span style="text-align: right; font-size: 1rem; letter-spacing: 0px;">
+										<?= $address->first_name ?> <?= $address->last_name ?>
+									</span></p>
+									<p><strong>Calle:</strong><span style="white-space: pre;">&nbsp; &nbsp;&nbsp;</span></p>
+									<p><?= $address->street_and_use_number ?></p>
+									<p>
+										<strong>Apartamento:</strong><span style="white-space: pre;"><strong>&nbsp; &nbsp;&nbsp;</strong></span>
+									</p>
+									<p><span style="white-space: pre;"><?= $address->apartment ?></span></p>
+									<p>
+										<strong>Provincia:</strong><span style="white-space: pre;"><strong>&nbsp;</strong> &nbsp;&nbsp;</span>
+									</p>
+									<p><?= $address->city ?> <?= $address->state ?></p>
+									<p><strong>Código postal:</strong><span style="white-space: pre;">&nbsp; &nbsp;&nbsp;</span></p>
+									<p><?= $address->postal_code ?> <?= $address->country->code ?></p>
+									<p>
+										<strong>Teléfono:</strong><span style="white-space: pre;"><strong>&nbsp;</strong> &nbsp;&nbsp;</span>
+									</p>
+													<p><span style="white-space: pre;"><?= $address->phone_number ?></span></p>
+									<p><strong>Paí</strong><strong>s:</strong></p>
+									<p><?= $address->references ?></p>
+								</div>
+							</div>
+							<style>
+								#ed-456888664 > .inner {
+									padding: 10px;
+								}
+							</style>
+						</div>
+					<?php endforeach ?>
+				<?php endif ?>
+			`,
+		},
+	},
+	"orders": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: ordersHeader,
+		},
+		Instruction{
+			ShouldRemoveAllChildren: true,
+			Class:                   ".table-text table tbody",
+			InnerHTML: `
+				<?php if (isset($orders) && count($orders)) : ?>
+				<?php foreach ($orders as $order) : ?>
+				<tr>
+					<td style="width: 17.42%;"><div style="text-align: center;">#<?= $order->folio ?></div></td>
+					<td style="width: 19.2363%;">
+						<div style="text-align: center;"><?= (new DateTime($order->order_date))->format('F d, Y') ?> <span style="white-space: pre;" id="isPasted">&nbsp; &nbsp;&nbsp;</span>&nbsp;</div>
+					</td>
+					<td style="width: 19.1538%;"><div style="text-align: center;"><?= $order->order_status->name ?></div></td>
+					<td style="width: 20%; text-align: center;">
+						<div style="text-align: center;">
+							$ <?= number_format($order->total,2) ?> <br>
+							<small>
+								por <?= count($order->presentations) ?> artículos
+							</small>
+						</div>
+					</td>
+					<td style="width: 24.1899%;">
+						<div style="text-align: center;">
+							<a href="<?= BASE_PATH ?>account/order/<?= $order->folio ?>/">
+								Detalles
+							</a>
+						</div>
+					</td>
+				</tr>
+				<?php endforeach ?>
+				<?php endif ?>`,
+		},
+	},
+	"carrito": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: cartHeader,
+		},
+		Instruction{
+			Class:                              ".product_item_cart",
+			ShouldAppendAttributes:             true,
+			ShouldRemoveAllChildrenExceptFirst: true,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag: "",
+					Attr: Attribute{
+						Name:  "class",
+						Value: `item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>`,
+					},
+				},
+			},
+			InnerHtmlReplacements: newHTMLReplacements(cartStuff),
+		},
+		Instruction{
+			Class:                   ".product_item_cart .cart_product_delete",
+			ShouldAppendAttributes:  true,
+			ShouldRemoveAllChildren: true,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("onclick", "removeItemCart(this)"),
+				},
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("data-id", "<?= $product->id ?>"),
+				},
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("data-feature", "<?=$product->feature?>"),
+				},
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("data-parent", `item_<?= $product->id ?>_<?= str_replace(" ", "", $product->feature) ?>`),
+				},
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("data-parent", `item_<?= $product->id ?>_<?= str_replace(" ", "", $product->feature) ?>`),
+				},
+			},
+		},
+		Instruction{
+			Class:                   ".cart_product_quantity input",
+			ShouldAppendAttributes:  true,
+			ShouldRemoveAllChildren: true,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("value", `<?= $product->cantidad ?>`),
+				},
+			},
+		},
+		Instruction{
+			Class:                   ".cart_product_description",
+			ShouldRemoveAllChildren: true,
+			InnerHTML: `
+			<?= $product->feature ?>
+			`,
+		},
+		Instruction{
+			Class:                   ".cart_subtotal",
+			ShouldRemoveAllChildren: true,
+			InnerHTML: `
+			$<?= number_format( $total ,2) ?>
+			`,
+		},
+		Instruction{
+			Class:                   ".cart_total",
+			ShouldRemoveAllChildren: true,
+			InnerHTML: `
+				$<?= number_format( $total ,2) ?>
+			`,
+		},
+	},
+	"form-carrito": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: formCarritoHeader,
+		},
+		Instruction{
+			Class:                              ".cart_item_row",
+			ShouldRemoveAllChildrenExceptFirst: true,
+			ForEach: `
+				<?php $total = 0; ?>
+					<?php if (isset($_SESSION['cart']) && count($_SESSION['cart'])): ?>
+						<?php foreach ($_SESSION['cart'] as $product): ?> 
+							<div class="ed-element ed-separator"><hr class="bg-primary" />
+								<hr class="bg-primary" />
+							</div>
+							%s
+						<?php $total += ($product->cantidad * $product->price) ?>
+					<?php endforeach ?>
+				<?php endif ?> 
+			`,
+			InnerHtmlReplacements: []HTMLReplacement{
+				newHTMLReplacement("cart_product_name", `<?= $product->name ?>`),
+				newHTMLReplacement("cart_product_price", `$<?= number_format($product->price * $product->cantidad, 2)?>`),
+				newHTMLReplacement("cart_product_quantity", `$<?= number_format($product->price,2) ?> x <?= $product->cantidad ?> `),
+				// no existen aun creo
+				// newHTMLReplacement("checkout_subtotal", `$<?= number_format( $total ,2) ?> `),
+				// newHTMLReplacement("checkout_total", `$<?= number_format( $total ,2) ?>`),
+			},
+		},
+		Instruction{
+			Class:                   `.submit_checkout`,
+			ShouldRemoveAllChildren: true,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "",
+					Attr: CreateAttribute("onclick", "document.querySelector('.checkout_form')?.dispatchEvent(new Event('submit', { cancelable: true }))"),
+				},
+			},
+		},
+		Instruction{
+			Class: `.checkout_name`,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "input",
+					Attr: CreateAttribute("name", "name"),
+				},
+			},
+		},
+		Instruction{
+			Class: `.checkout_email`,
+			TagsAttributes: []TagAttribute{
+				TagAttribute{
+					// with empty tag we use the Target div from above
+					Tag:  "input",
+					Attr: CreateAttribute("name", "email"),
+				},
+			},
+		},
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_phone`,
+			`name="phone"`,
+			`input`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_street_and_use_number`,
+			`name="street_and_use_number"`,
+			`input`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_street_and_use_number`,
+			`name="street_and_use_number"`,
+			`input`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_estate`,
+			`name="estate"`,
+			`select`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_city`,
+			`name="city"`,
+			`select`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_postal_code`,
+			`name="postal_code"`,
+			`input`,
+		),
+		CreateInstructionReplacementForAttributeOfTag(
+			`checkout_references`,
+			`name="references"`,
+			`textarea`,
+		),
+	},
 }
+
+// CreateInstructionReplacementForAttributeOfTag(
+// 	``,
+// 	``,
+// 	`input`,
+// ),
+
+var detailsInputs map[string][]string = map[string][]string{
+	".details_email":            {"name", "email"},
+	".details_name":             {"name", "name"},
+	".details_lastname":         {"name", "lastname"},
+	".details_phone":            {"name", "phone"},
+	".details_password_current": {"name", "password_current"},
+	".details_password_1":       {"name", "password_1"},
+	".details_password_2":       {"name", "password_2"},
+}
+
+var cartStuff map[string]string = map[string]string{
+	"cart_product_name":     "<?= $product->name ?>",
+	"cart_product_price":    "$<?= number_format(floatval($product->price) ?? 0, 2)?>",
+	"cart_product_subtotal": "$<?= number_format(floatval($product->cantidad * $product->price) ?? 0, 2) ?>",
+}
+
+// TagsAttributes: []TagAttribute{
+// 	TagAttribute{
+// 		Tag: "input",
+// 		Attr: Attribute{
+// 			Name:  "name",
+// 			Value: "phone",
+// 		},
+// 	},
+// },

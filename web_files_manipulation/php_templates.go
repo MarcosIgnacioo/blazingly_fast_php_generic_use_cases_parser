@@ -229,3 +229,76 @@ var loginHeader = `
 		}
 	?>
 	`
+
+// # dashboard
+var dashBoardHeader = `
+	<?php
+		include_once "../../app/config.php";    
+
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login/');
+		}
+	?>
+`
+
+// # details
+var detailsHeader = `
+	<?php
+		include_once "../../app/config.php";    
+
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login');
+		}
+	?>
+`
+
+// # addresseds
+
+var addressesHeader = `
+	<?php
+		include_once "../../app/config.php";    
+		include_once "../../app/AuthController.php";
+
+		$authController = new AuthController();
+
+		$authController = new AuthController();
+
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login/');
+		}
+
+		$addresses = $authController->getAddress();
+
+	?>
+`
+
+var ordersHeader = `
+	<?php
+		include_once "../../app/config.php";    
+		include_once "../../app/AuthController.php";
+
+		$authController = new AuthController();
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login/');
+		}
+
+		$orders = array_reverse($authController->getOrders($_SESSION['client_id']));
+	?>
+	`
+
+var cartHeader = `
+	<?php
+		include_once "../app/config.php"; 
+		include_once "../app/ProductsController.php";
+
+		$productsController = new ProductsController(); 
+	?>
+	`
+
+var formCarritoHeader = `
+	<?php
+		include_once "../app/config.php"; 
+		include_once "../app/ProductsController.php";
+		$productsController = new ProductsController(); 
+	?>
+	`

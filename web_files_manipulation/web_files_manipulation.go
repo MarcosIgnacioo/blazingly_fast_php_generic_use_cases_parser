@@ -16,6 +16,17 @@ func p(a ...any) {
 	fmt.Println(a...)
 }
 
+func f(fString string, a ...any) string {
+	return fmt.Sprintf(fString, a...)
+}
+
+func fp(fString string, a ...any) {
+	fmt.Printf(fString, a...)
+}
+func panik(fString string, a ...any) {
+	panic(f(fString, a...))
+}
+
 func Init(sourceDirectory string) {
 	directories, files, err := getFilesInDirectory(sourceDirectory)
 	if err != nil {
@@ -93,7 +104,7 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 					if instruction.InnerHtmlReplacements != nil {
 						innerHTMLManipulation(instruction, classToSearch, targetDiv)
 					}
-					constructHTML(&parent, targetDiv, instruction, instruction.ShouldRemoveAllChildren)
+					constructHTML(&parent, targetDiv, instruction, firstQuery)
 				}
 
 				buildPHPFile(file, doc)

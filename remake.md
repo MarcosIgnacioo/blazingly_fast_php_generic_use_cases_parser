@@ -13,3 +13,13 @@ update attribute src from .caca a to php.com
 format
 
 hacer otro programa que haga toodo el show de descomprimir y poner todos los archivos en un arreglo para pues leerlos e irles pasando uno por uno al programa
+
+
+get parent from item
+delete item from 
+query selector all 
+if len > 1 
+delete all but first
+manipulate that html
+replace WHOLE file with the updated html
+because we arem odififying the targetDiv that is from the doc tree well the whole tree is updated there

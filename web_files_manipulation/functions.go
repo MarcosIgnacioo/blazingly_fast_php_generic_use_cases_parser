@@ -67,6 +67,31 @@ func removeAllChildrenExceptFirst(tag *node.Node) {
 	}
 }
 
+func removeAllChildrenExceptFirstWithClassName(tag *node.Node, className string) {
+	if tag == nil || *tag == nil {
+		return
+	}
+	children := (*tag).Children()
+	firstLock := false
+	for i := 0; i < len(children); i++ {
+		child := children[i].Raw()
+		childClassName, _ := children[i].Attrs().Get("class")
+		containsClass := strings.Contains(childClassName, className)
+		if containsClass && firstLock {
+			(*tag).Raw().RemoveChild(child)
+		} else if containsClass {
+			firstLock = true
+		}
+	}
+}
+
+func newHTMLReplacement(className string, html string) HTMLReplacement {
+	return HTMLReplacement{
+		ClassName: className,
+		HTML:      html,
+	}
+}
+
 func preppendHTMLToNode(text string, beforeNode node.Node) {
 	if beforeNode == nil {
 		panic("beforeNode nil in preppendHTML")
@@ -150,9 +175,11 @@ func appendAttribute(htmlNode *node.Node, attribute string, value string) {
 		attr := &attributes[i]
 		if attr.Key == attribute {
 			attr.Val += " " + value
-			break
+			return
 		}
 	}
+	newAttribute := html.Attribute{Key: attribute, Val: value}
+	(*htmlNode).Raw().Attr = append(attributes, newAttribute)
 }
 
 func getData(instruction map[string]string, attribute string) string {
@@ -190,10 +217,14 @@ func dirToJson() map[string][]map[string]string {
 	}
 }
 
-func setUpTags(tags *[]node.Node, tagAttribute Attribute) {
+func setUpTags(tags *[]node.Node, tagAttribute Attribute, shouldAppendAttributes bool) {
+	attrChange := setAttribute
+	if shouldAppendAttributes {
+		attrChange = appendAttribute
+	}
 	for i := 0; i < len(*tags); i++ {
 		tag := &(*tags)[i]
-		setAttribute(tag, tagAttribute.Name, tagAttribute.Value)
+		attrChange(tag, tagAttribute.Name, tagAttribute.Value)
 	}
 }
 
@@ -226,7 +257,7 @@ func attributesManipulation(instruction Instruction, classToSearch string, targe
 		if tags == nil || len(tags) == 0 {
 			panic(fmt.Sprintf("%s are nil or zero len in this instruction %s", classToSearch, tagAttribute.Tag))
 		}
-		setUpTags(&tags, tagAttribute.Attr)
+		setUpTags(&tags, tagAttribute.Attr, instruction.ShouldAppendAttributes)
 	}
 }
 
@@ -241,7 +272,7 @@ func innerHTMLManipulation(instruction Instruction, classToSearch string, target
 	}
 }
 
-func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction, shouldRemoveChildren bool) {
+func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instruction, className string) {
 	// solamente quiero vacaciones
 	if !instruction.IsParent {
 		*parent = targetDiv.Parent()
@@ -252,9 +283,13 @@ func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instructi
 	if instruction.ForEach != "" {
 		htmlToInsert = fmt.Sprintf(instruction.ForEach, htmlToInsert)
 	}
-	if shouldRemoveChildren {
+	if instruction.ShouldRemoveAllChildren {
 		removeAllChildren(parent)
 		// replaceInnerHTMLFromNode(htmlToInsert, targetDiv)
+	}
+	if instruction.ShouldRemoveAllChildrenExceptFirst {
+		// removeAllChildrenExceptFirst(parent)
+		removeAllChildrenExceptFirstWithClassName(parent, className)
 	}
 	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
 }
@@ -382,6 +417,102 @@ func searchElement(name string, where node.Node) node.Node {
 		return where.Find(node.Descendant, nil, node.Class(name[1:]))
 	} else {
 		return where.Find(node.Descendant, node.Tag(name))
+	}
+}
+
+func generateInputTagAttributes(fields map[string][]string, tag string, header string) []Instruction {
+	attrsLen := len(fields)
+	instructions := make([]Instruction, attrsLen+1)
+	index := 0
+	instructions[index] = Instruction{
+		Class:       "html",
+		PrependHTML: header,
+	}
+	index++
+	for k, v := range fields {
+		instructions[index] =
+			Instruction{
+				Class: k,
+				TagsAttributes: []TagAttribute{
+					TagAttribute{
+						Tag: tag,
+						Attr: Attribute{
+							Name:  v[0],
+							Value: v[1],
+						},
+					},
+				},
+			}
+		index++
+	}
+	return instructions
+}
+
+func CreateAttribute(name string, value string) Attribute {
+	return Attribute{
+		Name:  name,
+		Value: value,
+	}
+}
+
+func CreateTagAttribute(name string, value string, params ...any) TagAttribute {
+	tagName := ""
+	if len(params) > 0 {
+		tagName = params[0].(string)
+	}
+	return TagAttribute{
+		// with empty tag we use the Target div from above
+		Tag:  tagName,
+		Attr: CreateAttribute(name, value),
+	}
+}
+
+func newHTMLReplacements(htmlReplacements map[string]string) []HTMLReplacement {
+	htmlReplacementsLen := len(htmlReplacements)
+	replacements := make([]HTMLReplacement, htmlReplacementsLen)
+	index := 0
+	for k, v := range htmlReplacements {
+		replacements[index] = newHTMLReplacement(k, v)
+		index++
+	}
+	return replacements
+}
+
+// example of well formed arguments
+// `checkout_phone`,
+// `input`,
+// `name="phone"`,
+func CreateInstructionReplacementForAttributeOfTag(className string, attribute string, tagName string, params ...any) Instruction {
+	if len(attribute) < 1 {
+		panik("attribute empty `%s`", attribute)
+	}
+	attrData := strings.Split(attribute, "=")
+	if className[0] != '.' {
+		className = f(".%s", className)
+	}
+
+	if len(attrData) < 2 {
+		panik(" AttrData is malformed `%s`\nmaybe missing `=`", attribute)
+	}
+
+	shouldRemoveChildren := false
+	if len(params) > 1 {
+		shouldRemoveChildren = true
+	}
+
+	attributeName := attrData[0]
+	attributeValue := strings.ReplaceAll(attrData[1], "\"", "")
+
+	return Instruction{
+		Class:                   className,
+		ShouldRemoveAllChildren: shouldRemoveChildren,
+		TagsAttributes: []TagAttribute{
+			TagAttribute{
+				// with empty tag we use the Target div from above
+				Tag:  tagName,
+				Attr: CreateAttribute(attributeName, attributeValue),
+			},
+		},
 	}
 }
 
