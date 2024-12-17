@@ -1018,6 +1018,200 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			`textarea`,
 		),
 	},
+	"payment": {
+		Instruction{
+			Class:       "html",
+			PrependHTML: paymentHeader,
+		},
+		// doesnt exist yet i think
+		// Instruction{
+		// 	ShouldRemoveAllChildren: true,
+		// 	Class:                   ".order_folio span",
+		// 	InnerHTML:               `ORDEN #<?= $_GET['folio'] ?>`,
+		// },
+		Instruction{
+			Class:                             ".cart_item_row",
+			ShouldRemoveTagsWithSameClassName: true,
+			ForEach:                           paymentForEachWrapper,
+			// TagsAttributes: []TagAttribute{
+			// 	productAnchorHrefTagAtrr,
+			// 	productAnchorTitleTagAtrr,
+			// 	productImgAltTagAtrr,
+			// },
+			InnerHtmlReplacements: []HTMLReplacement{
+				HTMLReplacement{
+					ClassName: "cart_product_name",
+					HTML: `
+					<?php if(isset($presentation->product)): ?>
+						<a href="<?= BASE_PATH ?>shop/details/<?= $presentation->product->slug; ?>/">
+							<?= $presentation->product->name ?>  
+						</a>
+					<?php endif ?>  
+`,
+				},
+				HTMLReplacement{
+					ClassName: "cart_product_quantity",
+					HTML: `
+$<?= number_format(($presentation->pivot->price->amount ?? 0),2) ?> x <?= $presentation->pivot->quantity ?>
+`,
+				},
+				HTMLReplacement{
+					ClassName: "cart_product_price",
+					HTML: `
+$<?= number_format(($presentation->pivot->price->amount ?? 0) * $presentation->pivot->quantity,2) ?>
+`,
+				},
+				// HTMLReplacement{
+				// 	ClassName: `cart_product_description`,
+				// 	HTML: `
+				// 		<?= $presentation->pivot->comment ?>
+				// 	`,
+				// },
+			},
+		},
+		Instruction{
+			Class: ".total_item_cart",
+			InnerHtmlReplacements: []HTMLReplacement{
+				HTMLReplacement{
+					ClassName: "checkout_subtotal",
+					HTML:      ` $<?= number_format(($order->total),2) ?> `,
+				},
+				HTMLReplacement{
+					ClassName: "checkout_shipping_cost",
+					HTML:      `$<?= number_format(($order->shipping_cost ?? 0),2) ?>`,
+				},
+				HTMLReplacement{
+					ClassName: "checkout_total",
+					HTML:      `$<?= number_format(($order->total),2) ?>`,
+				},
+			},
+		},
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`card_number`,
+		// 	`name="numero_tarjeta"`,
+		// 	`input`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`card_exp_date`,
+		// 	`name="fecha_exp"`,
+		// 	`input`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`card_company`,
+		// 	`name="marca_tarjeta"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`card_type`,
+		// 	`name="tipo_tarjeta"`,
+		// 	`select`,
+		// ),
+		// Instruction{
+		// 	Class:                   ".card_company select",
+		// 	ShouldRemoveAllChildren: true,
+		// 	InnerHTML: `
+		// 	<option value="" selected disabled>Selecciona una opción</option>
+		// 	<option value="VISA">Visa</option>
+		// 	<option value="MC">Mastercard</option>
+		// 	`,
+		// },
+		// Instruction{
+		// 	Class:                   ".card_type select",
+		// 	ShouldRemoveAllChildren: true,
+		// 	InnerHTML: `
+		// 	<option value="" selected disabled>Selecciona una opción</option>
+		// 	<option value="CR">Crédito</option>
+		// 	<option value="DB">Débito</option>
+		// 	`,
+		// },
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_city`,
+		// 	`name="ciudad"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_city`,
+		// 	`value="<?= $order->address->city ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_postal_code`,
+		// 	`name="codigo_postal"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_postal_code`,
+		// 	`value="<?= $order->address->postal_code ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_first_name`,
+		// 	`name="nombre"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_first_name`,
+		// 	`value="<?= $order->address->first_name ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_phone_number`,
+		// 	`name="numero_celular"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_phone_number`,
+		// 	`value="<?= $order->address->phone_number ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_state`,
+		// 	`name="estado"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_state`,
+		// 	`value="<?= $order->address->state ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_street_and_use_number`,
+		// 	`name="calle"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_street_and_use_number`,
+		// 	`value="<?= $order->address->street_and_use_number ?>`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_last_name`,
+		// 	`name="apellido"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_last_name`,
+		// 	`value="<?= $order->address->last_name ?>"`,
+		// 	`select`,
+		// ),
+		//
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_email`,
+		// 	`name="correo"`,
+		// 	`select`,
+		// ),
+		// CreateInstructionReplacementForAttributeOfTag(
+		// 	`address_email`,
+		// 	`value="<?= $order->client->email ?>"`,
+		// 	`select`,
+		// ),
+	},
 }
 
 // CreateInstructionReplacementForAttributeOfTag(

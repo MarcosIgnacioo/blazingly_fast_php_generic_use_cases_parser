@@ -302,3 +302,29 @@ var formCarritoHeader = `
 		$productsController = new ProductsController(); 
 	?>
 	`
+
+var paymentHeader = `
+	<?php 
+		include_once "../app/config.php";
+		include_once "../app/ProductsController.php";
+		include_once "../app/ShopController.php";
+
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login/');
+		}
+
+		$shopController = new ShopController();
+		$productsController = new ProductsController();
+
+		$order = $shopController->getDataOrder($_GET['folio']); 
+	?>
+`
+
+var paymentForEachWrapper = `
+<?php if (isset($order->presentations) && count($order->presentations)): ?>
+		<?php foreach ($order->presentations as $presentation): ?>                 
+			%s
+		<div class="ed-element ed-separator"><hr class="bg-primary" /></div>
+	<?php endforeach ?>
+<?php endif ?> 
+	`

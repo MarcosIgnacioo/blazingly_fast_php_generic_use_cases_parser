@@ -34,6 +34,7 @@ type Instruction struct {
 	Class                              string            `json:"class"`
 	ShouldRemoveAllChildren            bool              `json:"should_removeall_children"`
 	ShouldRemoveAllChildrenExceptFirst bool              `json:"should_remove_all_childrene_xcept_first"`
+	ShouldRemoveTagsWithSameClassName  bool              `json:"should_removetags_with_same_classname"`
 	ShouldAppendAttributes             bool              `json:"should_append_attributes"`
 	TargetParent                       bool              `json:"target_parent"`
 	IsParent                           bool              `json:"is_parent"`

@@ -291,6 +291,11 @@ func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instructi
 		// removeAllChildrenExceptFirst(parent)
 		removeAllChildrenExceptFirstWithClassName(parent, className)
 	}
+
+	if instruction.ShouldRemoveTagsWithSameClassName {
+		removeChildrenWithClassName(parent, className)
+	}
+
 	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
 }
 
