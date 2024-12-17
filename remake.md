@@ -1,7 +1,7 @@
 un compilador que parsee estas jaladas y haga las acciones en el archivo q se le pase al momento de ejecutarlo
 
-insert '<h2>shorap</h2>' from 'h1 .oppop' mode inner
-insert '<h2>shorap</h2>' from '.oppop ^' mode inner // ^ to refer to the parent of the classname
+insertInner '<h2>shorap</h2>' from 'h1 .oppop' mode inner
+insertOuter '<h2>shorap</h2>' from '.oppop ^' mode inner // ^ to refer to the parent of the classname
 insert '<h2>shorap</h2>' from '.oppop *' mode inner // * to refer to all children of the classname
 insert '<h2>shorap</h2>' from '.oppop >' mode inner // > to refer to first child of the classnme
 insert '<h2>shorap</h2>' from '.oppop <' mode inner // < to refer to last child of the classname

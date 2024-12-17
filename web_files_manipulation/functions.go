@@ -9,6 +9,22 @@ import (
 	"golang.org/x/net/html"
 )
 
+func p(a ...any) {
+	fmt.Println(a...)
+}
+
+func f(fString string, a ...any) string {
+	return fmt.Sprintf(fString, a...)
+}
+
+func fp(fString string, a ...any) {
+	fmt.Printf(fString, a...)
+}
+
+func panik(fString string, a ...any) {
+	panic(f(fString, a...))
+}
+
 func newTextHtmlNode(text string) *html.Node {
 	return (&html.Node{
 		Parent:      nil,
