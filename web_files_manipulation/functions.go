@@ -3,6 +3,7 @@ package web_files_manipulation
 import (
 	"fmt"
 	"os"
+	// "os/exec"
 	"strings"
 
 	"github.com/sunshineplan/node"
@@ -43,7 +44,15 @@ func removeChildrenWithClassName(tag *node.Node, class string) {
 		if !exists {
 			continue
 		}
-		if strings.Contains(childClass, class) {
+		classes := strings.Split(childClass, " ")
+		hasClass := false
+		for _, innerClass := range classes {
+			if innerClass == class {
+				hasClass = true
+				break
+			}
+		}
+		if hasClass {
 			child := children[i].Raw()
 			(*tag).Raw().RemoveChild(child)
 		}
@@ -312,7 +321,12 @@ func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instructi
 		removeChildrenWithClassName(parent, className)
 	}
 
-	(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
+	if instruction.ShouldReplaceOld {
+		(*parent).Raw().InsertBefore(newTextHtmlNode(htmlToInsert), targetDiv.Raw())
+		(*parent).Raw().RemoveChild(targetDiv.Raw())
+	} else {
+		(*parent).Raw().AppendChild(newTextHtmlNode(htmlToInsert))
+	}
 }
 
 func buildPHPFile(file *File, doc node.Node) {
@@ -320,6 +334,18 @@ func buildPHPFile(file *File, doc node.Node) {
 	os.Rename(file.filePath, phpFileName)
 	file.filePath = phpFileName
 	os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
+	// pretty-php test.php
+	// phpFormat := exec.Command("pretty-ph.phar", phpFileName)
+	// err := phpFormat.Start()
+	// if err != nil {
+	// 	fp("error php formating file `%s`", phpFileName)
+	// }
+	// // prettier --parser html
+	// htmlFormat := exec.Command("prettier", f("--write --parser html %s"), phpFileName)
+	// err = htmlFormat.Start()
+	// if err != nil {
+	// 	fp("error html formating file `%s`", phpFileName)
+	// }
 	fmt.Println(file.filePath)
 }
 

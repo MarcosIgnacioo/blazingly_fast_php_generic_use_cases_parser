@@ -110,11 +110,13 @@ func contentTransformation3D(directories *arraylist.ArrayList, files *arraylist.
 
 func prepareHTMLForFile(doc node.Node) []byte {
 	html := (doc.HTML())
+	// dangerous
+	html = gohtml.Format(html)
 	// var greaterThan = regexp.MustCompile(`(\?="*.)(&gt;)(?=.*")`)
 	// var lessThan = regexp.MustCompile(`(\?="*.)(&lt;)(?=.*")`)
 	// fixedGt := greaterThan.ReplaceAll([]byte(html), []byte(">"))
 	// finalHtml := lessThan.ReplaceAll(fixedGt, []byte("<"))
-	coolerHtml := strings.Replace(strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1), "&#39;", "'", -1)
+	coolerHtml := strings.ReplaceAll(strings.Replace(strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1), "&#39;", "'", -1), "&#34;", "'")
 	return []byte(coolerHtml)
 }
 

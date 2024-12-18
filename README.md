@@ -1,4 +1,8 @@
 # doce40 shop store
+# cosas que faltan
+
+# formatear losr achivos
+prettier es un pendejo y yo mas
 
 ### Paso 1: aplicar a la lista de carpetas: 
 
@@ -8,7 +12,6 @@
 Para hacer esto es hacer una funcion que haga lo siguiente
 
 Primero descomprimir el archivo
-
 
 
 ```go
@@ -31,6 +34,7 @@ func HTMLToPHP(FILE* file) void {
 
 Le pasas la carpeta donde se descomprimio todo el archivo
 
+# PENDING FORMATTING
 Dentro de esa carpeta checa si hay un index.html, si lo hay, lo formatea, y lo pasa a php
 
 Luego checa todos los folders que haya, y los mete en una arraylist
@@ -50,10 +54,10 @@ Se deberian de copiar en sus propias carpetas espejo
 
 ### Paso 3: 
 
+## QUESTION no hay ningun archivo zip dentro de la carpeta js
 - En la carpeta js de la raiz descromprimir el zip js dentro de el 
 
 ### Paso 4: 
-
 - En todos los archivos ubicar el item con la clase ``` separator_initial_cart  ``` 
 
     y sobre ese item colocar el código siguiente: 
@@ -509,6 +513,7 @@ Aquí va el código del item
 
 	?>
 	```
+# DONE
 - Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` cover_product_details  ``` este contiene la portada del item a reemplazar, reemplazar el código contenido por el siguiente: 
 
 	```
@@ -520,13 +525,13 @@ Aquí va el código del item
 
 - Dentro del mismo archivo ubicar el item con la clase ``` background-image-holder```  
 
-- Ubicar ``` product_title_details```  
-- Ubicar ``` product_price_details```  
-- Ubicar ``` product_description_details```  
+- Ubicar ``` product_title_details```   #done
+- Ubicar ``` product_price_details```   # donen
+- Ubicar ``` product_description_details```  #done
 
-- Dentro de ``` sizes_items_details``` ubicar el select
-	colocarle onchange="updateSelection(this)"
-	eliminar los options
+- Dentro de ``` sizes_items_details``` ubicar el select #done
+	colocarle onchange="updateSelection(this)" #done
+	eliminar los options #done
 	y colocar el siguiete código
 
 	<?php if (isset($grand_product->presentations) && count($grand_product->presentations)): ?>
@@ -535,12 +540,13 @@ Aquí va el código del item
                 <?= $presentation->description ?>
             </option> 
         <?php endforeach ?>
-        <?php endif ?> 
+        <?php endif ?> #done
 
     importate: este item tiene un id similar al siguiente: form_456731144_ed-f-456731147 reserva ese id porque se necesitará 
 
-- Dentro de quantity_items_product ubicar el select 
-	colocar la clase class="cantidad_producto" al select
+    # por alguna puta mamada esta mierda se duplicao dio esto todo esto esta duplicado aaaaaa pinche html ogt verga
+- Dentro de quantity_items_product ubicar el select  # done
+	colocar la clase class="cantidad_producto" al select # done
 
 	eliminar los options 
 	y colocar el siguiente código
@@ -552,7 +558,7 @@ Aquí va el código del item
             </option>
             <?php if ($i > 9) { break; } ?>
         <?php endfor; ?>
-    <?php endif; ?>
+    <?php endif; ?> # done
 
 - Dentro del item molienda_container ubicar el select 
 	colocarle la clase al select class="feature_product" 
@@ -737,6 +743,7 @@ Aquí va el código del item
     </div>
     ```
 
+    # PENDING
     - por último se deben eliminar todos los archivos index los items con la clase: ```remove_item_on_update```
 
 ### Paso 9:
@@ -900,6 +907,7 @@ Aquí va el código del item
     </li>
     ```
 
+# done
 - Buscar los item con la clase ```product_item_recomendation``` 
 	
 	```

@@ -181,8 +181,9 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 		},
 		// como lo reworkearia sweria que en la clase solamente estuviera el contenedor padre y dentro de los html manipulation inner outer append prepend meter la clase o tag de donde se va a meter ese html
 		Instruction{
-			ShouldRemoveAllChildren: true,
-			Class:                   ".sizes_items_details select",
+			ShouldRemoveAllChildren:           true,
+			ShouldRemoveTagsWithSameClassName: true,
+			Class:                             ".sizes_items_details select",
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					// with empty tag we use the Target div from above
@@ -205,6 +206,24 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 						endforeach ?>
 					<?php
 				endif ?>
+			`,
+		},
+		Instruction{
+			ShouldRemoveAllChildren: true,
+			Class:                   ".cover_product_details",
+			InnerHTML: `
+	<img
+        src="<?= $productsController->getCover($grand_product) ?>"
+        alt="<?= $grand_product->name ?>" 
+    />
+`,
+		},
+		Instruction{
+			ShouldRemoveAllChildren:           true,
+			ShouldRemoveTagsWithSameClassName: true,
+			Class:                             `.product_description_details`,
+			InnerHTML: `
+				<?= $grand_product->description ?>
 			`,
 		},
 		Instruction{
@@ -431,9 +450,10 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			InnerHTML:               "<?= $grand_product->name ?>",
 		},
 		Instruction{
-			ShouldRemoveAllChildren: false,
-			Class:                   ".price_big_product",
-			InnerHTML:               "$<?= number_format( $productsController->getPrice($grand_product->presentations) ,2) ?>",
+			ShouldRemoveAllChildren:           false,
+			ShouldRemoveTagsWithSameClassName: true,
+			Class:                             ".price_big_product",
+			InnerHTML:                         "$<?= number_format( $productsController->getPrice($grand_product->presentations) ,2) ?>",
 		},
 		Instruction{
 			ShouldRemoveAllChildren: true,
@@ -441,11 +461,10 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			InnerHTML:               "<?= $grand_product->description ?>",
 		},
 		Instruction{
-			ShouldRemoveAllChildren: false,
+			ShouldRemoveAllChildren: true,
 			Class:                   ".cover_product_details",
 			InnerHTML: `<?php  
 						$imagenes = '';
-
 						if (isset($grand_product) && isset($grand_product->images)):
 								foreach ($grand_product->images as $image): 
 										 $imagenes .= ',{"image":"'.$image->full_path.'","title":""}';
@@ -454,7 +473,6 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 
 						$imagenes = substr($imagenes, 1);
 				?> 
-
 				<div
 						class="slider-container has-dots slick-dotted slick-initialized slick-slider"
 						data-parameters='{"items":[<?= $imagenes ?>],"adaptiveHeight":true,"slidesToShow":1,"slidesToScroll":1,"rows":1,"slidesPerRow":1,"height":null,"animation":"slide","animationSpeed":"500ms","direction":"horizontal","autoplay":true,"autoplaySpeed":"5s","pauseOnHover":true,"loop":true,"nav":false,"dots":true,"enlarge":true,"retinaImages":true,"lazyLoad":"progressive","variableWidth":false,"centerMode":false,"centerPadding":"0px","asNavFor":"","responsive":[{"breakpoint":976,"settings":{"slidesToShow":1,"slidesToScroll":1,"centerPadding":"0px"}},{"breakpoint":576,"settings":{"slidesToShow":1,"slidesToScroll":1,"centerPadding":"0px"}}],"insideContainer":false}'
@@ -462,8 +480,9 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 				></div>`,
 		},
 		Instruction{
-			ShouldRemoveAllChildren: false,
-			Class:                   ".tallas_presentations",
+			ShouldRemoveAllChildren:           false,
+			ShouldRemoveTagsWithSameClassName: true,
+			Class:                             ".tallas_presentations",
 			InnerHTML: `
 	<?php if (isset($grand_product->presentations) && count($grand_product->presentations)): ?>
     <?php foreach ($grand_product->presentations as $presentation): ?>
@@ -569,30 +588,31 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			Class:                   ".product_item_recomendation",
 			// TargetParent:            true,
 			// IsParent:                true,
-			InnerHTML: `
+			ForEach: `
 			<?php if (isset($grand_product->related_products) && count($grand_product->related_products)): ?>
 				<?php foreach ($grand_product->related_products as $product): ?>
 					<?php 
 							$product->categories = $grand_product->categories;
 					?>
-					<?php $product = $productsController->getQuickView($product) ?>
-						<div class="ed-element ed-container columns-box wv-overflow_visible product_item_recomendation" id="ed-456731237">
-								<div class="inner">
-										<div class="ed-element ed-image" id="ed-456731240">
-												<a href="<?= $product->url ?>">
-														<img src="<?= $product->thumbnail_path ?>" alt="<?= $product->name ?>"  />
-												</a>
-										</div>
-										<div class="ed-element ed-text custom-theme" id="ed-456731243">
-												<p style="line-height: 1.15; text-align: center;">
-														<span style="font-size: 18px; font-family: 'daisywhl';"><a href="<?= $product->url ?>" title=""><?= $product->name ?></a></span>
-												</p>
-												<p style="line-height: 1; text-align: center;"><span style="font-size: 14px; color: rgb(94, 94, 94); font-family: 'daisywhl';">DESDE $<?= $product->price ?></span></p>
-										</div>
-								</div>
-						</div>
+						<?php $product = $productsController->getQuickView($product) ?>
+							%s
 				<?php endforeach ?>
-				<?php endif ?> 
+			<?php endif ?> 
+			`,
+			InnerHTML: `
+				<div class="inner">
+						<div class="ed-element ed-image" id="ed-456731240">
+								<a href="<?= $product->url ?>">
+										<img src="<?= $product->thumbnail_path ?>" alt="<?= $product->name ?>"  />
+								</a>
+						</div>
+						<div class="ed-element ed-text custom-theme" id="ed-456731243">
+								<p style="line-height: 1.15; text-align: center;">
+										<span style="font-size: 18px; font-family: 'daisywhl';"><a href="<?= $product->url ?>" title=""><?= $product->name ?></a></span>
+								</p>
+								<p style="line-height: 1; text-align: center;"><span style="font-size: 14px; color: rgb(94, 94, 94); font-family: 'daisywhl';">DESDE $<?= $product->price ?></span></p>
+						</div>
+				</div>
 			`,
 		},
 
@@ -637,7 +657,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			PrependHTML: loginHeader,
 		},
 		Instruction{
-			Class: ".login_email",
+			Class:            ".login_email",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -649,7 +670,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".login_password",
+			Class:            ".login_password",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -661,7 +683,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".register_email",
+			Class:            ".register_email",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -673,7 +696,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".register_password",
+			Class:            ".register_password",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -692,7 +716,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".register_password_confirmation",
+			Class:            ".register_password_confirmation",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -711,7 +736,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".register_name",
+			Class:            ".register_name",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -723,7 +749,8 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			},
 		},
 		Instruction{
-			Class: ".register_phone",
+			Class:            ".register_phone",
+			ShouldReplaceOld: true,
 			TagsAttributes: []TagAttribute{
 				TagAttribute{
 					Tag: "input",
@@ -1070,7 +1097,8 @@ $<?= number_format(($presentation->pivot->price->amount ?? 0) * $presentation->p
 			},
 		},
 		Instruction{
-			Class: ".total_item_cart",
+			Class:                             ".total_item_cart",
+			ShouldRemoveTagsWithSameClassName: true,
 			InnerHtmlReplacements: []HTMLReplacement{
 				HTMLReplacement{
 					ClassName: "checkout_subtotal",
