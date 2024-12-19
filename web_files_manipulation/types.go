@@ -109,6 +109,34 @@ const (
 	default_array_size = 12
 )
 
+// new API
+
+type Modification struct {
+	Query             string
+	SelectAll         bool
+	InnerHTML         string
+	OuterHTML         string
+	AppendHTML        string
+	PrependHTML       string
+	AttributesChanges []AttributeChange
+	HTMLSChanges      []HTMLChange
+}
+
+type AttributeMode int
+type HTMLMode int
+
+type AttributeChange struct {
+	Query     string
+	Mode      AttributeMode
+	Attribute Attribute
+}
+
+type HTMLChange struct {
+	Query string
+	Mode  HTMLMode
+	HTML  string
+}
+
 // file:///home/happy/Downloads/%3C?=%20$image-%3Efull_path%20?%3E
 // "diablo": {
 // {

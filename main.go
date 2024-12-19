@@ -53,15 +53,70 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 	}
 }
 
+// Instruction {
+// 	Query : ".product_item_coffe",
+// 	SelectAll: false,
+// 	InnerHTML: "",
+// 	OuterHTML: "",
+// 	AppendHTML: "",
+// 	PrependHTML: "",
+// 	AttributesChanges: []AttributeChange {
+// 		AttributeChange {
+// 			Query : "input"
+// 			Mode : REPLACE,
+// 			Attribute {
+// 				Name : "onclick",
+// 				Value : `()=>console.log(uwu)`
+// 			}
+// 		},
+// 		AttributeChange {
+// 			Query : "input"
+// 			Mode : APPEND,
+// 			Attribute {
+// 				Name : "class",
+// 				Value : `cooler_class_to_append`
+// 			}
+// 		}
+// 	},
+// 	HTMLSChanges: []HTMLChange {
+// 		HTMLChange {
+// 			Query : "input",
+// 			Mode : INNER,
+// 			HTML : ``
+// 		},
+// 		HTMLChange {
+// 			Query : "input",
+// 			Mode : OUTER,
+// 			HTML : ``
+// 		},
+// 		HTMLChange {
+// 			// empty query means its the `parent` query from above
+// 			Query : "",
+// 			Mode : APPEND,
+// 			HTML : ``
+// 		},
+// 		HTMLChange {
+// 			Query : "",
+// 			Mode : PREPEND,
+// 			HTML : ``
+// 		},
+// 	}
+// }
+
 func main() {
 	f, _ := os.ReadFile("./asdf.html")
 	doc, _ := node.ParseHTML(string(f))
 	ff := web_files_manipulation.QuerySelector(doc, ".product_item_coffe")
-	p(doc.HTML())
+	body := web_files_manipulation.QuerySelector(doc, "body")
 	web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
 	web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
 	web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
-	p(doc.HTML())
+	web_files_manipulation.InsertBeforeLastChild("<h1>holaaaa</h1>", &body)
+	web_files_manipulation.InsertBeforeLastChild("<h2>holaaaa</h2>", &body)
+	anchors := web_files_manipulation.SearchAllByAttribute("a", doc, "href=\"/logout\"")
+	for _, a := range anchors {
+		p(a.HTML())
+	}
 	// for _, v := range ff {
 	// }
 	// spans := doc.FindAll(node.Descendant, node.P)

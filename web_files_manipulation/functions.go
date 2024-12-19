@@ -599,6 +599,86 @@ func CreateInstructionReplacementForAttributeOfTag(className string, attribute s
 	}
 }
 
+// new API
+
+func SearchByAttribute(query string, doc node.Node, attribute string) node.Node {
+	name, value := ParseAttribute(attribute)
+	matches := QuerySelectorAll(doc, query)
+	for _, match := range matches {
+		attr, hasIt := match.Attrs().Get(name)
+		if !hasIt {
+			continue
+		}
+		if attr == value {
+			return match
+		}
+	}
+	return nil
+}
+
+func SearchAllByAttribute(query string, doc node.Node, attribute string) []node.Node {
+	name, value := ParseAttribute(attribute)
+	matches := QuerySelectorAll(doc, query)
+	founds := make([]node.Node, 12)
+	total := 0
+	for _, match := range matches {
+		attr, hasIt := match.Attrs().Get(name)
+		p(attr, "==", value)
+		if !hasIt {
+			continue
+		}
+		if attr == value {
+			founds = append(founds, match)
+			total++
+		}
+	}
+	notNilFounds := make([]node.Node, total)
+	index := 0
+	for _, found := range founds {
+		if found != nil {
+			notNilFounds[index] = found
+			index++
+		}
+	}
+	return notNilFounds
+}
+
+func PreppendHTMLToNode(text string, where node.Node) {
+	if where == nil {
+		panic("where nil in preppendHTML")
+	}
+	InsertBefore(newTextHtmlNode(text), where.Raw())
+}
+
+func AppendHTMLToNode(text string, where node.Node) {
+	if where == nil {
+		panic("where nil in appendingHMTL")
+	}
+	where.Raw().AppendChild(newTextHtmlNode(text))
+}
+
+func ReplaceInnerHTMLFromNode(text string, tag node.Node) {
+	if tag == nil {
+		panic("tag nil in replacing innerHTML")
+	}
+	if tag.Raw().Parent == nil {
+		panic("parent nil in replacing innerHTML")
+	}
+	removeChildren(tag)
+	tag.Raw().AppendChild(newTextHtmlNode(text))
+}
+
+func ReplaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
+	if tag == nil {
+		panic("tag nil in replacing outerHTML")
+	}
+	if tag.Raw().Parent == nil {
+		panic("parent nil in replacing outerHTML")
+	}
+	tag.Raw().InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	tag.Parent().Raw().RemoveChild(tag.Raw())
+}
+
 func InsertBefore(newChild, oldChild *html.Node) {
 	if newChild.Parent != nil || newChild.PrevSibling != nil || newChild.NextSibling != nil {
 		panic("html: InsertBefore called for an attached child Node")
@@ -658,6 +738,24 @@ func InsertAfter(newChild, oldChild *html.Node) {
 	newChild.Parent = n
 	newChild.PrevSibling = prev
 	newChild.NextSibling = next
+}
+
+func InsertBeforeLastChild(rawText string, parent *node.Node) {
+	if parent == nil {
+		panik(" parent is nil  \n")
+	}
+	lastChild := (*parent).LastChild()
+	if lastChild == nil {
+		panik(" last child is nil in parent \n%s", (*parent).HTML())
+	}
+	InsertAfter(NewTextHtmlNode(rawText), lastChild.Raw())
+}
+
+func ParseAttribute(attribute string) (attributeName string, attributeValue string) {
+	attrData := strings.Split(attribute, "=")
+	attributeName = attrData[0]
+	attributeValue = strings.ReplaceAll(attrData[1], "\"", "")
+	return
 }
 
 // func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {
