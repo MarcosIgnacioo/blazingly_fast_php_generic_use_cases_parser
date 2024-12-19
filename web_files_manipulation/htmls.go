@@ -1,9 +1,5 @@
 package web_files_manipulation
 
-var IDS map[string]string = map[string]string{
-	"": "",
-}
-
 // anchor tag attributes
 var productAnchorHrefTagAtrr = TagAttribute{
 	Tag: "a",

@@ -1,9 +1,82 @@
+# cossas qu debo de ser capaz de hacer
+
+Buscar un elemento por clases .popo tag .asdf .asdf caca
+Buscar un elemento por atributos
+Reemplazar el innerHTML de un elemento
+Reemplazar el outerHTML de un elemento
+Appendear HTML a un elemento
+Preppendear HTML a un elemento
+Preppendear raw text a un elemento
+Apendear raw text a un elemento
+Modificar los atributos de uno o mas elementos
+NO ALTERAR EL HTML
+Appendear al final del body (crear metodo directamente xd copiando el insertBefore pero al reves)
+Appendear al final del header (crear metodo directamente xd copiando el insertBefore pero al reves)
+Modificar los atributos de ciertas tags dentro de un container 
+Modificar el html de ciertas tags dentro de un container
+
+# cosas que estan mal con la version anterior
+
+altera el orden de los elementos en un contenedor
+
+se duplican elementos
+
+hay cosaas raras como 
+
+<a href="<?= $product->url ?>" title="<a href='<?= $product->url ?>'><?= $product->name ?></a>">
+
+en el index.php raiz linea 2051
+
+
+
 # doce40 shop store
+# cosas que faltan
+
+# formatear losr achivos
+prettier es un pendejo y yo mas
 
 ### Paso 1: aplicar a la lista de carpetas: 
 
 - Desminificar todos los archivos
 - Cambiar la extención de .html a .php
+
+Para hacer esto es hacer una funcion que haga lo siguiente
+
+Primero descomprimir el archivo
+
+
+```go
+package document_manipulation
+
+func scannDirectory(Directory *dir) error{
+    --checar la carpeta y todos los archivos .html meterlos a un
+    --arraylist(htmlFiles) y los que sean folders meterlos a otro arraylist (directories)
+    --iterar sobre el arraylist de los archivos .html para meterlos en la funcion HTMLToPHP(htmlFiles[i])
+    --iterar sobre el arraylist de directories y aplicarles la funcion de 
+    scannDirectory(directories[i])
+}
+
+func HTMLToPHP(FILE* file) void {
+    -- formatear el html
+    -- pasarlo a .php
+    -- borrar el archivo html anterior
+}
+```
+
+Le pasas la carpeta donde se descomprimio todo el archivo
+
+# PENDING FORMATTING
+Dentro de esa carpeta checa si hay un index.html, si lo hay, lo formatea, y lo pasa a php
+
+Luego checa todos los folders que haya, y los mete en una arraylist
+
+Luego, por cada folder hace un ciclo en el que se ejecuta la funcion de manera recursiva
+
+Cuando deje de haber folders e index.html que formatear y cambiar pues se detiene
+
+¿Que pasa con las carpetas que no tienen achivos html?
+
+Se deberian de copiar en sus propias carpetas espejo
 
 ### Paso 2: 
 
@@ -12,40 +85,38 @@
 
 ### Paso 3: 
 
+## QUESTION no hay ningun archivo zip dentro de la carpeta js
 - En la carpeta js de la raiz descromprimir el zip js dentro de el 
 
 ### Paso 4: 
-
 - En todos los archivos ubicar el item con la clase ``` separator_initial_cart  ``` 
 
     y sobre ese item colocar el código siguiente: 
 
     ``` 
-     
-                                    
 	<?php include "layouts/cart_mobile.template.php"; ?>
-
-	 
 	``` 
 
-	para los archivos de un nivel más profundo colocar un extra ../
+	para los archivos de un nivel más profundo colocar un extra ../ <-- this is the reason why this is all for today
+
+// this is all for today
 
 ### Paso 4:
 
 - En el index.php de la raiz colocar el siguiente código en la línea principal: 
-	```
-	<?php
+```php
+<?php
 
-	  include_once "app/config.php"; 
-	  include_once "app/ProductsController.php"; 
+  include_once "app/config.php"; 
+  include_once "app/ProductsController.php"; 
 
-	  $productsController = new ProductsController();   
+  $productsController = new ProductsController();   
 
-	  $cafes = $productsController -> getByCategory('cafe');
-	  $merchs = $productsController -> getByCategory('merch');
+  $cafes = $productsController -> getByCategory('cafe');
+  $merchs = $productsController -> getByCategory('merch');
 
-	?>
-	```
+?>
+```
 - Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` product_item_coffe  ```
 - Se deben borrar o comentar los últimos 3 items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
 	```
@@ -75,6 +146,32 @@
 	```
 	DESDE $<?= $product->price ?>
 	```
+    ```html
+	<?php if (isset($cafes) && count($cafes)): ?>
+        <?php foreach (array_slice($cafes, 0, 4) as $cafe): ?> 
+            <?php $product = $productsController->getQuickView($cafe) ?>
+                    <div class="inner">
+                        <div class="ed-element ed-image product_coffe_home_item" id="ed-456729788">
+                        <a href="<?= $product->url ?>">
+                            <img src="<?= $cafe->cover->full_path ?>" alt="<?= $product->name ?>" title="<?= $product->name ?>" />
+                          </a>
+                        </div>
+                        <div class="ed-element ed-text custom-theme product_coffe_home_item" id="ed-456729791">
+                          <p style="line-height: 1.15; text-align: center;">
+                            <span style="font-size: 18px; font-family: &#34;daisywhl&#34;;">
+                              <a href="<?= $product->url ?>"><?= $product->name ?></a>
+                            </span>
+                          </p>
+                          <p style="line-height: 1; text-align: center;">
+                            <span style="font-size: 14px; color: rgb(94, 94, 94); font-family: &#34;daisywhl&#34;;" class="product_price_home">
+                              DESDE $<?= $product->price ?>
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+        <?php endforeach ?>
+    <?php endif ?>
+    ```
 
 - Lo mismo pasa con la clase ``` product_item_favorite  ```
 - Se deben borrar o comentar los últimos 2 items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
@@ -108,20 +205,23 @@
 - En la carpeta tienda/index.php colocar el siguiente código en la cabecera 
 	```
 	<?php
-		include_once "../app/config.php"; 
-		include_once "../app/ProductsController.php";
-		include_once "../app/CategoriesController.php";
 
-		$productsController = new ProductsController(); 
-		$categoriesController = new CategoriesController(); 
+		  include_once "../app/config.php"; 
+		  include_once "../app/ProductsController.php";
+		  include_once "../app/CategoriesController.php";
 
-		$products = $productsController -> getMostSold(12);
+		  $productsController = new ProductsController(); 
+		  $categoriesController = new CategoriesController(); 
+
+		  $products = $productsController -> getMostSold(12);
+
 	?>
 	```
 
 - Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` product_item_all  ```
 - Se deben borrar o comentar todos los items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
 	```
+
 	<?php if (isset($products) && count($products)): ?>
     <?php foreach ($products as $product): ?> 
     <?php $product = $productsController->getQuickView($product) ?>
@@ -444,6 +544,7 @@ Aquí va el código del item
 
 	?>
 	```
+# DONE
 - Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` cover_product_details  ``` este contiene la portada del item a reemplazar, reemplazar el código contenido por el siguiente: 
 
 	```
@@ -455,13 +556,13 @@ Aquí va el código del item
 
 - Dentro del mismo archivo ubicar el item con la clase ``` background-image-holder```  
 
-- Ubicar ``` product_title_details```  
-- Ubicar ``` product_price_details```  
-- Ubicar ``` product_description_details```  
+- Ubicar ``` product_title_details```   #done
+- Ubicar ``` product_price_details```   # donen
+- Ubicar ``` product_description_details```  #done
 
-- Dentro de ``` sizes_items_details``` ubicar el select
-	colocarle onchange="updateSelection(this)"
-	eliminar los options
+- Dentro de ``` sizes_items_details``` ubicar el select #done
+	colocarle onchange="updateSelection(this)" #done
+	eliminar los options #done
 	y colocar el siguiete código
 
 	<?php if (isset($grand_product->presentations) && count($grand_product->presentations)): ?>
@@ -470,12 +571,14 @@ Aquí va el código del item
                 <?= $presentation->description ?>
             </option> 
         <?php endforeach ?>
-        <?php endif ?> 
+        <?php endif ?> #done
 
     importate: este item tiene un id similar al siguiente: form_456731144_ed-f-456731147 reserva ese id porque se necesitará 
 
-- Dentro de quantity_items_product ubicar el select 
-	colocar la clase class="cantidad_producto" al select
+    # por alguna puta mamada esta mierda se duplicao dio esto todo esto esta duplicado aaaaaa pinche html ogt verga
+s oreal
+- Dentro de quantity_items_product ubicar el select  # done
+	colocar la clase class="cantidad_producto" al select # done
 
 	eliminar los options 
 	y colocar el siguiente código
@@ -487,7 +590,7 @@ Aquí va el código del item
             </option>
             <?php if ($i > 9) { break; } ?>
         <?php endfor; ?>
-    <?php endif; ?>
+    <?php endif; ?> # done
 
 - Dentro del item molienda_container ubicar el select 
 	colocarle la clase al select class="feature_product" 
@@ -541,8 +644,6 @@ Aquí va el código del item
 	 <?php if (isset($grand_product) && isset($grand_product->images)): ?>
         <?php foreach ($grand_product->images as $image): ?>  
         <?php if (!$image->is_cover): ?> 
-
-         
         
         <?php endif ?>
         <?php endforeach ?> 
@@ -672,6 +773,7 @@ Aquí va el código del item
     </div>
     ```
 
+    # PENDING
     - por último se deben eliminar todos los archivos index los items con la clase: ```remove_item_on_update```
 
 ### Paso 9:
@@ -835,6 +937,7 @@ Aquí va el código del item
     </li>
     ```
 
+# done
 - Buscar los item con la clase ```product_item_recomendation``` 
 	
 	```
@@ -1138,18 +1241,18 @@ Aquí va el código del item
 		$productsController = new ProductsController(); 
 	?>
 ```
-- Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` product_item_cart  ``` agregarle esto en las clases ``` item_<?= $product->id ?>_<?= str_replace(" ", "", $product->feature) ?> ```
+- Dentro del mismo archivo index ubicar el primer item que contenga la clase ``` product_item_cart  ``` agregarle esto en las clases ``` item_<?= $product->id ?> ```
 
 - Se deben borrar o comentar todos los items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
 ```
 
-<?php $total = 0; ?>
 <?php if (isset($_SESSION['cart']) && count($_SESSION['cart'])): ?>
+<?php $total = 0; ?>
 <?php foreach ($_SESSION['cart'] as $product): ?> 
 
 Aquí va el código del item
 
-<div class="ed-element ed-separator item_<?= $product->id ?>_<?= str_replace(" ", "", $product->feature) ?>"><hr class="bg-primary" /></div>
+<div class="ed-element ed-separator item_<?= $product->id ?>"><hr class="bg-primary" /></div>
 
 <?php $total += ($product->cantidad * $product->price) ?>
 <?php endforeach ?>
@@ -1194,13 +1297,10 @@ value="<?= $product->cantidad ?>"
 - Dentro del item buscar el span con clase ``` cart_product_delete  ``` y agregarle los siguientes atributos 
 
 ```
-onclick="removeItemCart(this)" data-id="<?= $product->id ?>" data-feature="<?=$product->feature?>" data-parent="item_<?= $product->id ?>_<?= str_replace(" ", "", $product->feature) ?>" role="button"
+onclick="removeItemCart(this)" data-id="<?= $product->id ?>" data-parent="item_<?=$product->id?>" role="button"
 ```
 
-- Dentro del item buscar el span con clase ``` cart_product_description  ``` y reemplazar el contenido con 
-```
-<?= $product->feature ?>
-```
+- Dentro del item buscar el span con clase ``` cart_product_description  ``` y vaciarlo (luego vemos que ponerle, ahorita no sé, pq los cafés no tienen talla y la description es muy larga y se ve feo)
 
 -  Buscar el span con clase ``` cart_subtotal  ``` y reemplazar el contenido con 
 ```
@@ -1228,8 +1328,8 @@ $<?= number_format( $total ,2) ?>
 - Se deben borrar o comentar todos los items y dejar solo 1, el cual se repetirá en bucle a través del ciclo foreach con el siguiente código: 
 ```
 
-<?php $total = 0; ?>
 <?php if (isset($_SESSION['cart']) && count($_SESSION['cart'])): ?>
+<?php $total = 0; ?>
 <?php foreach ($_SESSION['cart'] as $product): ?> 
 
 Aquí va el código del item
@@ -1245,11 +1345,6 @@ Aquí va el código del item
 
 ```
 <?= $product->name ?>
-```
-
-- Dentro del item buscar el span con clase ``` cart_product_description  ``` y reemplazar el contenido con 
-```
-<?= $product->feature ?>
 ```
 
 - Dentro del item buscar el span con clase ``` cart_product_price  ``` y reemplazar el contenido con 
@@ -1297,7 +1392,6 @@ $<?= number_format( $total ,2) ?>
 
 -Al final del mismo archivo index agregar lo siguiente, antes del ``` </body> ```
 	```
-	    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript">
             document.querySelector('.checkout_form').addEventListener('submit', validateOrder);
         </script>
@@ -1306,7 +1400,7 @@ $<?= number_format( $total ,2) ?>
 
 
 ### Paso 16:
-- En la carpeta payment/index.php colocar el siguiente código en la cabecera 
+- En la carpeta account/form-carrito/index.php colocar el siguiente código en la cabecera 
 
 ```
 	<?php 
@@ -1355,11 +1449,6 @@ Aquí va el código del item
 <?php endif ?>  
 ```
 
-- Dentro del item buscar el span con clase ``` cart_product_description  ``` y reemplazar el contenido con 
-```
-<?= $presentation->pivot->comment ?>
-```
-
 - Dentro del item buscar el span con clase ``` cart_product_price  ``` y reemplazar el contenido con 
 
 ```
@@ -1377,63 +1466,10 @@ $<?= number_format(($presentation->pivot->price->amount ?? 0),2) ?> x <?= $prese
 $<?= number_format(($order->total),2) ?>
 ```
 
-- Buscar el span con clase ``` checkout_shipping_cost  ``` y reemplazar el contenido con 
-```
-$<?= number_format(($order->shipping_cost ?? 0),2) ?>
-```
-
 - Buscar el span con clase ``` checkout_total  ``` y reemplazar el contenido con 
 ```
 $<?= number_format(($order->total),2) ?>
 ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` card_number  ```, dentro de ese elemento ubicar el input y asignar el atributo name a  ``` name="numero_tarjeta"  ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` card_exp_date  ```, dentro de ese elemento ubicar el input y asignar el atributo name a  ``` name="fecha_exp"  ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` card_cvv  ```, dentro de ese elemento ubicar el input y asignar el atributo name a  ``` name="codigo_seguridad"  ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` card_company  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="marca_tarjeta"  ``` y reemplazar las opciones con
-
-```
-	<option value="" selected disabled>Selecciona una opción</option>
-	<option value="VISA">Visa</option>
-	<option value="MC">Mastercard</option>
-```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` card_type  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="tipo_tarjeta"  ``` y reemplazar las opciones con
-
-```
-	<option value="" selected disabled>Selecciona una opción</option>
-	<option value="CR">Crédito</option>
-	<option value="DB">Débito</option>
-```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_city  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="ciudad"  ``` y asignar el atributo value a ``` value="<?= $order->address->city ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_postal_code  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="codigo_postal"  ``` y asignar el atributo value a ``` value="<?= $order->address->postal_code ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_first_name  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="nombre"  ``` y asignar el atributo value a ``` value="<?= $order->address->first_name ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_phone_number  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="numero_celular"  ``` y asignar el atributo value a ``` value="<?= $order->address->phone_number ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_state  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="estado"  ``` y asignar el atributo value a ``` value="<?= $order->address->state ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_street_and_use_number  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="calle"  ``` y asignar el atributo value a ``` value="<?= $order->address->street_and_use_number ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_last_name  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="apellido"  ``` y asignar el atributo value a ``` value="<?= $order->address->last_name ?>" ```
-
-- Dentro del mismo archivo index ubicar el item que contiene la clase ``` address_email  ```, dentro de ese elemento ubicar el select y asignar el atributo name a  ``` name="correo"  ``` y asignar el atributo value a ``` value="<?= $order->client->email ?>" ```
-
--Al final del mismo archivo index agregar lo siguiente, antes del ``` </body> ```
-	```
-        <script type="text/javascript">
-			const order_folio = '<?= $_GET['folio'] ?>'
-            document.querySelector('.payment_form').addEventListener('submit', validatePayment);
-        </script>
-
-	```
-
 ### Home
 
 

@@ -123,7 +123,7 @@ func removeAllChildrenExceptFirstWithClassName(tag *node.Node, className string)
 
 // una alternativa a esto seria hacer una copia del primero y borrar a todos los hijos del contenedor padre, luego reemplazarlo con el nodo alterado pero  no seee
 // Remove other html elements with the same className except the first one of the parent container. Completly unsafe and relies on the fact the user provides always the first one as the one to use
-func RemoveElementsWithClassNameExceptFirst(pivotNode *node.Node, deletingClassName string, shouldUsePivotParent bool) {
+func RemoveElementsWithClassNameExceptFirst(pivotNode *node.Node, query string, shouldUsePivotParent bool) {
 	if pivotNode == nil || *pivotNode == nil {
 		panik("pivotNode removing node is nil")
 	}
@@ -136,13 +136,13 @@ func RemoveElementsWithClassNameExceptFirst(pivotNode *node.Node, deletingClassN
 	}
 
 	if parent == nil {
-		panik("parent of `removing class`: %s is nil", deletingClassName)
+		panik("parent of `removing class`: %s is nil", query)
 	}
 
-	children := QuerySelectorAll(parent, deletingClassName)
+	children := QuerySelectorAll(parent, query)
 
 	if children == nil {
-		panik("children of `removing class`: %s are nil", deletingClassName)
+		panik("children of `removing class`: %s are nil", query)
 	}
 
 	for i := 1; i < len(children); i++ {
@@ -151,10 +151,35 @@ func RemoveElementsWithClassNameExceptFirst(pivotNode *node.Node, deletingClassN
 		if !exists {
 			continue
 		}
-		containsClass := HasSameClass(childClassName, deletingClassName)
+		containsClass := HasSameClass(childClassName, query)
 		if containsClass {
 			parent.Raw().RemoveChild(child)
 		}
+	}
+}
+
+func DeleteOtherElementCopies(targets []node.Node) {
+	if len(targets) < 1 {
+		return
+	}
+	parent := targets[0].Parent()
+	for i := 1; i < len(targets); i++ {
+		child := targets[i].Raw()
+		if child.Parent != parent.Raw() {
+			fakeChildClass, _ := targets[i].Attrs().Get("class")
+			expectedToBeParentClass, _ := parent.Attrs().Get("class")
+			// realParentClass, _ := targets[i].Parent().Attrs().Get("class")
+			p("\n************************************************************************************************************************************************")
+			// expectedParentId, _ := targets[0].Attrs().Get("id")
+			// realParentId, _ := targets[i].Parent().Attrs().Get("id")
+			// p("expected parent id:", expectedParentId)
+			// p("real parent id:", realParentId)
+			fp("\nthere a nested elements with the same classname WITHOUT THE SAME PARENT!!! \n\n\"fake child\":\n\t`%s`\n\n\"expected to be parent\":\n\t`%s`\n", fakeChildClass, expectedToBeParentClass)
+			p("************************************************************************************************************************************************\n")
+			// fp("there a nested elements with the same classname WITHOUT THE SAME PARENT!!! \n\"child\":\n%s\n\"parent\":\n%s", targets[i].HTML(), parent.HTML())
+			continue
+		}
+		parent.Raw().RemoveChild(child)
 	}
 }
 
@@ -181,6 +206,9 @@ func HasSameClass(thisClass string, thatClass string) bool {
 }
 
 func parseClass(class string) string {
+	if len(class) == 0 {
+		return ""
+	}
 	if class[0] == '.' {
 		return class[1:]
 	}
@@ -368,6 +396,7 @@ func buildPHPFile(file *File, doc node.Node) {
 	// 	fp("error html formating file `%s`", phpFileName)
 	// }
 	fmt.Println(file.filePath)
+	// p(IDS)
 }
 
 func getBasicInstruction(className string, forEachWrapper string, priceClassName string, productNameClassName string, productPriceHTML string, productNameHTML string, imgs ...TagAttribute) Instruction {
@@ -440,7 +469,14 @@ func QuerySelectorAll(from node.Node, fullQuery string) []node.Node {
 func qRecurse(from node.Node, queries []string, queryIdx int) []node.Node {
 	currentQuery := queries[queryIdx]
 	// pre
-	fetchedNodes := searchElements(currentQuery, from)
+	// fetchedNodes := searchElements(currentQuery, from)
+	var fetchedNodes []node.Node
+	if strings.Contains(currentQuery, "=") {
+		tag, attribute := ParseAttributeQuery(currentQuery)
+		fetchedNodes = SearchAllByAttribute(tag, from, attribute)
+	} else {
+		fetchedNodes = searchElements(currentQuery, from)
+	}
 	if queryIdx == len(queries)-1 {
 		return fetchedNodes
 	}
@@ -457,16 +493,30 @@ func QuerySelector(document node.Node, query string) node.Node {
 	if len(queries) <= 0 {
 		return nil
 	}
-	elements := searchElements(queries[0], document)
+
+	var elements []node.Node
+	if strings.Contains(queries[0], "=") {
+		tag, attribute := ParseAttributeQuery(queries[0])
+		elements = SearchAllByAttribute(tag, document, attribute)
+	} else {
+		elements = searchElements(queries[0], document)
+	}
 
 	if len(elements) == 0 {
+		p(document.HTML())
 		panic(fmt.Sprintf(" elements is nil when trying to select\nthis query: `%s`\nprobably forgot to put a `.` for the className", query))
 		// return nil
 	}
 	needleElement := elements[0]
 	for i := 1; i < len(queries); i++ {
 		for _, element := range elements {
-			needleElement = searchElement(queries[i], element)
+			if strings.Contains(queries[i], "=") {
+				tag, attribute := ParseAttributeQuery(queries[i])
+				needleElement = SearchByAttribute(tag, element, attribute)
+			} else {
+				needleElement = searchElement(queries[i], element)
+			}
+			// needleElement = searchElement(queries[i], element)
 			if needleElement != nil {
 				break
 			}
@@ -487,7 +537,7 @@ func getClassNameOrTagName(query string) string {
 	}
 }
 
-func searchElements(name string, where node.Node) []node.Node {
+func searchElements(name string, where node.Node, params ...any) []node.Node {
 	if name[0] == '.' {
 		return where.FindAll(node.Descendant, nil, node.Class(name[1:]))
 	} else {
@@ -623,7 +673,6 @@ func SearchAllByAttribute(query string, doc node.Node, attribute string) []node.
 	total := 0
 	for _, match := range matches {
 		attr, hasIt := match.Attrs().Get(name)
-		p(attr, "==", value)
 		if !hasIt {
 			continue
 		}
@@ -643,7 +692,7 @@ func SearchAllByAttribute(query string, doc node.Node, attribute string) []node.
 	return notNilFounds
 }
 
-func PreppendHTMLToNode(text string, where node.Node) {
+func PrependHTMLToNode(text string, where node.Node) {
 	if where == nil {
 		panic("where nil in preppendHTML")
 	}
@@ -675,8 +724,28 @@ func ReplaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
 	if tag.Raw().Parent == nil {
 		panic("parent nil in replacing outerHTML")
 	}
-	tag.Raw().InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	// tag.Parent().Parent().Parent().Parent().Raw().InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	// tag.Raw().InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
+	InsertBefore(newTextHtmlNode(outerHTML), tag.Raw())
 	tag.Parent().Raw().RemoveChild(tag.Raw())
+}
+
+func HandleHTMLModifications(modification Modification, target node.Node) {
+	if modification.InnerHTML != "" {
+		ReplaceInnerHTMLFromNode(modification.InnerHTML, target)
+	}
+
+	if modification.PrependHTML != "" {
+		PrependHTMLToNode(modification.PrependHTML, target)
+	}
+
+	if modification.AppendHTML != "" {
+		AppendHTMLToNode(modification.AppendHTML, target)
+	}
+
+	if modification.OuterHTML != "" {
+		ReplaceOuterHTMLFromNode(modification.OuterHTML, target)
+	}
 }
 
 func InsertBefore(newChild, oldChild *html.Node) {
@@ -751,11 +820,112 @@ func InsertBeforeLastChild(rawText string, parent *node.Node) {
 	InsertAfter(NewTextHtmlNode(rawText), lastChild.Raw())
 }
 
+func ParseAttributeQuery(attributeQuery string) (tagName string, attribute string) {
+	attrData := strings.Split(attributeQuery, "[")
+	tagName = attrData[0]
+	attribute = strings.ReplaceAll(attrData[1], "]", "")
+	return
+}
+
 func ParseAttribute(attribute string) (attributeName string, attributeValue string) {
 	attrData := strings.Split(attribute, "=")
 	attributeName = attrData[0]
 	attributeValue = strings.ReplaceAll(attrData[1], "\"", "")
 	return
+}
+
+// POSIBLE REFACTOR
+// change targetDiv for whole document because if i wanna change multiple
+// tags attributes that arent on the same container
+// the ones outside the container where the first one came well wont have the changes
+// this would be like a really weird edge but still possible
+func AttributesChanges(modification Modification, targetDiv node.Node) {
+	for _, tagAttribute := range modification.AttributesChanges {
+		var tags []node.Node
+		if tagAttribute.Query != "" {
+			tags = QuerySelectorAll(targetDiv, tagAttribute.Query)
+		} else {
+			tags = []node.Node{targetDiv}
+		}
+		if tags == nil || len(tags) == 0 {
+			panic(fmt.Sprintf("%s are nil or zero len in this tagAttribute `%s`", tagAttribute.Query))
+		}
+		StoreID(tags[0], tagAttribute.Query)
+		SetUpTags(&tags, tagAttribute.Attribute, tagAttribute.Mode)
+	}
+}
+
+func SetUpTags(tags *[]node.Node, tagAttribute Attribute, mode AttributeMode) {
+	attrChange := setAttribute
+	if mode == APPEND_ATTRIBUTE {
+		attrChange = appendAttribute
+	}
+	for i := 0; i < len(*tags); i++ {
+		tag := &(*tags)[i]
+		attrChange(tag, tagAttribute.Name, tagAttribute.Value)
+	}
+}
+
+func SetAttribute(htmlNode *node.Node, attribute string, value string) {
+	attributes := (*htmlNode).Raw().Attr
+	// c goat
+	for i := 0; i < len(attributes); i++ {
+		attr := &attributes[i]
+		if attr.Key == attribute {
+			attr.Val = value
+			return
+		}
+	}
+	newAttribute := html.Attribute{Key: attribute, Val: value}
+	(*htmlNode).Raw().Attr = append(attributes, newAttribute)
+}
+
+func AppendAttribute(htmlNode *node.Node, attribute string, value string) {
+	attributes := (*htmlNode).Raw().Attr
+	// c goat
+	for i := 0; i < len(attributes); i++ {
+		attr := &attributes[i]
+		if attr.Key == attribute {
+			attr.Val += " " + value
+			return
+		}
+	}
+	newAttribute := html.Attribute{Key: attribute, Val: value}
+	(*htmlNode).Raw().Attr = append(attributes, newAttribute)
+}
+
+func HandleContainerHTMLChanges(modification Modification, target node.Node) {
+	for _, htmlChange := range modification.HTMLChanges {
+		tagToChange := QuerySelector(target, htmlChange.Query)
+		htmlChangeFn := ReplaceInnerHTMLFromNode
+		switch htmlChange.Mode {
+		case INNER_HTML:
+			{
+				htmlChangeFn = ReplaceInnerHTMLFromNode
+			}
+		case OUTER_HTML:
+			{
+				htmlChangeFn = ReplaceOuterHTMLFromNode
+			}
+		case APPEND_HTML:
+			{
+				htmlChangeFn = PrependHTMLToNode
+			}
+		case PREPEND_HTML:
+			{
+				htmlChangeFn = AppendHTMLToNode
+			}
+		}
+		StoreID(target, htmlChange.Query)
+		htmlChangeFn(htmlChange.HTML, tagToChange)
+	}
+}
+
+func StoreID(targetContainer node.Node, firstClass string) {
+	id, exists := targetContainer.Attrs().Get("id")
+	if exists {
+		IDS[firstClass] = id
+	}
 }
 
 // func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {

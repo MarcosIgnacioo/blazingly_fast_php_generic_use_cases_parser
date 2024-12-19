@@ -2,10 +2,12 @@ package web_files_manipulation
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
-	"os"
 )
 
 func InitNewAPI(sourceDirectory string) {
@@ -26,7 +28,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 		doc, err := node.ParseHTML(fileContent)
 
 		insertCartMobile(doc, file.nestedLevel)
-		if instructionsTYPED[file.fileParentDir] != nil {
+		if modifications[file.fileParentDir] != nil {
 			if err != nil {
 				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
 			}
@@ -48,12 +50,34 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						panic(fmt.Sprintf("preppending html for header doesnt exist in file %", file.filePath))
 					}
 					preppendHTMLToNode(modification.PrependHTML, targetContainer)
+				case "HEAD":
+					fallthrough
+				case "BODY":
+					{
+						targetContainer = QuerySelector(doc, strings.ToLower(firstClass))
+						InsertBeforeLastChild(f(modification.AppendHTML, IDS[".sizes_items_details select"]), &targetContainer)
+					}
 				default:
 					{
-						// queries := parseQuery(query)
+						var targets []node.Node
+
+						if query != "" {
+							targets = QuerySelectorAll(doc, query)
+						} else {
+							targets = []node.Node{doc}
+						}
+
+						if len(targets) == 0 {
+							panik(" not found query: `%s`", query)
+						}
+						targetContainer = targets[0]
+						StoreID(targetContainer, firstClass)
+						HandleHTMLModifications(modification, targetContainer)
+						DeleteOtherElementCopies(targets)
+						AttributesChanges(modification, targetContainer)
+						HandleContainerHTMLChanges(modification, targetContainer)
 					}
 				}
-
 				buildPHPFile(file, doc)
 			}
 		}
@@ -66,6 +90,6 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 			// TODO: manage a better error recovery here in c i should free all the memory or just keep going and just log it idrk
 			panic(fmt.Sprintf("Failed at directory: %s", directory))
 		}
-		contentTransformation3D(innerDirectories, innerFiles)
+		NewAPITrans(innerDirectories, innerFiles, modifications)
 	}
 }

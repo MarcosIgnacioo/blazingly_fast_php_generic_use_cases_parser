@@ -111,6 +111,7 @@ const (
 
 // new API
 
+// if query is empty or not initialized then the other instructions (AttributesChanges and HTMLChanges) use the whole document as the base search
 type Modification struct {
 	Query             string
 	SelectAll         bool
@@ -119,12 +120,22 @@ type Modification struct {
 	AppendHTML        string
 	PrependHTML       string
 	AttributesChanges []AttributeChange
-	HTMLSChanges      []HTMLChange
+	HTMLChanges       []HTMLChange
 }
 
 type AttributeMode int
 type HTMLMode int
 
+const (
+	INNER_HTML        = 0
+	OUTER_HTML        = 1
+	APPEND_HTML       = 3
+	PREPEND_HTML      = 4
+	REPLACE_ATTRIBUTE = 5
+	APPEND_ATTRIBUTE  = 6
+)
+
+// if query is empty or not initialized the upper query from the modfication is used as the targeting container
 type AttributeChange struct {
 	Query     string
 	Mode      AttributeMode

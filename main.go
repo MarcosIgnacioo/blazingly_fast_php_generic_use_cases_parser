@@ -104,19 +104,23 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 // }
 
 func main() {
-	f, _ := os.ReadFile("./asdf.html")
-	doc, _ := node.ParseHTML(string(f))
-	ff := web_files_manipulation.QuerySelector(doc, ".product_item_coffe")
-	body := web_files_manipulation.QuerySelector(doc, "body")
-	web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
-	web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
-	web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
-	web_files_manipulation.InsertBeforeLastChild("<h1>holaaaa</h1>", &body)
-	web_files_manipulation.InsertBeforeLastChild("<h2>holaaaa</h2>", &body)
-	anchors := web_files_manipulation.SearchAllByAttribute("a", doc, "href=\"/logout\"")
-	for _, a := range anchors {
-		p(a.HTML())
-	}
+	// web_files_manipulation.InitNewAPI("app")
+	// f, _ := os.ReadFile("./asdf.html")
+	// doc, _ := node.ParseHTML(string(f))
+	// ff := web_files_manipulation.QuerySelector(doc, ".product_item_coffe")
+	// body := web_files_manipulation.QuerySelector(doc, "body")
+	// web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
+	// web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
+	// web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
+	// web_files_manipulation.InsertBeforeLastChild("<h1>holaaaa</h1>", &body)
+	// web_files_manipulation.InsertBeforeLastChild("<h2>holaaaa</h2>", &body)
+	// anchors := web_files_manipulation.QuerySelectorAll(doc, "a[title=\"caca\"]")
+	// // selector := web_files_manipulation.QuerySelector(doc, "")
+	// for _, a := range anchors {
+	// 	p(a.HTML())
+	// }
+	//
+	// p(ff.HTML())
 	// for _, v := range ff {
 	// }
 	// spans := doc.FindAll(node.Descendant, node.P)
@@ -128,7 +132,7 @@ func main() {
 	// popo := web_files_manipulation.QuerySelectorAll(doc, "p span a")
 	// foo := `asdf %d asdf`
 	// fmt.Printf(foo, 123)
-	// run()
+	newRun()
 	// return
 	// textNodeToInsert := &html.Node{
 	// 	Parent:      nil,
@@ -147,9 +151,9 @@ func printHtml(doc node.Node) {
 	fmt.Println(gohtml.Format(doc.HTML()))
 }
 
-func run() {
+func newRun() {
 	unzip("./1240.zip", "./app")
-	web_files_manipulation.Init("./app")
+	web_files_manipulation.InitNewAPI("./app")
 }
 
 func insertingIndexPHPHead(doc node.Node) string {
