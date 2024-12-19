@@ -1,3 +1,34 @@
+# cossas qu debo de ser capaz de hacer
+
+Buscar un elemento por clases .popo tag .asdf .asdf caca
+Buscar un elemento por atributos
+Reemplazar el innerHTML de un elemento
+Reemplazar el outerHTML de un elemento
+Appendear HTML a un elemento
+Preppendear HTML a un elemento
+Preppendear raw text a un elemento
+Apendear raw text a un elemento
+Modificar los atributos de uno o mas elementos
+NO ALTERAR EL HTML
+Appendear al final del body (crear metodo directamente xd copiando el insertBefore pero al reves)
+Appendear al final del header (crear metodo directamente xd copiando el insertBefore pero al reves)
+Modificar los atributos de ciertas tags dentro de un container 
+Modificar el html de ciertas tags dentro de un container
+
+# cosas que estan mal con la version anterior
+
+altera el orden de los elementos en un contenedor
+
+se duplican elementos
+
+hay cosaas raras como 
+
+<a href="<?= $product->url ?>" title="<a href='<?= $product->url ?>'><?= $product->name ?></a>">
+
+en el index.php raiz linea 2051
+
+
+
 # doce40 shop store
 # cosas que faltan
 

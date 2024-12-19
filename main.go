@@ -3,13 +3,14 @@ package main
 import (
 	"archive/zip"
 	"fmt"
+	"io"
+	"log"
+	"os"
+
 	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
-	"io"
-	"log"
-	"os"
 )
 
 var testhtml = `
@@ -36,7 +37,7 @@ var testhtml = `
 	`
 
 func p(a ...any) {
-	fmt.Println(a)
+	fmt.Println(a...)
 }
 
 // possible improvement make this function return true or false if it can change it or not
@@ -53,9 +54,16 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 }
 
 func main() {
-	// f, _ := os.ReadFile("./asdf.html")
-	// doc, _ := node.ParseHTML(string(f))
-	// fmt.Println(string(f))
+	f, _ := os.ReadFile("./asdf.html")
+	doc, _ := node.ParseHTML(string(f))
+	ff := web_files_manipulation.QuerySelector(doc, ".product_item_coffe")
+	p(doc.HTML())
+	web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
+	web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
+	web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
+	p(doc.HTML())
+	// for _, v := range ff {
+	// }
 	// spans := doc.FindAll(node.Descendant, node.P)
 	// for _, v := range spans {
 	// 	fmt.Println("###########")
@@ -65,7 +73,7 @@ func main() {
 	// popo := web_files_manipulation.QuerySelectorAll(doc, "p span a")
 	// foo := `asdf %d asdf`
 	// fmt.Printf(foo, 123)
-	run()
+	// run()
 	// return
 	// textNodeToInsert := &html.Node{
 	// 	Parent:      nil,

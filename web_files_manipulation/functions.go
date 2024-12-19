@@ -26,6 +26,17 @@ func panik(fString string, a ...any) {
 	panic(f(fString, a...))
 }
 
+func NewTextHtmlNode(text string) *html.Node {
+	return (&html.Node{
+		Parent:      nil,
+		PrevSibling: nil,
+		NextSibling: nil,
+		Data:        text,
+		Type:        html.RawNode, // XD
+		Attr:        []html.Attribute{},
+	})
+}
+
 func newTextHtmlNode(text string) *html.Node {
 	return (&html.Node{
 		Parent:      nil,
@@ -110,6 +121,72 @@ func removeAllChildrenExceptFirstWithClassName(tag *node.Node, className string)
 	}
 }
 
+// una alternativa a esto seria hacer una copia del primero y borrar a todos los hijos del contenedor padre, luego reemplazarlo con el nodo alterado pero  no seee
+// Remove other html elements with the same className except the first one of the parent container. Completly unsafe and relies on the fact the user provides always the first one as the one to use
+func RemoveElementsWithClassNameExceptFirst(pivotNode *node.Node, deletingClassName string, shouldUsePivotParent bool) {
+	if pivotNode == nil || *pivotNode == nil {
+		panik("pivotNode removing node is nil")
+	}
+
+	var parent node.Node
+	if shouldUsePivotParent {
+		parent = (*pivotNode).Parent()
+	} else {
+		parent = *pivotNode
+	}
+
+	if parent == nil {
+		panik("parent of `removing class`: %s is nil", deletingClassName)
+	}
+
+	children := QuerySelectorAll(parent, deletingClassName)
+
+	if children == nil {
+		panik("children of `removing class`: %s are nil", deletingClassName)
+	}
+
+	for i := 1; i < len(children); i++ {
+		child := children[i].Raw()
+		childClassName, exists := children[i].Attrs().Get("class")
+		if !exists {
+			continue
+		}
+		containsClass := HasSameClass(childClassName, deletingClassName)
+		if containsClass {
+			parent.Raw().RemoveChild(child)
+		}
+	}
+}
+
+// thisClass is the class of the element we are analizing
+//
+// thisClass = `ed-element ed-container Foto-item product_item_coffe`
+//
+// thatClass is the class we are looking for
+//
+// thatClass = `ed-element`
+func HasSameClass(thisClass string, thatClass string) bool {
+	if thisClass == "" {
+		return false
+	}
+	thatClass = parseClass(thatClass)
+	allClasses := strings.Split(thisClass, " ")
+	for _, class := range allClasses {
+		if parseClass(class) == thatClass {
+			return true
+		}
+	}
+
+	return false
+}
+
+func parseClass(class string) string {
+	if class[0] == '.' {
+		return class[1:]
+	}
+	return class
+}
+
 func newHTMLReplacement(className string, html string) HTMLReplacement {
 	return HTMLReplacement{
 		ClassName: className,
@@ -158,27 +235,6 @@ func replaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
 	tag.Parent().Raw().RemoveChild(tag.Raw())
 }
 
-func setUpAnchors(anchors *[]node.Node, productHref string, productName string) {
-	for i := 0; i < len(*anchors); i++ {
-		anchor := &(*anchors)[i]
-		setAttribute(anchor, "href", productHref)
-		setAttribute(anchor, "title", productName)
-	}
-}
-
-func setUpImages(images *[]node.Node, productImg string, productName string) {
-	for i := 0; i < len(*images); i++ {
-		img := &(*images)[i]
-		setAttribute(img, "src", productImg)
-		setAttribute(img, "srcset", productImg)
-		setAttribute(img, "alt", productName)
-	}
-}
-
-func setUpPriceAndName(container *[]node.Node, productPrice string, productName string) {
-
-}
-
 func setAttribute(htmlNode *node.Node, attribute string, value string) {
 	attributes := (*htmlNode).Raw().Attr
 	// c goat
@@ -205,41 +261,6 @@ func appendAttribute(htmlNode *node.Node, attribute string, value string) {
 	}
 	newAttribute := html.Attribute{Key: attribute, Val: value}
 	(*htmlNode).Raw().Attr = append(attributes, newAttribute)
-}
-
-func getData(instruction map[string]string, attribute string) string {
-	attributeData := instruction[attribute]
-	if attributeData != "" {
-		return attributeData
-	}
-	switch attribute {
-	case "href":
-		return productHref
-	case "productName":
-		return productName
-	case "img":
-		return productThumbnail
-	case "price":
-		return productPrice
-	}
-	return attributeData
-}
-
-func dirToJson() map[string][]map[string]string {
-	return map[string][]map[string]string{
-		"DIRNAME": {
-			{
-				"class":        "html",
-				"htmlToInsert": merchHeader,
-			},
-			{
-				"class":      "product_item_merch",
-				"foreach":    merchForeachWrapper,
-				"classPrice": "product_price",
-				"className":  "product_name",
-			},
-		},
-	}
 }
 
 func setUpTags(tags *[]node.Node, tagAttribute Attribute, shouldAppendAttributes bool) {
@@ -398,7 +419,22 @@ func getNestedPath(nestedLevel int) string {
 
 func QuerySelectorAll(from node.Node, fullQuery string) []node.Node {
 	queries := strings.Split(fullQuery, " ")
-	return qRecurse(from, queries, 0)
+	results := qRecurse(from, queries, 0)
+	numberOfNotNilElements := 0
+	for _, result := range results {
+		if result != nil {
+			numberOfNotNilElements++
+		}
+	}
+	notNilResults := make([]node.Node, numberOfNotNilElements)
+	i := 0
+	for _, result := range results {
+		if result != nil {
+			notNilResults[i] = result
+			i++
+		}
+	}
+	return notNilResults
 }
 
 func qRecurse(from node.Node, queries []string, queryIdx int) []node.Node {
@@ -561,6 +597,67 @@ func CreateInstructionReplacementForAttributeOfTag(className string, attribute s
 			},
 		},
 	}
+}
+
+func InsertBefore(newChild, oldChild *html.Node) {
+	if newChild.Parent != nil || newChild.PrevSibling != nil || newChild.NextSibling != nil {
+		panic("html: InsertBefore called for an attached child Node")
+	}
+	var prev, next *html.Node
+	n := oldChild.Parent
+
+	if n == nil {
+		panik("html: oldChild parent is nil")
+	}
+	if oldChild != nil {
+		prev, next = oldChild.PrevSibling, oldChild
+	} else {
+		prev = n.LastChild
+	}
+	if prev != nil {
+		prev.NextSibling = newChild
+	} else {
+		n.FirstChild = newChild
+	}
+	if next != nil {
+		next.PrevSibling = newChild
+	} else {
+		n.LastChild = newChild
+	}
+	newChild.Parent = n
+	newChild.PrevSibling = prev
+	newChild.NextSibling = next
+}
+
+func InsertAfter(newChild, oldChild *html.Node) {
+	if (*newChild).Parent != nil || (*newChild).PrevSibling != nil || (*newChild).NextSibling != nil {
+		panic("html: InsertAfter called for an attached child Node")
+	}
+
+	n := oldChild.Parent
+	if n == nil {
+		panik("html: oldChild parent is nil")
+	}
+
+	var prev, next *html.Node
+	if oldChild != nil {
+		prev, next = oldChild, oldChild.NextSibling
+	} else {
+		prev = n.LastChild
+	}
+	if prev != nil {
+		prev.NextSibling = newChild
+	} else {
+		n.FirstChild = newChild
+	}
+	if next != nil {
+		next.PrevSibling = newChild
+	} else {
+		n.LastChild = newChild
+	}
+	newChild.Parent = n
+	newChild.PrevSibling = prev
+	newChild.NextSibling = next
 }
 
 // func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {
