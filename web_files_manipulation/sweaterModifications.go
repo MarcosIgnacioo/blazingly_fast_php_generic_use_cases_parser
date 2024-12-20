@@ -92,23 +92,89 @@ var sweaterModifications = []Modification{
 		},
 	},
 	Modification{
-		Query: ".remove_item_on_update",
+		Query: ".quantity_items_details",
 		AttributesChanges: []AttributeChange{
 			AttributeChange{
-				Query: "",
-				Mode:  REPLACE_ATTRIBUTE,
+				Query: "select",
+				Mode:  APPEND_ATTRIBUTE,
 				Attribute: Attribute{
-					Name:  "style",
-					Value: `display: none;`,
+					Name:  "class",
+					Value: `cantidad_producto`,
 				},
 			},
 		},
 		HTMLChanges: []HTMLChange{
 			HTMLChange{
-				Query: "a",
+				Query: "select",
 				Mode:  INNER_HTML,
-				HTML:  `<?= $presentation->description ?>`,
+				HTML: `
+	<?php if (isset($stock) && $stock > 0): ?>
+        <?php for ($i = 1; $i < $stock; $i++): ?>
+            <option value="<?= $i ?>">
+                <?= $i ?>
+            </option>
+            <?php if ($i > 9) { break; } ?>
+        <?php endfor; ?>
+    <?php endif; ?> 
+`,
 			},
+		},
+	},
+	Modification{
+		Query: ".button_add_big_product",
+		PrependHTML: `
+		<?php if ($stock>0): ?>
+		`,
+		AppendHTML: `
+    <?php else: ?>
+        <h3>
+            Este producto se encuentra agotado
+        </h3>
+    <?php endif ?>
+		`,
+		AttributesChanges: []AttributeChange{
+			NewAttributeChange(
+				``,
+				REPLACE_ATTRIBUTE,
+				`onclick="QuickAdd(this)"`,
+			),
+		},
+	},
+	Modification{
+		Query: ".ed-gallery-items li",
+		PrependHTML: `
+		<?php if (isset($grand_product) && isset($grand_product->images)): ?>
+					<?php foreach ($grand_product->images as $image): ?>  
+						<?php if (!$image->is_cover): ?>
+		`,
+		AppendHTML: `
+				<?php endif ?>
+			<?php endforeach ?> 
+		<?php endif ?>  
+		`,
+		AttributesChanges: []AttributeChange{
+			NewAttributeChange(
+				`a`,
+				REPLACE_ATTRIBUTE,
+				`href="<?= $image->full_path ?>"`,
+			),
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`src="<?= $image->full_path ?>"`,
+			),
+
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`data-src="<?= $image->full_path ?>"`,
+			),
+
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`data-srcset="<?= $image->full_path ?>"`,
+			),
 		},
 	},
 
