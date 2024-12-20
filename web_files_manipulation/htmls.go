@@ -159,7 +159,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 	"accesorios": {
 		Instruction{
 			Class:       "html",
-			PrependHTML: accesoriesHeader,
+			PrependHTML: accessoriesHeader,
 		},
 		getBasicInstruction(
 			".product_item_accessories",
@@ -770,6 +770,7 @@ var instructionsTYPED map[string][]Instruction = map[string][]Instruction{
 			InnerHTML:               `Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href="/clients?action=logout">Cerrar sesión</a> )`,
 		},
 	},
+
 	"details": generateInputTagAttributes(detailsInputs, "input", detailsHeader),
 
 	"addresses": {

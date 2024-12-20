@@ -48,6 +48,50 @@ var devilModifications = []Modification{
 			<?php endforeach ?>
     <?php endif ?> 
 		`,
+		AttributesChanges: []AttributeChange{
+			AttributeChange{
+				Query: "a",
+				Mode:  REPLACE_ATTRIBUTE,
+				Attribute: Attribute{
+					Name:  "href",
+					Value: `<?= $product->url ?>`,
+				},
+			},
+
+			AttributeChange{
+				Query: "img",
+				Mode:  REPLACE_ATTRIBUTE,
+				Attribute: Attribute{
+					Name:  "src",
+					Value: `<?= $product->thumbnail_path ?>`,
+				},
+			},
+			AttributeChange{
+				Query: "img",
+				Mode:  REPLACE_ATTRIBUTE,
+				Attribute: Attribute{
+					Name:  "srcset",
+					Value: ``,
+				},
+			},
+			AttributeChange{
+				Query: "img",
+				Mode:  REPLACE_ATTRIBUTE,
+				Attribute: Attribute{
+					Name:  "alt",
+					Value: `<?= $product->name ?>`,
+				},
+			},
+
+			AttributeChange{
+				Query: "img",
+				Mode:  REPLACE_ATTRIBUTE,
+				Attribute: Attribute{
+					Name:  "title",
+					Value: `<?= $product->name ?>`,
+				},
+			},
+		},
 	},
 	Modification{
 		Query: "",

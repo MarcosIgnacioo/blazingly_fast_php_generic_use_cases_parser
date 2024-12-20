@@ -57,6 +57,27 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						targetContainer = QuerySelector(doc, strings.ToLower(firstClass))
 						InsertBeforeLastChild(f(modification.AppendHTML, IDS[".sizes_items_details select"]), &targetContainer)
 					}
+				case "tallas_presentations":
+					{
+						targetContainer = QuerySelector(doc, query)
+						sizesParent := targetContainer.Parent()
+						// THIS COULD INCREMENT IN A FUTURE
+						notAirChildren := make([]node.Node, 2)
+						idx := 0
+						for _, child := range sizesParent.Children() {
+							if !IsBlank(child.HTML()) {
+								notAirChildren[idx] = child
+								idx++
+							}
+						}
+						itemsContainer := notAirChildren[1]
+						itemSamples := QuerySelectorAll(itemsContainer, ".ed-element")
+						itemFirstSample := itemSamples[0]
+						HandleHTMLModifications(modification, itemFirstSample)
+						DeleteOtherElementCopies(itemSamples)
+						AttributesChanges(modification, itemFirstSample)
+						HandleContainerHTMLChanges(modification, itemFirstSample)
+					}
 				default:
 					{
 						var targets []node.Node
@@ -73,6 +94,9 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						targetContainer = targets[0]
 						StoreID(targetContainer, firstClass)
 						HandleHTMLModifications(modification, targetContainer)
+						if modification.DeleteSiblings {
+							RemoveAllChildrenExceptThis(targetContainer.Parent(), targetContainer)
+						}
 						DeleteOtherElementCopies(targets)
 						AttributesChanges(modification, targetContainer)
 						HandleContainerHTMLChanges(modification, targetContainer)

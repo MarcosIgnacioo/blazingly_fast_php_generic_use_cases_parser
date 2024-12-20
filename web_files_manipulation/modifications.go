@@ -1,9 +1,14 @@
 package web_files_manipulation
 
 var modifications map[string][]Modification = map[string][]Modification{
-	"app":       rootDirModifications,
-	"dashboard": dashboardModifications,
-	"diablo":    devilModifications,
+	"app":        rootDirModifications,
+	"dashboard":  dashboardModifications,
+	"tienda":     storeModifications,
+	"cafe":       coffeeModifications,
+	"merch":      merchModifications,
+	"accesorios": accessoriesModifications,
+	"diablo":     devilModifications,
+	"sudadera":   sweaterModifications,
 }
 
 var IDS map[string]string = map[string]string{

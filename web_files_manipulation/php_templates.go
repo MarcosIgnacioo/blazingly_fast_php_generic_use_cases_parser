@@ -131,7 +131,7 @@ var merchForeachWrapper = `
 `
 
 // # Accesories
-var accesoriesHeader = `
+var accessoriesHeader = `
 <?php
 
 	  include_once "../../app/config.php"; 

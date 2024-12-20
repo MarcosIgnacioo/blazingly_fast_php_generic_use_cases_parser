@@ -1,5 +1,23 @@
 # doce40 shop store
 
+app[x]
+tienda[x]
+    cafe[x]
+        diablo[x]
+    merch[x]
+        sudadera[]
+    accesorios[x]
+login[]
+dashboard[]
+addresses[]
+orders[]
+carrito[]
+form-carrito[]
+payment[]
+
+
+FALTA eliminar la funcion del archivo de js 
+
 ### Paso 1: aplicar a la lista de carpetas: 
 
 - Desminificar todos los archivos
@@ -460,6 +478,7 @@ Aquí va el código del item
 - Ubicar ``` product_description_details```  
 
 - Dentro de ``` sizes_items_details``` ubicar el select
+ EN EL PHP original viene con un segundo argumento esta funcion
 	colocarle onchange="updateSelection(this)"
 	eliminar los options
 	y colocar el siguiete código

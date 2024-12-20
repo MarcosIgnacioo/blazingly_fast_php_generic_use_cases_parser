@@ -92,14 +92,22 @@ func removeAllChildren(tag *node.Node) {
 	}
 }
 
-func removeAllChildrenExceptFirst(tag *node.Node) {
-	if tag == nil || *tag == nil {
+func RemoveAllChildrenExceptThis(parent node.Node, exception node.Node) {
+	if parent == nil {
 		return
 	}
-	children := (*tag).Children()
-	for i := 1; i < len(children); i++ {
+	children := parent.Children()
+	rawException := exception.Raw()
+	for i := 0; i < len(children); i++ {
 		child := children[i].Raw()
-		(*tag).Raw().RemoveChild(child)
+		// the 'better' thing to do would be to make `HandleHTMLModifications`
+		// to return each html.node corresponding to all the `newTextHtmlNode`
+		// and pass them here so we dont delete them too
+		// butttttt im too lazy im so sorry
+		if child == rawException || strings.Contains(children[i].HTML(), "<?php") {
+			continue
+		}
+		parent.Raw().RemoveChild(child)
 	}
 }
 
@@ -703,7 +711,7 @@ func AppendHTMLToNode(text string, where node.Node) {
 	if where == nil {
 		panic("where nil in appendingHMTL")
 	}
-	where.Raw().AppendChild(newTextHtmlNode(text))
+	InsertAfter(newTextHtmlNode(text), where.Raw())
 }
 
 func ReplaceInnerHTMLFromNode(text string, tag node.Node) {
@@ -925,6 +933,38 @@ func StoreID(targetContainer node.Node, firstClass string) {
 	id, exists := targetContainer.Attrs().Get("id")
 	if exists {
 		IDS[firstClass] = id
+	}
+}
+
+func IsBlank(text string) bool {
+	return len(strings.TrimSpace(text)) == 0
+}
+
+func DeleteNodeFromHTMLTree(deletingNode node.Node) {
+	realNode := deletingNode.Raw()
+	next := realNode.NextSibling
+	prev := realNode.PrevSibling
+	realNode.NextSibling.PrevSibling = prev
+	realNode.PrevSibling.NextSibling = next
+	realNode.NextSibling = nil
+	realNode.PrevSibling = nil
+	realNode.Parent = nil
+}
+
+func NewAttributeChange(query string, mode AttributeMode, attribute string) AttributeChange {
+	attrData := strings.SplitN(attribute, "=", 2)
+
+	if len(attrData) < 2 {
+		panik(" AttrData is malformed `%s`\nmaybe missing `=`", attribute)
+	}
+
+	attributeName := attrData[0]
+	attributeValue := strings.ReplaceAll(attrData[1], "\"", "")
+
+	return AttributeChange{
+		Query:     query,
+		Mode:      mode,
+		Attribute: CreateAttribute(attributeName, attributeValue),
 	}
 }
 

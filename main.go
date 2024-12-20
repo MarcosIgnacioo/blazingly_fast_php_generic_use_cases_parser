@@ -104,11 +104,13 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 // }
 
 func main() {
+	newRun()
 	// web_files_manipulation.InitNewAPI("app")
 	// f, _ := os.ReadFile("./asdf.html")
 	// doc, _ := node.ParseHTML(string(f))
-	// ff := web_files_manipulation.QuerySelector(doc, ".product_item_coffe")
-	// body := web_files_manipulation.QuerySelector(doc, "body")
+	// ff := web_files_manipulation.QuerySelectorAll(doc, ".tallas_presentations")
+	// p(ff)
+	// p(ff[0].HTML())
 	// web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
 	// web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
 	// web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
@@ -132,7 +134,6 @@ func main() {
 	// popo := web_files_manipulation.QuerySelectorAll(doc, "p span a")
 	// foo := `asdf %d asdf`
 	// fmt.Printf(foo, 123)
-	newRun()
 	// return
 	// textNodeToInsert := &html.Node{
 	// 	Parent:      nil,
