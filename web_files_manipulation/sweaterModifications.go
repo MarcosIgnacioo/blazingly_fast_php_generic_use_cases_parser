@@ -179,6 +179,61 @@ var sweaterModifications = []Modification{
 	},
 
 	Modification{
+		Query: ".product_item_recomendation",
+		PrependHTML: `
+		<?php if (isset($grand_product->related_products) && count($grand_product->related_products)): ?>
+				<?php foreach ($grand_product->related_products as $product): ?>
+					<?php $product->categories = $grand_product->categories; ?>
+					<?php $product = $productsController->getQuickView($product) ?>
+		`,
+		AppendHTML: `
+			<?php endforeach ?> 
+		<?php endif ?>  
+		`,
+		AttributesChanges: []AttributeChange{
+			NewAttributeChange(
+				`a`,
+				REPLACE_ATTRIBUTE,
+				`href="<?= $image->full_path ?>"`,
+			),
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`src="<?= $product->thumbnail_path ?>"`,
+			),
+
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`alt="<?= $product->name ?>"`,
+			),
+
+			NewAttributeChange(
+				`img`,
+				REPLACE_ATTRIBUTE,
+				`data-srcset="<?= $image->full_path ?>"`,
+			),
+		},
+		// i dont like inserting raw html but if the one inserted doenst have ids means its technically safe to insert butttttt if they change this part of the page well it kinda gets ruined but if they did changes i also think all this rules should be modified to go acordingly
+		HTMLChanges: []HTMLChange{
+			HTMLChange{
+				Query: ".ed-text",
+				Mode:  INNER_HTML,
+				HTML: `
+				<p style="line-height: 1.15; text-align: center;">
+						<span style="font-size: 18px; font-family: 'daisywhl';">
+								<a href="<?= $product->url ?>" title="">
+										<?= $product->name ?>
+								</a>
+						</span>
+				</p>
+				<p style="line-height: 1; text-align: center;"><span style="font-size: 14px; color: rgb(94, 94, 94); font-family: 'daisywhl';">DESDE $<?= $product->price ?></span></p>
+				`,
+			},
+		},
+	},
+
+	Modification{
 		Query: ".remove_item_on_update",
 		AttributesChanges: []AttributeChange{
 			AttributeChange{

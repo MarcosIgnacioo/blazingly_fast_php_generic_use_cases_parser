@@ -28,6 +28,8 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 		doc, err := node.ParseHTML(fileContent)
 
 		insertCartMobile(doc, file.nestedLevel)
+		insertScripts(doc)
+
 		if modifications[file.fileParentDir] != nil {
 			if err != nil {
 				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
@@ -58,6 +60,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						InsertBeforeLastChild(f(modification.AppendHTML, IDS[".sizes_items_details select"]), &targetContainer)
 					}
 				case "tallas_presentations":
+					// HARDCODED more like HARDCORE jajjajjajjajajajjajajjajajjajajajja
 					{
 						targetContainer = QuerySelector(doc, query)
 						sizesParent := targetContainer.Parent()
@@ -102,9 +105,9 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						HandleContainerHTMLChanges(modification, targetContainer)
 					}
 				}
-				buildPHPFile(file, doc)
 			}
 		}
+		buildPHPFile(file, doc)
 	}
 
 	for i := 0; i < int(directories.Length); i++ {

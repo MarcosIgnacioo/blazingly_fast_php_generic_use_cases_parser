@@ -444,6 +444,14 @@ func insertCartMobile(doc node.Node, nestedLevel int) {
 	preppendHTMLToNode(cartMobile, separatorCart)
 }
 
+func insertScripts(doc node.Node) {
+	body := QuerySelector(doc, "body")
+	head := QuerySelector(doc, "head")
+
+	InsertBeforeLastChild(scriptsBody, &body)
+	InsertBeforeLastChild(scriptsHead, &head)
+}
+
 func getNestedPath(nestedLevel int) string {
 	nesting := ""
 	if nestedLevel > 1 {
