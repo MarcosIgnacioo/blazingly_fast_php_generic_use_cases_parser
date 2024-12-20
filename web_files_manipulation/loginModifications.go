@@ -28,6 +28,7 @@ var loginModifications = []Modification{
 				REPLACE_ATTRIBUTE,
 				`name="password"`,
 			),
+
 			NewAttributeChange(
 				`.login_password input`,
 				REPLACE_ATTRIBUTE,

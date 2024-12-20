@@ -97,7 +97,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						}
 
 						if len(targets) == 0 {
-							panik(" not found query: `%s` \nprobably forgot a dot", query)
+							panik(" not found query: `%s` \nprobably forgot a dot \npath:%s", query, file.filePath)
 						}
 						targetContainer = targets[0]
 						StoreID(targetContainer, firstClass)

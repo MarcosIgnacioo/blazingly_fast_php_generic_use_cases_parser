@@ -42,6 +42,7 @@ var modifications map[string][]Modification = map[string][]Modification{
 	"dashboard":  dashboardModifications,
 	"details":    detailsModifications,
 	"addresses":  addressesModifications,
+	"orders":     ordersModifications,
 }
 
 var IDS map[string]string = map[string]string{
