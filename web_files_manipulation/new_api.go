@@ -59,6 +59,11 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						targetContainer = QuerySelector(doc, strings.ToLower(firstClass))
 						InsertBeforeLastChild(f(modification.AppendHTML, IDS[".sizes_items_details select"]), &targetContainer)
 					}
+				case "append_scripts_to_end_of_body":
+					{
+						targetContainer = QuerySelector(doc, "body")
+						InsertBeforeLastChild(modification.AppendHTML, &targetContainer)
+					}
 				case "tallas_presentations":
 					// HARDCODED more like HARDCORE jajjajjajjajajajjajajjajajjajajajja
 					{
@@ -92,7 +97,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						}
 
 						if len(targets) == 0 {
-							panik(" not found query: `%s`", query)
+							panik(" not found query: `%s` \nprobably forgot a dot", query)
 						}
 						targetContainer = targets[0]
 						StoreID(targetContainer, firstClass)

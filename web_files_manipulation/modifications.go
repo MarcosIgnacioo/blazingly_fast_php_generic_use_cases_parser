@@ -32,7 +32,6 @@ var scriptsBody = `
 
 var modifications map[string][]Modification = map[string][]Modification{
 	"app":        rootDirModifications,
-	"dashboard":  dashboardModifications,
 	"tienda":     storeModifications,
 	"cafe":       coffeeModifications,
 	"merch":      merchModifications,
@@ -40,24 +39,37 @@ var modifications map[string][]Modification = map[string][]Modification{
 	"diablo":     devilModifications,
 	"sudadera":   sweaterModifications,
 	"login":      loginModifications,
+	"dashboard":  dashboardModifications,
+	"details":    detailsModifications,
+	"addresses":  addressesModifications,
 }
 
 var IDS map[string]string = map[string]string{
 	"": "",
 }
 
-var dashboardModifications = []Modification{
-	Modification{
-		Query:     `a[href="/login"]`,
-		SelectAll: true,
-		AttributesChanges: []AttributeChange{
-			AttributeChange{
-				Mode: REPLACE_ATTRIBUTE,
-				Attribute: Attribute{
-					Name:  "href",
-					Value: `/clients?action=logout`,
-				},
+var anchorLoginModification = Modification{
+	Query:     `a[href="/login"]`,
+	SelectAll: true,
+	AttributesChanges: []AttributeChange{
+		AttributeChange{
+			Mode: REPLACE_ATTRIBUTE,
+			Attribute: Attribute{
+				Name:  "href",
+				Value: `/clients?action=logout`,
 			},
 		},
+	},
+}
+
+var dashboardModifications = []Modification{
+	Modification{
+		Query:       "html",
+		PrependHTML: dashBoardHeader,
+	},
+	anchorLoginModification,
+	Modification{
+		Query:     ".header_welcome",
+		InnerHTML: `Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href="/clients?action=logout">Cerrar sesión</a> )`,
 	},
 }

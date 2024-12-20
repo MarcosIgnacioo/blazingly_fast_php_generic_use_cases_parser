@@ -925,11 +925,11 @@ func HandleContainerHTMLChanges(modification Modification, target node.Node) {
 			}
 		case APPEND_HTML:
 			{
-				htmlChangeFn = PrependHTMLToNode
+				htmlChangeFn = AppendHTMLToNode
 			}
 		case PREPEND_HTML:
 			{
-				htmlChangeFn = AppendHTMLToNode
+				htmlChangeFn = PrependHTMLToNode
 			}
 		}
 		StoreID(target, htmlChange.Query)

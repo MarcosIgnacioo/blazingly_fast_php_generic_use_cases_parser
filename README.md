@@ -993,7 +993,7 @@ Aquí va el código del item
 
 - Remplazar el interior con 
 	```
-	Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href="/clients?action=logout">Cerrar sesión</a> )
+	Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href="/login">Cerrar sesión</a> )
 	```
 
 ### Paso 12:
@@ -1049,7 +1049,6 @@ Aquí va el código del item
 		}
 
 		$addresses = $authController->getAddress();
-
 	?>
 	```
 
