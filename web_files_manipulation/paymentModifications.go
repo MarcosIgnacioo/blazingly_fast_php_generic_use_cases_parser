@@ -77,86 +77,86 @@ var paymentModifications = []Modification{
 				REPLACE_ATTRIBUTE,
 				`name="tipo_tarjeta"`,
 			),
-			// NewAttributeChange(
-			// 	`.address_city select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="ciudad"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_city select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->city ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_postal_code select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="codigo_postal"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_postal_code select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->postal_code ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_first_name select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="nombre"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_first_name select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->first_name ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_phone_number select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="numero_celular"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_phone_number select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->phone_number ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_state select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="estado"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_state select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->state ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_street_and_use_number select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="calle"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_street_and_use_number select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->street_and_use_number ?>`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_last_name select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="apellido"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_last_name select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->address->last_name ?>"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_email select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`name="correo"`,
-			// ),
-			// NewAttributeChange(
-			// 	`.address_email select`,
-			// 	REPLACE_ATTRIBUTE,
-			// 	`value="<?= $order->client->email ?>"`,
-			// ),
+			NewAttributeChange(
+				`.address_city input`,
+				REPLACE_ATTRIBUTE,
+				`name="ciudad"`,
+			),
+			NewAttributeChange(
+				`.address_city input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->city ?>"`,
+			),
+			NewAttributeChange(
+				`.address_postal_code input`,
+				REPLACE_ATTRIBUTE,
+				`name="codigo_postal"`,
+			),
+			NewAttributeChange(
+				`.address_postal_code input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->postal_code ?>"`,
+			),
+			NewAttributeChange(
+				`.address_first_name input`,
+				REPLACE_ATTRIBUTE,
+				`name="nombre"`,
+			),
+			NewAttributeChange(
+				`.address_first_name input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->first_name ?>"`,
+			),
+			NewAttributeChange(
+				`.address_phone_number input`,
+				REPLACE_ATTRIBUTE,
+				`name="numero_celular"`,
+			),
+			NewAttributeChange(
+				`.address_phone_number input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->phone_number ?>"`,
+			),
+			NewAttributeChange(
+				`.address_state input`,
+				REPLACE_ATTRIBUTE,
+				`name="estado"`,
+			),
+			NewAttributeChange(
+				`.address_state input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->state ?>"`,
+			),
+			NewAttributeChange(
+				`.address_street_and_use_number input`,
+				REPLACE_ATTRIBUTE,
+				`name="calle"`,
+			),
+			NewAttributeChange(
+				`.address_street_and_use_number input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->street_and_use_number ?>`,
+			),
+			NewAttributeChange(
+				`.address_last_name input`,
+				REPLACE_ATTRIBUTE,
+				`name="apellido"`,
+			),
+			NewAttributeChange(
+				`.address_last_name input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->address->last_name ?>"`,
+			),
+			NewAttributeChange(
+				`.address_email input`,
+				REPLACE_ATTRIBUTE,
+				`name="correo"`,
+			),
+			NewAttributeChange(
+				`.address_email input`,
+				REPLACE_ATTRIBUTE,
+				`value="<?= $order->client->email ?>"`,
+			),
 		},
 		HTMLChanges: []HTMLChange{
 			// HTMLChange{

@@ -174,16 +174,16 @@ func DeleteOtherElementCopies(targets []node.Node) {
 	for i := 1; i < len(targets); i++ {
 		child := targets[i].Raw()
 		if child.Parent != parent.Raw() {
-			fakeChildClass, _ := targets[i].Attrs().Get("class")
-			expectedToBeParentClass, _ := parent.Attrs().Get("class")
+			// fakeChildClass, _ := targets[i].Attrs().Get("class")
+			// expectedToBeParentClass, _ := parent.Attrs().Get("class")
 			// realParentClass, _ := targets[i].Parent().Attrs().Get("class")
-			p("\n************************************************************************************************************************************************")
+			// p("\n************************************************************************************************************************************************")
 			// expectedParentId, _ := targets[0].Attrs().Get("id")
 			// realParentId, _ := targets[i].Parent().Attrs().Get("id")
 			// p("expected parent id:", expectedParentId)
 			// p("real parent id:", realParentId)
-			fp("\nthere a nested elements with the same classname WITHOUT THE SAME PARENT!!! \n\n\"fake child\":\n\t`%s`\n\n\"expected to be parent\":\n\t`%s`\n", fakeChildClass, expectedToBeParentClass)
-			p("************************************************************************************************************************************************\n")
+			// fp("\nthere a nested elements with the same classname WITHOUT THE SAME PARENT!!! \n\n\"fake child\":\n\t`%s`\n\n\"expected to be parent\":\n\t`%s`\n", fakeChildClass, expectedToBeParentClass)
+			// p("************************************************************************************************************************************************\n")
 			// fp("there a nested elements with the same classname WITHOUT THE SAME PARENT!!! \n\"child\":\n%s\n\"parent\":\n%s", targets[i].HTML(), parent.HTML())
 			continue
 		}

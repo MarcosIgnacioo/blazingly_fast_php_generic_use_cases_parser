@@ -46,6 +46,7 @@ var modifications map[string][]Modification = map[string][]Modification{
 	"carrito":      cartModifications,
 	"form-carrito": cartFormModifications,
 	"payment":      paymentModifications,
+	"order":        individualOrderModifications,
 }
 
 var IDS map[string]string = map[string]string{

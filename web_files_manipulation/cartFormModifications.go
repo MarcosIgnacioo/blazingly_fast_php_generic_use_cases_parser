@@ -33,11 +33,11 @@ var cartFormModifications = []Modification{
 				Mode:  INNER_HTML,
 				HTML:  `<?= $product->name ?>`,
 			},
-			// HTMLChange{
-			// 	Query: ".cart_product_description",
-			// 	Mode:  INNER_HTML,
-			// 	HTML:  `<?= $product->feature ?>`,
-			// },
+			HTMLChange{
+				Query: ".cart_product_description",
+				Mode:  INNER_HTML,
+				HTML:  `<?= $product->feature ?>`,
+			},
 			HTMLChange{
 				Query: ".cart_product_price",
 				Mode:  INNER_HTML,

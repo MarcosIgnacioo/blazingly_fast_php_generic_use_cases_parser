@@ -286,6 +286,23 @@ var ordersHeader = `
 	?>
 	`
 
+var individualOrderHeader = `
+	<?php 
+		include_once "../app/config.php";
+		include_once "../app/ProductsController.php";
+		include_once "../app/ShopController.php";
+
+		if (!isset($_SESSION['client_id'])) {
+			header("Location:" . BASE_PATH . 'login/');
+		}
+
+		$shopController = new ShopController();
+		$productsController = new ProductsController();
+
+		$order = $shopController->getDataOrder($_GET['folio']); 
+	?>
+	`
+
 var cartHeader = `
 	<?php
 		include_once "../app/config.php"; 
