@@ -5,6 +5,7 @@ var ordersModifications = []Modification{
 		Query:       "html",
 		PrependHTML: ordersHeader,
 	},
+	anchorLoginModification,
 	Modification{
 		Query: ".table-text table tbody",
 		InnerHTML: `

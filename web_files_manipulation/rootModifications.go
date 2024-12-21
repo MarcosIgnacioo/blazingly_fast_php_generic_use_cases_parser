@@ -137,17 +137,17 @@ var rootDirModifications = []Modification{
 			},
 		},
 	},
-	Modification{
-		Query: ".remove_item_on_update",
-		AttributesChanges: []AttributeChange{
-			AttributeChange{
-				Query: "",
-				Mode:  REPLACE_ATTRIBUTE,
-				Attribute: Attribute{
-					Name:  "style",
-					Value: `display: none;`,
-				},
-			},
-		},
-	},
+	// Modification{
+	// 	Query: ".remove_item_on_update",
+	// 	AttributesChanges: []AttributeChange{
+	// 		AttributeChange{
+	// 			Query: "",
+	// 			Mode:  REPLACE_ATTRIBUTE,
+	// 			Attribute: Attribute{
+	// 				Name:  "style",
+	// 				Value: `display: none;`,
+	// 			},
+	// 		},
+	// 	},
+	// },
 }
