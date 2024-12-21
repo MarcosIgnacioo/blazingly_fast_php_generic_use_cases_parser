@@ -864,7 +864,7 @@ func AttributesChanges(modification Modification, targetDiv node.Node) {
 			tags = []node.Node{targetDiv}
 		}
 		if tags == nil || len(tags) == 0 {
-			panic(fmt.Sprintf("%s are nil or zero len in this tagAttribute `%s`", tagAttribute.Query))
+			panic(fmt.Sprintf(" %s are nil or zero len in this tagAttribute\nprobably missed a dot", tagAttribute.Query))
 		}
 		StoreID(tags[0], tagAttribute.Query)
 		SetUpTags(&tags, tagAttribute.Attribute, tagAttribute.Mode)

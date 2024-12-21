@@ -101,12 +101,30 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						}
 						targetContainer = targets[0]
 						StoreID(targetContainer, firstClass)
-						HandleHTMLModifications(modification, targetContainer)
+
+						// if selectall well we do the html modifications to all of the elements!
+						if modification.ChangeAll {
+							for _, container := range targets {
+								HandleHTMLModifications(modification, container)
+							}
+						} else {
+							HandleHTMLModifications(modification, targetContainer)
+						}
+
+						// we only do the removechildren stuff to the target one tho
 						if modification.DeleteSiblings {
 							RemoveAllChildrenExceptThis(targetContainer.Parent(), targetContainer)
 						}
+
 						DeleteOtherElementCopies(targets)
-						AttributesChanges(modification, targetContainer)
+
+						if modification.ChangeAll {
+							for _, container := range targets {
+								AttributesChanges(modification, container)
+							}
+						} else {
+							AttributesChanges(modification, targetContainer)
+						}
 						HandleContainerHTMLChanges(modification, targetContainer)
 					}
 				}

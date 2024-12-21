@@ -8,8 +8,8 @@ var ordersModifications = []Modification{
 	Modification{
 		Query: ".table-text table tbody",
 		InnerHTML: `
-		<?php if (isset($orders) && count($orders)) : ?>
-		<?php foreach ($orders as $order) : ?>
+			<?php if (isset($orders) && count($orders)) : ?>
+			<?php foreach ($orders as $order) : ?>
 			<tr>
 				<td style="width: 17.42%;"><div style="text-align: center;">#<?= $order->folio ?></div></td>
 				<td style="width: 19.2363%;">
@@ -26,15 +26,48 @@ var ordersModifications = []Modification{
 				</td>
 				<td style="width: 24.1899%;">
 					<div style="text-align: center;">
-						<a href="<?= BASE_PATH ?>account/order/<?= $order->folio ?>/">
+						<?php if($order->order_status->id == 2): ?>
+							<a href="<?= BASE_PATH ?>tienda/payment/<?= $order->folio ?>/">
+								Completar el pago
+							</a>
+						<?php endif ?>
+						<!-- <a href="<?= BASE_PATH ?>account/order/<?= $order->folio ?>/">
 							Detalles
-						</a>
+						</a> -->
 					</div>
 				</td>
 			</tr>
-		<?php endforeach ?>
-		<?php endif ?>
+			<?php endforeach ?>
+			<?php endif ?>
 		`,
+	},
+	Modification{
+		Query: "append_scripts_to_end_of_body",
+		AppendHTML: `
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<?php if(isset($_GET['payment-ok'])): ?>
+		<script>
+			document.addEventListener('DOMContentLoaded', ()=>{
+				Swal.fire({
+					title: "¡Hecho!",
+					text: "El pago se ha procesado correctamente",
+					icon: "success"
+				});
+			});
+		</script>
+	<?php endif ?>
+	<?php if(isset($_GET['payment-error'])): ?>
+		<script>
+			document.addEventListener('DOMContentLoaded', ()=>{
+				Swal.fire({
+					title: "Error",
+					text: "Ha ocurrido un error al procesar el pago",
+					icon: "error"
+				});
+			});
+		</script>
+	<?php endif ?>
+`,
 	},
 	Modification{
 		Query: ".remove_item_on_update",

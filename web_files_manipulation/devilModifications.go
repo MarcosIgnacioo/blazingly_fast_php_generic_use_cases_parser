@@ -209,7 +209,7 @@ var devilModifications = []Modification{
 				Mode:  REPLACE_ATTRIBUTE,
 				Attribute: Attribute{
 					Name:  "onchange",
-					Value: `updateSelection(this)`,
+					Value: `updateSelection(this, 'cafe')`,
 				},
 			},
 			AttributeChange{

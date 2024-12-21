@@ -115,6 +115,7 @@ const (
 type Modification struct {
 	Query             string
 	SelectAll         bool
+	ChangeAll         bool
 	DeleteSiblings    bool
 	InnerHTML         string
 	OuterHTML         string

@@ -31,18 +31,21 @@ var scriptsBody = `
 	`
 
 var modifications map[string][]Modification = map[string][]Modification{
-	"app":        rootDirModifications,
-	"tienda":     storeModifications,
-	"cafe":       coffeeModifications,
-	"merch":      merchModifications,
-	"accesorios": accessoriesModifications,
-	"diablo":     devilModifications,
-	"sudadera":   sweaterModifications,
-	"login":      loginModifications,
-	"dashboard":  dashboardModifications,
-	"details":    detailsModifications,
-	"addresses":  addressesModifications,
-	"orders":     ordersModifications,
+	"app":          rootDirModifications,
+	"tienda":       storeModifications,
+	"cafe":         coffeeModifications,
+	"merch":        merchModifications,
+	"accesorios":   accessoriesModifications,
+	"diablo":       devilModifications,
+	"sudadera":     sweaterModifications,
+	"login":        loginModifications,
+	"dashboard":    dashboardModifications,
+	"details":      detailsModifications,
+	"addresses":    addressesModifications,
+	"orders":       ordersModifications,
+	"carrito":      cartModifications,
+	"form-carrito": cartFormModifications,
+	"payment":      paymentModifications,
 }
 
 var IDS map[string]string = map[string]string{
