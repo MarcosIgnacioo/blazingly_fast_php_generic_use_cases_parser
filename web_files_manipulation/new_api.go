@@ -31,11 +31,11 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 
 		insertCartMobile(doc, file.nestedLevel)
 		insertScripts(doc)
-		links := QuerySelectorAll(doc, `link[rel="stylesheet"]`)
-		for _, link := range links {
-			ogLink, _ := link.Attrs().Get("href")
-			SetAttribute(&link, "href", ogLink[1:])
-		}
+		// links := QuerySelectorAll(doc, `link[rel="stylesheet"]`)
+		// for _, link := range links {
+		// 	ogLink, _ := link.Attrs().Get("href")
+		// 	SetAttribute(&link, "href", ogLink[1:])
+		// }
 		if modifications[file.fileParentDir] != nil {
 			if err != nil {
 				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
