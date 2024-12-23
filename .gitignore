@@ -55,6 +55,9 @@ bundles/
 exported/*
 out/
 app/
+controllers/
+extra_js/
+doce40GAMER/
 *.zip
 *.php
 *.html
