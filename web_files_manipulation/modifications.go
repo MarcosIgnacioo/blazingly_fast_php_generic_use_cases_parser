@@ -1,5 +1,7 @@
 package web_files_manipulation
 
+var ROOT_APP_DIR = `doce40GAMER`
+
 var scriptsHead = `
 	<link href="<?= BASE_PATH ?>js/toasty/dist/toasty.min.css" rel="stylesheet">
 
@@ -31,7 +33,7 @@ var scriptsBody = `
 	`
 
 var modifications map[string][]Modification = map[string][]Modification{
-	"app":          rootDirModifications,
+	ROOT_APP_DIR:   rootDirModifications,
 	"tienda":       storeModifications,
 	"cafe":         coffeeModifications,
 	"merch":        merchModifications,

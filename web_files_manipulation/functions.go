@@ -1,14 +1,25 @@
 package web_files_manipulation
 
 import (
+	"bufio"
 	"fmt"
+	"io/fs"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"regexp"
+
 	// "os/exec"
 	"strings"
 
 	"github.com/sunshineplan/node"
+	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
 )
+
+func pt(a ...any) {
+	fmt.Print(a...)
+}
 
 func p(a ...any) {
 	fmt.Println(a...)
@@ -442,6 +453,12 @@ func insertCartMobile(doc node.Node, nestedLevel int) {
 	cartMobile := fmt.Sprintf("<?php include \"%slayouts/cart_mobile.template.php\"; ?>\n", getNestedPath(nestedLevel))
 	separatorCart := doc.Find(node.Descendant, nil, node.Class("separator_initial_cart"))
 	preppendHTMLToNode(cartMobile, separatorCart)
+}
+
+func InsertConfig(doc node.Node, nestedLevel int) {
+	config := fmt.Sprintf("<?php include_once \"%sapp/config.php\";   ?>", getNestedPath(nestedLevel))
+	html := doc.Find(node.Descendant, node.Tag("html"))
+	preppendHTMLToNode(config, html)
 }
 
 func insertScripts(doc node.Node) {
@@ -974,6 +991,128 @@ func NewAttributeChange(query string, mode AttributeMode, attribute string) Attr
 		Mode:      mode,
 		Attribute: CreateAttribute(attributeName, attributeValue),
 	}
+}
+
+func Preprocess() {
+	dir := f("./%s/index.html", ROOT_APP_DIR)
+	file, err := os.ReadFile(dir)
+	if err != nil {
+		panik("cannot open %s/index.html file for preprocessing \n", ROOT_APP_DIR)
+	}
+	fileContent := gohtml.Format(string(file))
+	doc, err := node.ParseHTML(fileContent)
+
+	modification := Modification{
+		OuterHTML: `
+    <img
+        src="<?= $product->cover ?>"
+        alt="<?= $product->name ?>"
+        data-src="<?= $product->cover ?>"
+        class="ed-lazyload"
+        style="object-fit: cover;"
+        srcset="<?= $product->cover ?>"
+        data-srcset="<?= $product->cover ?>"
+    />
+		`,
+	}
+
+	productCartItem := QuerySelector(doc, ".product_item_cart")
+	imgCartItem := QuerySelector(productCartItem, "img")
+	HandleHTMLModifications(modification, imgCartItem)
+	err = os.Mkdir(f("%s/layouts", ROOT_APP_DIR), 0775)
+	mobileTemplate, err := os.Create(f("%s/layouts/cart_mobile.template.php", ROOT_APP_DIR))
+	if err != nil {
+		panik("error creating cart_mobile template")
+	}
+	_, err = mobileTemplate.WriteString(f(`
+		<?php 
+			if (!isset($_SESSION)) {  
+				include_once "../app/config.php";
+			}
+		?>
+    <?php $total = 0; ?>
+			<?php if (isset($_SESSION['cart']) && count($_SESSION['cart'])): ?> 
+				<?php foreach ($_SESSION['cart'] as $product): ?>
+					<span id="cart_container_mobile"></span>
+						%s
+				<?php $total += ($product->cantidad*$product->price) ?> 
+			<?php endforeach ?>
+    <?php endif ?>
+		`, productCartItem.HTML()))
+	if err != nil {
+		panik("error creating cart_mobile template file")
+	}
+}
+
+func Postprocess() {
+	fromPattern := "extra_js/*"
+	toDir := f("%s/js", ROOT_APP_DIR)
+	files, err := filepath.Glob(fromPattern)
+	if err != nil {
+		p(err)
+		return
+	}
+
+	for _, file := range files {
+		cmd := exec.Command("cp", "--recursive", file, toDir)
+		cmd.Run()
+	}
+
+	fromPattern = "controllers/*"
+	appDir := f("%s/app", ROOT_APP_DIR)
+	err = os.MkdirAll(appDir, 0775)
+
+	if err != nil {
+		p(err)
+		return
+	}
+
+	files, err = filepath.Glob(fromPattern)
+
+	if err != nil {
+		p(err)
+		return
+	}
+
+	for _, file := range files {
+		cmd := exec.Command("cp", "--recursive", file, appDir)
+		cmd.Run()
+	}
+}
+
+func ReadWord(br *bufio.Reader, initialState byte) string {
+	curr := initialState
+	word := string(initialState)
+	for (curr >= 'a' && curr <= 'z') || (curr == ':' || curr == '(' || curr == ')' || curr == '{') {
+		curr, _ = br.ReadByte()
+		word += string(curr)
+	}
+	return word
+}
+
+func GetFilesNamesFilteredBy(root string, fn func(string) bool) []string {
+	var files []string
+	filepath.WalkDir(root, func(s string, d fs.DirEntry, e error) error {
+		if fn(s) {
+			files = append(files, s)
+		}
+		return nil
+	})
+	return files
+}
+
+func GetFileNameByRegex(regex string) string {
+	r, _ := regexp.Compile(regex)
+	files := GetFilesNamesFilteredBy(ROOT_APP_DIR, func(s string) bool {
+		return r.Match([]byte(s)) && filepath.Ext(s) == ".js"
+	})
+	if len(files) > 1 {
+		p("more files that match the regex, using this one `%s`", files[0])
+	}
+	if len(files) == 0 {
+		panik("could not find a file that match this regex `%s`", regex)
+	}
+	return files[0]
 }
 
 // func newInstruction(directory string, productClass string, header string, forEachWrapper string, classNames ...string) map[string][]Instruction {

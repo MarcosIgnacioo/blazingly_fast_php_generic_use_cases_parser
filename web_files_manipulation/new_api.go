@@ -11,11 +11,13 @@ import (
 )
 
 func InitNewAPI(sourceDirectory string) {
+	Preprocess()
 	directories, files, err := getFilesInDirectory(sourceDirectory)
 	if err != nil {
 		panic(fmt.Sprintf("Failed at initial directory %s", sourceDirectory))
 	}
 	NewAPITrans(directories, files, modifications)
+	Postprocess()
 }
 
 // probablemente esta funcion pase a ser unicamente la que mete los productos en las tiendas, las otras cosas que se ocupan hacer son mas especificas y complicadas que encontrar una manera generica de hacerlo es algo que requiere bastante mas tiempo
@@ -129,6 +131,8 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 					}
 				}
 			}
+		} else {
+			InsertConfig(doc, file.nestedLevel)
 		}
 		buildPHPFile(file, doc)
 	}

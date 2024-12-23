@@ -104,6 +104,7 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 // }
 
 func main() {
+	// web_files_manipulation.Preprocess()
 	newRun()
 	// web_files_manipulation.InitNewAPI("app")
 	// f, _ := os.ReadFile("./asdf.html")
@@ -153,8 +154,9 @@ func printHtml(doc node.Node) {
 }
 
 func newRun() {
-	unzip("./1240.zip", "./app")
-	web_files_manipulation.InitNewAPI("./app")
+	root := fmt.Sprintf("./%s", web_files_manipulation.ROOT_APP_DIR)
+	unzip("./1240.zip", root)
+	web_files_manipulation.InitNewAPI(root)
 }
 
 func insertingIndexPHPHead(doc node.Node) string {
