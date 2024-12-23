@@ -402,6 +402,7 @@ func buildPHPFile(file *File, doc node.Node) {
 	os.Rename(file.filePath, phpFileName)
 	file.filePath = phpFileName
 	os.WriteFile(phpFileName, prepareHTMLForFile(doc), 0777)
+	fmt.Println(file.filePath)
 	// pretty-php test.php
 	// phpFormat := exec.Command("pretty-ph.phar", phpFileName)
 	// err := phpFormat.Start()
@@ -414,7 +415,6 @@ func buildPHPFile(file *File, doc node.Node) {
 	// if err != nil {
 	// 	fp("error html formating file `%s`", phpFileName)
 	// }
-	fmt.Println(file.filePath)
 	// p(IDS)
 }
 
@@ -471,7 +471,7 @@ func insertScripts(doc node.Node) {
 
 func getNestedPath(nestedLevel int) string {
 	nesting := ""
-	if nestedLevel > 1 {
+	if nestedLevel >= 1 {
 		for i := 0; i < nestedLevel; i++ {
 			nesting += "../"
 		}
@@ -1002,7 +1002,7 @@ func Preprocess() {
 	fileContent := gohtml.Format(string(file))
 	doc, err := node.ParseHTML(fileContent)
 
-	modification := Modification{
+	imgModification := Modification{
 		OuterHTML: `
     <img
         src="<?= $product->cover ?>"
@@ -1016,9 +1016,33 @@ func Preprocess() {
 		`,
 	}
 
+	nameModification := Modification{
+		InnerHTML: `<?= $product->name ?>`,
+	}
+
+	// featureModification := Modification{
+	// 	InnerHTML: `<?= $product->feature ?>`,
+	// }
+
+	priceModification := Modification{
+		InnerHTML: `$<?= number_format($product->price,2) ?>`,
+	}
+
+	// quantityModification := Modification{
+	// 	InnerHTML: `x<?= $product->cantidad ?>`,
+	// }
+
 	productCartItem := QuerySelector(doc, ".product_item_cart")
 	imgCartItem := QuerySelector(productCartItem, "img")
-	HandleHTMLModifications(modification, imgCartItem)
+	nameCartItem := QuerySelector(productCartItem, ".name_item_carrito_nav")
+	priceCartItem := QuerySelector(productCartItem, ".price_item_carrito_nav")
+	// quantittyCartItem := QuerySelector(productCartItem, ".quantity_item_carrito_nav")
+	// featureCartItem := QuerySelector(productCartItem, "")
+
+	HandleHTMLModifications(imgModification, imgCartItem)
+	HandleHTMLModifications(priceModification, priceCartItem)
+	HandleHTMLModifications(nameModification, nameCartItem)
+
 	err = os.Mkdir(f("%s/layouts", ROOT_APP_DIR), 0775)
 	mobileTemplate, err := os.Create(f("%s/layouts/cart_mobile.template.php", ROOT_APP_DIR))
 	if err != nil {
@@ -1078,6 +1102,8 @@ func Postprocess() {
 		cmd := exec.Command("cp", "--recursive", file, appDir)
 		cmd.Run()
 	}
+	cmd := exec.Command("cp", "--recursive", ".htaccess", ROOT_APP_DIR)
+	err = cmd.Run()
 }
 
 func ReadWord(br *bufio.Reader, initialState byte) string {

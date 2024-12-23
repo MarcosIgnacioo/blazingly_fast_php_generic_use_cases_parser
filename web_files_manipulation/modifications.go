@@ -1,6 +1,6 @@
 package web_files_manipulation
 
-var ROOT_APP_DIR = `doce40GAMER`
+var ROOT_APP_DIR = `doce40BUILD`
 
 var scriptsHead = `
 	<link href="<?= BASE_PATH ?>js/toasty/dist/toasty.min.css" rel="stylesheet">

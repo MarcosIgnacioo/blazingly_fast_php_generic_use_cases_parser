@@ -1,0 +1,26 @@
+Options +FollowSymLinks -MultiViews -Indexes
+RewriteEngine On
+RewriteBase /doce40BUILD/
+
+# Skip rewrites for existing files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Handle static assets correctly
+RewriteRule ^(static/.*|js/.*|css/.*|img/.*)$ $1 [L]
+
+# Rewrite rules for pages
+RewriteRule ^tienda/cafe/([^\/]+)?/$ tienda/cafe/diablo/index.php?slug=$1 [L]
+RewriteRule ^tienda/merch/([^\/]+)?/$ tienda/merch/sudadera/index.php?slug=$1 [L]
+RewriteRule ^tienda/payment/([^\/]+)?/$ payment/index.php?folio=$1 [L]
+RewriteRule ^order/([^\/]+)?/$ order/index.php?folio=$1 [L]
+
+# Controllers
+RewriteRule ^clients$ app/AuthController.php  
+RewriteRule ^shopcart$ app/ShopController.php
+RewriteRule ^sendcontact$ app/ContactController.php
+
+# Components
+RewriteRule ^mobile_cart/?$ layouts/cart_mobile.template.php
+RewriteRule ^detail_cart/?$ layouts/cart_details.template.php

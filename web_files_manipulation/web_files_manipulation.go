@@ -51,7 +51,8 @@ func storeFilesInArray(entry fs.DirEntry, directory string, files *arraylist.Arr
 		fileName := entry.Name()
 		fullFilePath := fmt.Sprintf("%s/%s", directory, fileName)
 		fileExtension = filepath.Ext(fileName)
-		nestedLevel := (len(strings.Split(fullFilePath, "/")) / 2)
+		prodPath := fullFilePath[len(ROOT_APP_DIR)+2:]
+		nestedLevel := (len(strings.Split(prodPath, "/"))) - 2
 		parentDirectory := filepath.Base(directory)
 		newFile := &File{fileName: fileName, filePath: fullFilePath, fileType: fileTypesMap[fileExtension], nestedLevel: nestedLevel, fileParentDir: parentDirectory}
 		files.Enqueue(newFile)
