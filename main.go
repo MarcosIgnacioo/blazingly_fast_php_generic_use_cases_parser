@@ -104,12 +104,15 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 // 	}
 // }
 
+func createinstructionjson() {
+	f, _ := os.Create("modifications.json")
+	json, _ := json.Marshal(web_files_manipulation.JSONED)
+	f.WriteString(string(json))
+	web_files_manipulation.Preprocess()
+}
+
 func main() {
 	// p()
-	// f, _ := os.Create("modifications.json")
-	// json, _ := json.Marshal(web_files_manipulation.JSONED)
-	// f.WriteString(string(json))
-	// web_files_manipulation.Preprocess()
 	newRun()
 	// web_files_manipulation.InitNewAPI("app")
 	// f, _ := os.ReadFile("./asdf.html")

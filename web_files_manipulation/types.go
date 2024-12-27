@@ -113,16 +113,16 @@ const (
 
 // if query is empty or not initialized then the other instructions (AttributesChanges and HTMLChanges) use the whole document as the base search
 type Modification struct {
-	Query             string
-	SelectAll         bool
-	ChangeAll         bool
-	DeleteSiblings    bool
-	InnerHTML         string
-	OuterHTML         string
-	AppendHTML        string
-	PrependHTML       string
-	AttributesChanges []AttributeChange
-	HTMLChanges       []HTMLChange
+	Query             string            `json:"query"`
+	SelectAll         bool              `json:"select_all"`
+	ChangeAll         bool              `json:"changue_all"`
+	DeleteSiblings    bool              `json:"delete_siblings"`
+	InnerHTML         string            `json:"inner_html"`
+	OuterHTML         string            `json:"outer_html"`
+	AppendHTML        string            `json:"append_html"`
+	PrependHTML       string            `json:"prepend_html"`
+	AttributesChanges []AttributeChange `json:"attributes_changes"`
+	HTMLChanges       []HTMLChange      `json:"html_changes"`
 }
 
 type AttributeMode string
@@ -148,15 +148,15 @@ const (
 
 // if query is empty or not initialized the upper query from the modfication is used as the targeting container
 type AttributeChange struct {
-	Query     string
-	Mode      AttributeMode
-	Attribute Attribute
+	Query     string        `json:"query"`
+	Mode      AttributeMode `json:"mode"`
+	Attribute Attribute     `json:"attribute"`
 }
 
 type HTMLChange struct {
-	Query string
-	Mode  HTMLMode
-	HTML  string
+	Query string   `json:"query"`
+	Mode  HTMLMode `json:"mode"`
+	HTML  string   `json:"html"`
 }
 
 // file:///home/happy/Downloads/%3C?=%20$image-%3Efull_path%20?%3E

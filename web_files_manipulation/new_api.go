@@ -1,6 +1,7 @@
 package web_files_manipulation
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -11,6 +12,15 @@ import (
 )
 
 func InitNewAPI(sourceDirectory string) {
+	jsonName := "modifications.json"
+	var modificationsJson, modJsonErr = os.ReadFile(jsonName)
+	if modJsonErr != nil {
+		panik("could not read %s", jsonName)
+	}
+	unErr := json.Unmarshal(modificationsJson, &modifications)
+	if unErr != nil {
+		panik(unErr.Error())
+	}
 	Preprocess()
 	directories, files, err := getFilesInDirectory(sourceDirectory)
 	if err != nil {
