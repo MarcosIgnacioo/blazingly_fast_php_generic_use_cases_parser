@@ -1,5 +1,7 @@
 package web_files_manipulation
 
+import "os"
+
 var ROOT_APP_DIR = `doce40BUILD`
 
 var scriptsHead = `
@@ -31,6 +33,27 @@ var scriptsBody = `
 		});
 	</script>
 	`
+
+var JSONED map[string][]Modification = map[string][]Modification{
+	ROOT_APP_DIR:   rootDirModifications,
+	"tienda":       storeModifications,
+	"cafe":         coffeeModifications,
+	"merch":        merchModifications,
+	"accesorios":   accessoriesModifications,
+	"diablo":       devilModifications,
+	"sudadera":     sweaterModifications,
+	"login":        loginModifications,
+	"dashboard":    dashboardModifications,
+	"details":      detailsModifications,
+	"addresses":    addressesModifications,
+	"orders":       ordersModifications,
+	"carrito":      cartModifications,
+	"form-carrito": cartFormModifications,
+	"payment":      paymentModifications,
+	"order":        individualOrderModifications,
+}
+
+var modificationsJson, err = os.ReadFile("modifdications.json")
 
 var modifications map[string][]Modification = map[string][]Modification{
 	ROOT_APP_DIR:   rootDirModifications,

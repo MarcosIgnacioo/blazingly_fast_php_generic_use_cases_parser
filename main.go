@@ -2,6 +2,7 @@ package main
 
 import (
 	"archive/zip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -104,6 +105,10 @@ func setAttribute(htmlNode *node.Node, attribute string, value string) {
 // }
 
 func main() {
+	// p()
+	// f, _ := os.Create("modifications.json")
+	// json, _ := json.Marshal(web_files_manipulation.JSONED)
+	// f.WriteString(string(json))
 	// web_files_manipulation.Preprocess()
 	newRun()
 	// web_files_manipulation.InitNewAPI("app")

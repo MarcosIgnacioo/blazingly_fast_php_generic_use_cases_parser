@@ -12,8 +12,8 @@ dashboard[x]
 addresses[x]
 orders[x]
 carrito[x]
-form-carrito[]
-payment[]
+form-carrito[x]
+payment[x]
 
 
 FALTA eliminar la funcion del archivo de js 

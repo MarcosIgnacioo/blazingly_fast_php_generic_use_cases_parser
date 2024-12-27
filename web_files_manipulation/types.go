@@ -125,16 +125,25 @@ type Modification struct {
 	HTMLChanges       []HTMLChange
 }
 
-type AttributeMode int
-type HTMLMode int
+type AttributeMode string
+type HTMLMode string
+
+// const (
+// 	INNER_HTML        = 0
+// 	OUTER_HTML        = 1
+// 	APPEND_HTML       = 3
+// 	PREPEND_HTML      = 4
+// 	REPLACE_ATTRIBUTE = 5
+// 	APPEND_ATTRIBUTE  = 6
+// )
 
 const (
-	INNER_HTML        = 0
-	OUTER_HTML        = 1
-	APPEND_HTML       = 3
-	PREPEND_HTML      = 4
-	REPLACE_ATTRIBUTE = 5
-	APPEND_ATTRIBUTE  = 6
+	INNER_HTML        = "inner"
+	OUTER_HTML        = "outer"
+	APPEND_HTML       = "append"
+	PREPEND_HTML      = "prepend"
+	REPLACE_ATTRIBUTE = "replace_attribute"
+	APPEND_ATTRIBUTE  = "append_attribute"
 )
 
 // if query is empty or not initialized the upper query from the modfication is used as the targeting container

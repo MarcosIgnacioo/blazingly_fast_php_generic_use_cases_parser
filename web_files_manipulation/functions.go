@@ -1104,6 +1104,12 @@ func Postprocess() {
 	}
 	cmd := exec.Command("cp", "--recursive", ".htaccess", ROOT_APP_DIR)
 	err = cmd.Run()
+
+	cmd = exec.Command("./js_super_cool_trimmer", "doce40BUILD/webcard/static/app.bundle.1734003986.js")
+	err = cmd.Run()
+	if err != nil {
+		p(err)
+	}
 }
 
 func ReadWord(br *bufio.Reader, initialState byte) string {
