@@ -1078,8 +1078,11 @@ func Postprocess() {
 	}
 
 	for _, file := range files {
-		cmd := exec.Command("cp", "--recursive", file, toDir)
-		cmd.Run()
+		cmd := exec.Command("cp", "-r", file, toDir)
+		err = cmd.Run()
+		if err != nil {
+			p(err)
+		}
 	}
 
 	fromPattern = "controllers/*"
@@ -1099,17 +1102,23 @@ func Postprocess() {
 	}
 
 	for _, file := range files {
-		cmd := exec.Command("cp", "--recursive", file, appDir)
-		cmd.Run()
+		cmd := exec.Command("cp", "-r", file, appDir)
+		err = cmd.Run()
+		if err != nil {
+			p(err)
+		}
 	}
-	cmd := exec.Command("cp", "--recursive", ".htaccess", ROOT_APP_DIR)
+	cmd := exec.Command("cp", "-r", ".htaccess", ROOT_APP_DIR)
 	err = cmd.Run()
 
-	cmd = exec.Command("./js_super_cool_trimmer", "doce40BUILD/webcard/static/app.bundle.1734003986.js")
+	bundleJsName := GetFileNameByRegex("doce40BUILD/webcard/static/", `app\.bundle\..*\.js`)
+	p("Quitando contenido de funcion de js, por favor espere...")
+	cmd = exec.Command("./macos_js_manipulator", bundleJsName)
 	err = cmd.Run()
 	if err != nil {
 		p(err)
 	}
+	p("Listo!")
 }
 
 func ReadWord(br *bufio.Reader, initialState byte) string {
@@ -1133,9 +1142,9 @@ func GetFilesNamesFilteredBy(root string, fn func(string) bool) []string {
 	return files
 }
 
-func GetFileNameByRegex(regex string) string {
+func GetFileNameByRegex(dir string, regex string) string {
 	r, _ := regexp.Compile(regex)
-	files := GetFilesNamesFilteredBy(ROOT_APP_DIR, func(s string) bool {
+	files := GetFilesNamesFilteredBy(dir, func(s string) bool {
 		return r.Match([]byte(s)) && filepath.Ext(s) == ".js"
 	})
 	if len(files) > 1 {

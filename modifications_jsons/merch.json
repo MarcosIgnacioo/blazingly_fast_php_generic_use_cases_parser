@@ -1,0 +1,99 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n<?php\n\n\t  include_once \"../../app/config.php\"; \n\t  include_once \"../../app/ProductsController.php\";\n\t  include_once \"../../app/CategoriesController.php\";\n\n\t  $productsController = new ProductsController(); \n\t  \n\t  $products = $productsController -> getByCategory('merch');\n\n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".product_item_merch",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($products) \u0026\u0026 count($products)): ?>\n\t\t\t<?php foreach ($products as $product): ?> \n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

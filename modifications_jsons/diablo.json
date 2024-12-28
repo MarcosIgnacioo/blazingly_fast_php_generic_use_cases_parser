@@ -1,0 +1,212 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n<?php\n\n  include_once \"../../../app/config.php\"; \n  include_once \"../../../app/ProductsController.php\";\n  include_once \"../../../app/CategoriesController.php\";\n\n  $productsController = new ProductsController(); \n  $categoriesController = new CategoriesController(); \n\n  if(isset($_GET['slug'])) {\n\n    $grand_product = $productsController -> getBySlug($_GET['slug']); \n\n  }else{\n    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n  }\n\n  if (is_null($grand_product)) {\n    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n  } \n\n  $features = $productsController ->getFeatures($grand_product,\"molienda\");\n  $backgroud = $productsController ->getFile($grand_product,\"background_\".$_GET['slug']);\n  $stock = $productsController ->getStock($grand_product->presentations);;\n\n\n  $tueste = $productsController ->getFile($grand_product,\"tueste_\".$_GET['slug']);\n\n  $perfil_de_sabor = $productsController ->getFile($grand_product,\"perfil_de_sabor_\".$_GET['slug']); \n\n?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".ed-gallery-thumb",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "\n\t\t\t<a href=\"<?= $image->full_path ?>\" target=\"_blank\" title=\"Caption\">\n\t\t\t\t\t\t<img\n\t\t\t\t\t\t\t\tsrc=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\talt=\"Caption\"\n\t\t\t\t\t\t\t\tsrcset=\"\n\t\t\t\t\t\t\t\t\t\tdata:image/svg+xml,\n\t\t\t\t\t\t\t\t\t\t%3Csvg%20width='800'%20viewBox='0%200%20800%20800'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='800'%20height='800'%20style='fill:%20%23F7F7F7'%20/%3E%3C/svg%3E\n\t\t\t\t\t\t\t\t\"\n\t\t\t\t\t\t\t\tdata-src=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\tclass=\"ed-lazyload lazyload\"\n\t\t\t\t\t\t\t\tdata-srcset=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t/>\n\t\t\t\t</a>\n\t\t",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t\t<?php endif ?>\n\t\t\t\t<?php endforeach ?> \n\t\t\t<?php endif ?>\n\t\t",
+    "prepend_html": "\n\t <?php if (isset($grand_product) \u0026\u0026 isset($grand_product->images)): ?>\n\t\t\t<?php foreach ($grand_product->images as $image): ?>  \n        <?php if (!$image->is_cover): ?> \n\t\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".product_item_recomendation",
+    "select_all": true,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?> \n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($grand_product->related_products) \u0026\u0026 count($grand_product->related_products)): ?>\n\t\t\t<?php foreach ($grand_product->related_products as $product): ?>\n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".background-image-holder",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "background-image: 'url('<?= ($backgroud != '') ? $backgroud : '/images/0/9983852/Graficos_BolsasCafe_DIABLO.svg' ?>');'"
+        }
+      },
+      {
+        "query": ".sizes_items_details select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onchange",
+          "Value": "updateSelection(this, 'cafe')"
+        }
+      },
+      {
+        "query": ".quantity_items_product select",
+        "mode": "append_attribute",
+        "attribute": {
+          "Name": "class",
+          "Value": "cantidad_producto"
+        }
+      },
+      {
+        "query": ".molienda_container select",
+        "mode": "append_attribute",
+        "attribute": {
+          "Name": "class",
+          "Value": "feature_product"
+        }
+      },
+      {
+        "query": ".boton_add_to_cart a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onclick",
+          "Value": "QuickAdd(this)"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".cover_product_details",
+        "mode": "inner",
+        "html": "<img src=\"<?= $productsController->getCover($grand_product) ?>\" alt=\"<?= $grand_product->name ?>\"/>"
+      },
+      {
+        "query": ".product_title_details",
+        "mode": "inner",
+        "html": "<?= $grand_product->name ?>"
+      },
+      {
+        "query": ".product_price_details",
+        "mode": "inner",
+        "html": "$<?= number_format( $productsController->getPrice($grand_product->presentations) ,2) ?>"
+      },
+      {
+        "query": ".product_description_details",
+        "mode": "inner",
+        "html": "<?= $grand_product->description ?>"
+      },
+      {
+        "query": ".sizes_items_details select",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if (isset($grand_product->presentations) \u0026\u0026 count($grand_product->presentations)): ?>\n\t\t\t\t\t<?php foreach ($grand_product->presentations as $presentation): ?> \n\t\t\t\t\t\t<option data-id=\"<?= $presentation->id ?>\" data-price=\"<?= $presentation->current_price->amount ?>\" value=\"<?= $presentation->id ?>\" data-product='<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>' >\n\t\t\t\t\t\t\t\t<?= $presentation->description ?>\n\t\t\t\t\t\t</option> \n\t\t\t\t\t<?php endforeach ?>\n        <?php endif ?>"
+      },
+      {
+        "query": ".quantity_items_product select",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if (isset($stock) \u0026\u0026 $stock > 0): ?>\n\t\t\t\t\t\t<?php for ($i = 1; $i < $stock; $i++): ?>\n\t\t\t\t\t\t\t\t<option value=\"<?= $i ?>\">\n\t\t\t\t\t\t\t\t\t\t<?= $i ?>\n\t\t\t\t\t\t\t\t</option>\n\t\t\t\t\t\t\t\t<?php if ($i > 9) { break; } ?>\n\t\t\t\t\t\t<?php endfor; ?>\n\t\t\t\t<?php endif; ?>\n        "
+      },
+      {
+        "query": ".molienda_container select",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\t<?php foreach ($features as $feature): ?>\n\t\t\t\t\t\t\t<option value=\"<?= $feature  ?>\">\n\t\t\t\t\t\t\t\t\t<?= $feature  ?>\n\t\t\t\t\t\t\t</option>\n\t\t\t\t\t<?php endforeach ?>\n        "
+      },
+      {
+        "query": ".tueste_item_details",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if ($tueste!=\"\"): ?>\n\t\t\t\t\t<img src=\"<?= $tueste ?>\" alt=\"\" />\n\t\t\t\t<?php else: ?>\n\t\t\t\t\t<img src=\"/images/250/10441024/escala_tueste.png\" alt=\"\" />\n        <?php endif ?> \n        "
+      },
+      {
+        "query": ".sabor_item_details",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if ($perfil_de_sabor!=\"\"): ?>\n\t\t\t\t\t<img src=\"<?= $perfil_de_sabor ?>\" alt=\"\" />\n        <?php else: ?>\n\t\t\t\t\t<img src=\"/images/250/10441024/escala_tueste.png\" alt=\"\" />\n        <?php endif ?> \n        "
+      },
+      {
+        "query": ".item_recomendation_name",
+        "mode": "outer",
+        "html": "\n\t\t\t\t<a href=\"<?= $product->url ?>\">\n\t\t\t\t\t\t\t<img src=\"<?= $product->thumbnail_path ?>\" alt=\"<?= $product->name ?>\"  />\n\t\t\t\t</a>\n\t\t\t\t<a href=\"<?= $product->url ?>\" title=\"\"class=\"item_recomendation_name\" title=\"\"><?= $product->name ?></a>\n        "
+      },
+      {
+        "query": ".item_recomendation_price",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\tDESDE $<?= $product->price ?>\n        "
+      }
+    ]
+  },
+  {
+    "query": "BODY",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.getElementById('%s').onchange()\n\t\t</script>\n\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "HEAD",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\tvar id_selection = '%s';\n\t\t</script>\n\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  }
+]

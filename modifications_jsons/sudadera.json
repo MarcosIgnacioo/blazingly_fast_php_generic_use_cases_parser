@@ -1,0 +1,271 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n \t<?php\n \t    \n \t  include_once \"../../../app/config.php\"; \n \t  include_once \"../../../app/ProductsController.php\";\n \t  include_once \"../../../app/CategoriesController.php\";\n\n \t  $productsController = new ProductsController(); \n \t  $categoriesController = new CategoriesController(); \n\n \t  if(isset($_GET['slug'])) {\n\n \t    $grand_product = $productsController -> getBySlug($_GET['slug']); \n\n \t  }else{\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  }\n\n \t  if (is_null($grand_product)) {\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  } \n\n \t  $stock = $productsController ->getStock($grand_product->presentations);;\n\n \t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".name_big_product",
+        "mode": "inner",
+        "html": "<?= $grand_product->name ?>"
+      },
+      {
+        "query": ".price_big_product",
+        "mode": "inner",
+        "html": "$<?= number_format( $productsController->getPrice($grand_product->presentations) ,2) ?>"
+      },
+      {
+        "query": ".description_big_product",
+        "mode": "inner",
+        "html": "<?= $grand_product->description ?>"
+      },
+      {
+        "query": ".cover_product_details",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\t<?php  \n\t\t\t\t\t\t\t$imagenes = '';\n\n\t\t\t\t\t\t\tif (isset($grand_product) \u0026\u0026 isset($grand_product->images)):\n\t\t\t\t\t\t\t\t\tforeach ($grand_product->images as $image): \n\t\t\t\t\t\t\t\t\t\t\t $imagenes .= ',{\"image\":\"'.$image->full_path.'\",\"title\":\"\"}';\n\t\t\t\t\t\t\t\t\tendforeach;\n\t\t\t\t\t\t\tendif;\n\n\t\t\t\t\t\t\t$imagenes = substr($imagenes, 1);\n\t\t\t\t\t?> \n\t\t\t\t\t<div class=\"slider-container has-dots slick-dotted slick-initialized slick-slider\" data-parameters='{\"items\":[<?= $imagenes ?>],\"adaptiveHeight\":true,\"slidesToShow\":1,\"slidesToScroll\":1,\"rows\":1,\"slidesPerRow\":1,\"height\":null,\"animation\":\"slide\",\"animationSpeed\":\"500ms\",\"direction\":\"horizontal\",\"autoplay\":true,\"autoplaySpeed\":\"5s\",\"pauseOnHover\":true,\"loop\":true,\"nav\":false,\"dots\":true,\"enlarge\":true,\"retinaImages\":true,\"lazyLoad\":\"progressive\",\"variableWidth\":false,\"centerMode\":false,\"centerPadding\":\"0px\",\"asNavFor\":\"\",\"responsive\":[{\"breakpoint\":976,\"settings\":{\"slidesToShow\":1,\"slidesToScroll\":1,\"centerPadding\":\"0px\"}},{\"breakpoint\":576,\"settings\":{\"slidesToShow\":1,\"slidesToScroll\":1,\"centerPadding\":\"0px\"}}],\"insideContainer\":false}' style=\"max-width: 100%;\"\n\t\t\t\t\t></div>\n\t\t\t\t"
+      }
+    ]
+  },
+  {
+    "query": ".tallas_presentations",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t\t<?php if (isset($grand_product->presentations) \u0026\u0026 count($grand_product->presentations)): ?>\n\t\t\t\t<?php foreach ($grand_product->presentations as $presentation): ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "append_attribute",
+        "attribute": {
+          "Name": "class",
+          "Value": "presentations"
+        }
+      },
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onclick",
+          "Value": "updateSelection(this,'merch')"
+        }
+      },
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-id",
+          "Value": "<?= $presentation->id ?>"
+        }
+      },
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-price",
+          "Value": "<?= $presentation->current_price->amount ?>"
+        }
+      },
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-product",
+          "Value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": "a",
+        "mode": "inner",
+        "html": "<?= $presentation->description ?>"
+      }
+    ]
+  },
+  {
+    "query": ".quantity_items_details",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "select",
+        "mode": "append_attribute",
+        "attribute": {
+          "Name": "class",
+          "Value": "cantidad_producto"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": "select",
+        "mode": "inner",
+        "html": "\n\t<?php if (isset($stock) \u0026\u0026 $stock > 0): ?>\n        <?php for ($i = 1; $i < $stock; $i++): ?>\n            <option value=\"<?= $i ?>\">\n                <?= $i ?>\n            </option>\n            <?php if ($i > 9) { break; } ?>\n        <?php endfor; ?>\n    <?php endif; ?> \n"
+      }
+    ]
+  },
+  {
+    "query": ".button_add_big_product",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n    <?php else: ?>\n        <h3>\n            Este producto se encuentra agotado\n        </h3>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if ($stock>0): ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onclick",
+          "Value": "QuickAdd(this)"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".ed-gallery-items li",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t<?php endif ?>\n\t\t\t<?php endforeach ?> \n\t\t<?php endif ?>  \n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($grand_product) \u0026\u0026 isset($grand_product->images)): ?>\n\t\t\t\t\t<?php foreach ($grand_product->images as $image): ?>  \n\t\t\t\t\t\t<?php if (!$image->is_cover): ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $image->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $image->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-src",
+          "Value": "<?= $image->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-srcset",
+          "Value": "<?= $image->full_path ?>"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".product_item_recomendation",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?> \n\t\t<?php endif ?>  \n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($grand_product->related_products) \u0026\u0026 count($grand_product->related_products)): ?>\n\t\t\t\t<?php foreach ($grand_product->related_products as $product): ?>\n\t\t\t\t\t<?php $product->categories = $grand_product->categories; ?>\n\t\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $image->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-srcset",
+          "Value": "<?= $image->full_path ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".ed-text",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<p style=\"line-height: 1.15; text-align: center;\">\n\t\t\t\t\t\t<span style=\"font-size: 18px; font-family: 'daisywhl';\">\n\t\t\t\t\t\t\t\t<a href=\"<?= $product->url ?>\" title=\"\">\n\t\t\t\t\t\t\t\t\t\t<?= $product->name ?>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t</span>\n\t\t\t\t</p>\n\t\t\t\t<p style=\"line-height: 1; text-align: center;\"><span style=\"font-size: 14px; color: rgb(94, 94, 94); font-family: 'daisywhl';\">DESDE $<?= $product->price ?></span></p>\n\t\t\t\t"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

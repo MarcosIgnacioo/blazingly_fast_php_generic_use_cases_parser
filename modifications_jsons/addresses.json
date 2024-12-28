@@ -1,0 +1,58 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../../app/config.php\";    \n\t\tinclude_once \"../../app/AuthController.php\";\n\n\t\t$authController = new AuthController();\n\n\t\t$authController = new AuthController();\n\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$addresses = $authController->getAddress();\n\n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "a[href=\"/login\"]",
+    "select_all": true,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "/clients?action=logout"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".address-data",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n\t\t<?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($addresses) \u0026\u0026 count($addresses)) : ?>\n\t\t\t<?php foreach ($addresses as $address) : ?>\n\t\t",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".inner .ed-element",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<p id=\"isPasted\"><strong>Nombre:\u0026nbsp;</strong></p>\n\t\t\t\t<p><span style=\"text-align: right; font-size: 1rem; letter-spacing: 0px;\">\n\t\t\t\t\t<?= $address->first_name ?> <?= $address->last_name ?>\n\t\t\t\t</span></p>\n\t\t\t\t<p><strong>Calle:</strong><span style=\"white-space: pre;\">\u0026nbsp; \u0026nbsp;\u0026nbsp;</span></p>\n\t\t\t\t<p><?= $address->street_and_use_number ?></p>\n\t\t\t\t<p>\n\t\t\t\t\t<strong>Apartamento:</strong><span style=\"white-space: pre;\"><strong>\u0026nbsp; \u0026nbsp;\u0026nbsp;</strong></span>\n\t\t\t\t</p>\n\t\t\t\t<p><span style=\"white-space: pre;\"><?= $address->apartment ?></span></p>\n\t\t\t\t<p>\n\t\t\t\t\t<strong>Provincia:</strong><span style=\"white-space: pre;\"><strong>\u0026nbsp;</strong> \u0026nbsp;\u0026nbsp;</span>\n\t\t\t\t</p>\n\t\t\t\t<p><?= $address->city ?> <?= $address->state ?></p>\n\t\t\t\t<p><strong>Código postal:</strong><span style=\"white-space: pre;\">\u0026nbsp; \u0026nbsp;\u0026nbsp;</span></p>\n\t\t\t\t<p><?= $address->postal_code ?> <?= $address->country->code ?></p>\n\t\t\t\t<p>\n\t\t\t\t\t<strong>Teléfono:</strong><span style=\"white-space: pre;\"><strong>\u0026nbsp;</strong> \u0026nbsp;\u0026nbsp;</span>\n\t\t\t\t</p>\n                <p><span style=\"white-space: pre;\"><?= $address->phone_number ?></span></p>\n\t\t\t\t<p><strong>Paí</strong><strong>s:</strong></p>\n\t\t\t\t<p><?= $address->references ?></p>\n\t\t\t\t"
+      },
+      {
+        "query": ".inner",
+        "mode": "append",
+        "html": "\n\t\t\t\t<style>\n\t\t\t\t\t\t#ed-456888664 > .inner {\n\t\t\t\t\t\t\tpadding: 10px;\n\t\t\t\t\t\t}\n\t\t\t\t</style>\n\t\t\t\t"
+      }
+    ]
+  }
+]

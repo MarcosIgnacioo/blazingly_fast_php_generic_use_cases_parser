@@ -24,6 +24,23 @@ func prepareHTMLForFile(doc node.Node) []byte {
 	return []byte(coolerHtml)
 }
 
+func GetDiretoriesAndFilesFromDirectory(directory string) (directories []string, files []string) {
+	entries, err := os.ReadDir(directory)
+
+	if err != nil {
+		return
+	}
+
+	for _, e := range entries {
+		if e.IsDir() {
+			directories = append(directories, fmt.Sprintf("%s/%s", directory, e.Name()))
+		} else {
+			files = append(files, e.Name())
+		}
+	}
+	return
+}
+
 func getFilesInDirectory(directory string) (directories *arraylist.ArrayList, files *arraylist.ArrayList, err error) {
 	directories = arraylist.NewArrayList(default_array_size)
 	files = arraylist.NewArrayList(default_array_size)

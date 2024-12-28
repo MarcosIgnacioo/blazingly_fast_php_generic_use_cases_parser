@@ -1,0 +1,47 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../../app/config.php\";    \n\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "a[href=\"/login\"]",
+    "select_all": true,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "/clients?action=logout"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".header_welcome",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href=\"/clients?action=logout\">Cerrar sesión</a> )",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  }
+]

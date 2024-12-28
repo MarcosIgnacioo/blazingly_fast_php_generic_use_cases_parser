@@ -1,0 +1,291 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n<?php\n\t  include_once \"../../app/config.php\"; \n\t  include_once \"../../app/ProductsController.php\";\n\t  include_once \"../../app/CategoriesController.php\";\n\n\t  $productsController = new ProductsController(); \n\t  $categoriesController = new CategoriesController(); \n\n\t  $mezclas = $productsController -> getByCategory('mezclas');\n\t  $autores = $productsController -> getByCategory('autor');\n\t  $origenes = $productsController -> getByCategory('origen');\n\n\t  $merchs = $productsController -> getByCategory('merch');\n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".product_item_coffee_mezclas",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($mezclas) \u0026\u0026 count($mezclas)): ?>\n\t\t\t\t<?php foreach ($mezclas as $product): ?> \n\t\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".product_item_coffee_autor",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t<?php if (isset($autores) \u0026\u0026 count($autores)): ?>\n\t\t<?php foreach ($autores as $product): ?> \n\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".product_item_coffee_origen",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($origenes) \u0026\u0026 count($origenes)): ?>\n\t\t\t<?php foreach ($origenes as $product): ?> \n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".product_item_favorite",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($merchs) \u0026\u0026 count($merchs)): ?>\n\t\t\t<?php foreach ($merchs as $product): ?> \n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

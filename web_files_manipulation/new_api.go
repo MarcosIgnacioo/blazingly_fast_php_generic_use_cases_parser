@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	arraylist "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/array_list"
@@ -12,15 +13,39 @@ import (
 )
 
 func InitNewAPI(sourceDirectory string) {
-	jsonName := "modifications.json"
-	var modificationsJson, modJsonErr = os.ReadFile(jsonName)
-	if modJsonErr != nil {
-		panik("could not read %s", jsonName)
+	jsonDir := "modifications_jsons"
+	_, jsonFiles := GetDiretoriesAndFilesFromDirectory(jsonDir)
+	modifications := map[string][]Modification{}
+
+	for _, jsonFile := range jsonFiles {
+		var modificationsJson, modJsonErr = os.ReadFile(fmt.Sprintf("%s/%s", jsonDir, jsonFile))
+		if modJsonErr != nil {
+			panik("could not read %s", jsonFile)
+		}
+		var modificationsArray []Modification
+		unErr := json.Unmarshal(modificationsJson, &modificationsArray)
+		if unErr != nil {
+			panik(unErr.Error())
+		}
+		extension := len(filepath.Ext(jsonFile))
+		jsonLen := len(jsonFile)
+		trim := jsonLen - extension
+		modificationName := jsonFile[0:trim]
+		modifications[modificationName] = modificationsArray
+		// modifications[modificationName] = []Modification{}
 	}
-	unErr := json.Unmarshal(modificationsJson, &modifications)
-	if unErr != nil {
-		panik(unErr.Error())
-	}
+	// p(modifications)
+	// panik("xd")
+
+	// jsonName := "modifications.json"
+	// var modificationsJson, modJsonErr = os.ReadFile(jsonName)
+	// if modJsonErr != nil {
+	// 	panik("could not read %s", jsonName)
+	// }
+	// unErr := json.Unmarshal(modificationsJson, &modifications)
+	// if unErr != nil {
+	// 	panik(unErr.Error())
+	// }
 	Preprocess()
 	directories, files, err := getFilesInDirectory(sourceDirectory)
 	if err != nil {
@@ -62,7 +87,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 
 				switch firstClass {
 				case "html":
-					targetContainer = doc.Find(node.Descendant, node.Html)
+					targetContainer = doc.Find(node.Descendant, node.Tag("html"))
 					// we PREPEND the html in this case instead of replacing the innerhtml
 					if modification.PrependHTML == "" {
 						panic(fmt.Sprintf("preppending html for header doesnt exist in file %", file.filePath))

@@ -8,11 +8,35 @@ import (
 	"log"
 	"os"
 
+	// "strings"
+
 	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
 )
+
+// func mkjsons() {
+// 	os.Mkdir("modifications_jsons", 0775)
+// 	for fileName, jsonContent := range web_files_manipulation.JSONED {
+// 		f, _ := os.Create(fmt.Sprintf("modifications_jsons/%s.json", fileName))
+// 		json, _ := json.Marshal(jsonContent)
+// 		json = pretty.Pretty(json)
+// 		jsonString := string(json)
+// 		jsonString = strings.ReplaceAll(jsonString, `\u003e`, ">")
+// 		jsonString = strings.ReplaceAll(jsonString, `\u003c`, "<")
+// 		f.WriteString(jsonString)
+// 	}
+// }
+
+func main() {
+	newRun()
+	// p()
+	// web_files_manipulation.InitNewAPI("app")
+	// f, _ := os.ReadFile("./asdf.html")
+	// doc, _ := node.ParseHTML(string(f))
+	// ff := web_files_manipulation.QuerySelectorAll(doc, ".tallas_presentations")
+}
 
 var testhtml = `
 <!doctype html>
@@ -109,52 +133,6 @@ func createinstructionjson() {
 	json, _ := json.Marshal(web_files_manipulation.JSONED)
 	f.WriteString(string(json))
 	web_files_manipulation.Preprocess()
-}
-
-func main() {
-	// p()
-	newRun()
-	// web_files_manipulation.InitNewAPI("app")
-	// f, _ := os.ReadFile("./asdf.html")
-	// doc, _ := node.ParseHTML(string(f))
-	// ff := web_files_manipulation.QuerySelectorAll(doc, ".tallas_presentations")
-	// p(ff)
-	// p(ff[0].HTML())
-	// web_files_manipulation.RemoveElementsWithClassNameExceptFirst(&ff, ".product_item_coffe", true)
-	// web_files_manipulation.InsertAfter(web_files_manipulation.NewTextHtmlNode("hola"), ff.Raw())
-	// web_files_manipulation.InsertBefore(web_files_manipulation.NewTextHtmlNode("ADIOS"), ff.Raw())
-	// web_files_manipulation.InsertBeforeLastChild("<h1>holaaaa</h1>", &body)
-	// web_files_manipulation.InsertBeforeLastChild("<h2>holaaaa</h2>", &body)
-	// anchors := web_files_manipulation.QuerySelectorAll(doc, "a[title=\"caca\"]")
-	// // selector := web_files_manipulation.QuerySelector(doc, "")
-	// for _, a := range anchors {
-	// 	p(a.HTML())
-	// }
-	//
-	// p(ff.HTML())
-	// for _, v := range ff {
-	// }
-	// spans := doc.FindAll(node.Descendant, node.P)
-	// for _, v := range spans {
-	// 	fmt.Println("###########")
-	// 	fmt.Println(v.HTML())
-	// }
-
-	// popo := web_files_manipulation.QuerySelectorAll(doc, "p span a")
-	// foo := `asdf %d asdf`
-	// fmt.Printf(foo, 123)
-	// return
-	// textNodeToInsert := &html.Node{
-	// 	Parent:      nil,
-	// 	PrevSibling: nil,
-	// 	NextSibling: nil,
-	// 	Data:        "DESDE $<?= $product->price ?>",
-	// 	Type:        html.RawNode, // XD
-	// 	Attr:        []html.Attribute{},
-	// }
-	//
-	// span.Raw().AppendChild(textNodeToInsert)
-	// println(a)
 }
 
 func printHtml(doc node.Node) {

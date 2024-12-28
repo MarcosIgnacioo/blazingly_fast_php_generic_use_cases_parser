@@ -7,8 +7,7 @@ var devilModifications = []Modification{
 		PrependHTML: devilHeader,
 	},
 	Modification{
-		Query:     `.ed-gallery-thumb`,
-		SelectAll: true,
+		Query: `.ed-gallery-thumb`,
 		PrependHTML: `
 	 <?php if (isset($grand_product) && isset($grand_product->images)): ?>
 			<?php foreach ($grand_product->images as $image): ?>  

@@ -1,0 +1,153 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\n\t\t$productsController = new ProductsController(); \n\t?>\n\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".cart_subtotal",
+        "mode": "inner",
+        "html": "$<?= number_format( $total ,2) ?>"
+      },
+      {
+        "query": ".cart_total",
+        "mode": "inner",
+        "html": "$<?= number_format( $total ,2) ?>"
+      }
+    ]
+  },
+  {
+    "query": ".product_item_cart",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t<?php $total += ($product->cantidad * $product->price) ?>\n\t\t\t<?php endforeach ?>\n\t\t<?php endif ?> \n\t\t",
+    "prepend_html": "\n\t\t<?php $total = 0; ?>\n\t\t\t<?php if (isset($_SESSION['cart']) \u0026\u0026 count($_SESSION['cart'])): ?>\n\t\t\t\t<?php foreach ($_SESSION['cart'] as $product): ?> \n\t\t",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "append_attribute",
+        "attribute": {
+          "Name": "class",
+          "Value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
+        }
+      },
+      {
+        "query": ".cart_product_quantity",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $product->cantidad ?>"
+        }
+      },
+      {
+        "query": ".cart_product_delete",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $product->cantidad ?>"
+        }
+      },
+      {
+        "query": ".cart_product_delete",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onclick",
+          "Value": "removeItemCart(this)"
+        }
+      },
+      {
+        "query": ".cart_product_delete",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-id",
+          "Value": "<?= $product->id ?>"
+        }
+      },
+      {
+        "query": ".cart_product_delete",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "data-parent",
+          "Value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
+        }
+      },
+      {
+        "query": ".cart_product_delete",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "role",
+          "Value": "button"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".cart_product_img",
+        "mode": "outer",
+        "html": "\n\t\t\t\t<img\n\t\t\t\t\tsrc=\"<?= $product->cover ?>\"\n\t\t\t\t\talt=\"\"\n\t\t\t\t\tclass=\"ed-lazyload cart_product_img\"\n\t\t\t\t\tstyle=\"object-fit: cover;\"\n\t\t\t\t/>"
+      },
+      {
+        "query": ".cart_product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".cart_product_price",
+        "mode": "inner",
+        "html": "$<?= number_format(floatval($product->price) ?? 0, 2)?>"
+      },
+      {
+        "query": ".cart_product_subtotal",
+        "mode": "inner",
+        "html": "$<?= number_format(floatval($product->cantidad * $product->price) ?? 0, 2) ?>"
+      },
+      {
+        "query": ".cart_product_description",
+        "mode": "inner",
+        "html": "<?= $product->feature ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

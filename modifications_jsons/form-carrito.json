@@ -1,0 +1,173 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\t\t$productsController = new ProductsController(); \n\t?>\n\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t    <script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n        <script type=\"text/javascript\">\n            document.querySelector('.checkout_form').addEventListener('submit', validateOrder);\n        </script>\n\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".cart_item_row",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t\t<div class=\"ed-element ed-separator\"><hr class=\"bg-primary\" /></div>\n\t\t\t\t<?php $total += ($product->cantidad * $product->price) ?>\n\t\t\t<?php endforeach ?>\n\t\t<?php endif ?> \n\t\t",
+    "prepend_html": "\n\t\t<?php $total = 0; ?>\n\t\t\t<?php if (isset($_SESSION['cart']) \u0026\u0026 count($_SESSION['cart'])): ?>\n\t\t\t\t<?php foreach ($_SESSION['cart'] as $product): ?> \n\t\t",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".cart_product_name",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".cart_product_description",
+        "mode": "inner",
+        "html": "<?= $product->feature ?>"
+      },
+      {
+        "query": ".cart_product_price",
+        "mode": "inner",
+        "html": "$<?= number_format($product->price * $product->cantidad, 2)?>"
+      },
+      {
+        "query": ".cart_product_quantity",
+        "mode": "inner",
+        "html": "$<?= number_format($product->price,2) ?> x <?= $product->cantidad ?>"
+      }
+    ]
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": true,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".submit_checkout",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "onclick",
+          "Value": "document.querySelector('.checkout_form')?.dispatchEvent(new Event('submit', { cancelable: true }))"
+        }
+      },
+      {
+        "query": ".checkout_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "name"
+        }
+      },
+      {
+        "query": ".checkout_email input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "email"
+        }
+      },
+      {
+        "query": ".checkout_phone input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "phone"
+        }
+      },
+      {
+        "query": ".checkout_street_and_use_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "street_and_use_number"
+        }
+      },
+      {
+        "query": ".checkout_street_and_use_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "street_and_use_number"
+        }
+      },
+      {
+        "query": ".checkout_estate select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "estate"
+        }
+      },
+      {
+        "query": ".checkout_city select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "city"
+        }
+      },
+      {
+        "query": ".checkout_postal_code input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "postal_code"
+        }
+      },
+      {
+        "query": ".checkout_references textarea",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "references"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

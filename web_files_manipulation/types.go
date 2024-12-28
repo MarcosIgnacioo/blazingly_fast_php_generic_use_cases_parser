@@ -115,7 +115,7 @@ const (
 type Modification struct {
 	Query             string            `json:"query"`
 	SelectAll         bool              `json:"select_all"`
-	ChangeAll         bool              `json:"changue_all"`
+	ChangeAll         bool              `json:"change_all"`
 	DeleteSiblings    bool              `json:"delete_siblings"`
 	InnerHTML         string            `json:"inner_html"`
 	OuterHTML         string            `json:"outer_html"`

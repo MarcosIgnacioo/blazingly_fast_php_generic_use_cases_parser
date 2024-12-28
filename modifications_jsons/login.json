@@ -1,0 +1,140 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../app/config.php\";    \n\n\t\tif (isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'account/dashboard');\n\t\t}\n\t?>\n\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.querySelector('.login_form').addEventListener('submit', validateAccess);\n\t\t\t\tdocument.querySelector('.register_form').addEventListener('submit', validateRegister);\n\t\t</script>\n\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".login_email input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "email"
+        }
+      },
+      {
+        "query": ".login_password input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "password"
+        }
+      },
+      {
+        "query": ".login_password input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "type",
+          "Value": "password"
+        }
+      },
+      {
+        "query": ".register_email input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "email"
+        }
+      },
+      {
+        "query": ".register_password input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "password"
+        }
+      },
+      {
+        "query": ".register_password input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "type",
+          "Value": "password"
+        }
+      },
+      {
+        "query": ".register_password_confirmation input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "password_confirmation"
+        }
+      },
+      {
+        "query": ".register_password_confirmation input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "type",
+          "Value": "password"
+        }
+      },
+      {
+        "query": ".register_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "name"
+        }
+      },
+      {
+        "query": ".register_phone input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "phone"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

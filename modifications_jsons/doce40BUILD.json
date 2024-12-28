@@ -1,0 +1,163 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t  include_once \"app/config.php\"; \n\t  include_once \"app/ProductsController.php\"; \n\n\t  $productsController = new ProductsController();   \n\n\t  $cafes = $productsController->getByCategory('cafe');\n\t  $merchs = $productsController->getByCategory('merch');\n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".product_item_coffe",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($cafes) \u0026\u0026 count($cafes)): ?>\n\t\t\t<?php foreach (array_slice($cafes, 0, 4) as $cafe): ?> \n\t\t\t\t<?php $product = $productsController->getQuickView($cafe) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $cafe->cover->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name_home",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price_home",
+        "mode": "inner",
+        "html": "DESDE $<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".product_item_favorite",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($merchs) \u0026\u0026 count($merchs)): ?>\n\t\t\t<?php foreach (array_slice($merchs, 0, 3) as $merch): ?> \n\t\t\t\t<?php $product = $productsController->getQuickView($merch) ?>\n\t\t",
+    "attributes_changes": [
+      {
+        "query": "a",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "<?= $product->url ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "src",
+          "Value": "<?= $product->thumbnail_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "srcset",
+          "Value": ""
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "alt",
+          "Value": "<?= $product->name ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "title",
+          "Value": "<?= $product->name ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".product_name_home",
+        "mode": "inner",
+        "html": "<?= $product->name ?>"
+      },
+      {
+        "query": ".product_price_home",
+        "mode": "inner",
+        "html": "$<?= $product->price ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

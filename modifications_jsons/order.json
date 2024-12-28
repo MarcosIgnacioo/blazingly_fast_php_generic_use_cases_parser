@@ -1,0 +1,111 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php \n\t\tinclude_once \"../app/config.php\";\n\t\tinclude_once \"../app/ProductsController.php\";\n\t\tinclude_once \"../app/ShopController.php\";\n\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$shopController = new ShopController();\n\t\t$productsController = new ProductsController();\n\n\t\t$order = $shopController->getDataOrder($_GET['folio']); \n\t?>\n\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".order_folio",
+        "mode": "inner",
+        "html": "ORDEN #<?= $_GET['folio'] ?>"
+      },
+      {
+        "query": ".order_subtotal",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->total),2) ?>"
+      },
+      {
+        "query": ".order_shipping_cost",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->shipping_cost ?? 0),2) ?>"
+      },
+      {
+        "query": ".order_total",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->total),2) ?>"
+      },
+      {
+        "query": ".button_payment",
+        "mode": "outer",
+        "html": "\n\t\t\t\t<?php if($order->order_status->id == 2): ?>\n\t\t\t\t\t<a href=\"<?= BASE_PATH ?>tienda/payment/<?= $order->folio ?>/\" \n\t\t\t\t\tclass=\"button center button-variant-secondary button-payment\">\n\t\t\t\t\t\tCONTINUAR CON EL PAGO\n\t\t\t\t\t</a>\n\t\t\t\t<?php endif ?>\n"
+      }
+    ]
+  },
+  {
+    "query": ".cart_item_row",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t<div class=\"ed-element ed-separator\"><hr class=\"bg-primary\" /></div>\n\t\t\t<?php endforeach ?>\n\t\t<?php endif ?> \n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($order->presentations) \u0026\u0026 count($order->presentations)): ?>\n\t\t\t<?php foreach ($order->presentations as $presentation): ?>                 \n\t\t",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".cart_product_img",
+        "mode": "outer",
+        "html": "\n\t\t\t\t<img\n\t\t\t\t\tsrc=\"<?= $presentation->cover?->full_path ?>\"\n\t\t\t\t\talt=\"\"\n\t\t\t\t\tclass=\"ed-lazyload cart_product_img\"\n\t\t\t\t\tstyle=\"object-fit: cover;\"\n\t\t\t\t/>\n"
+      },
+      {
+        "query": ".cart_product_name",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if(isset($presentation->product)): ?>\n\t\t\t\t\t<a href=\"<?= BASE_PATH ?>shop/details/<?= $presentation->product->slug; ?>/\">\n\t\t\t\t\t\t<?= $presentation->product->name ?>  \n\t\t\t\t\t</a>\n\t\t\t\t<?php endif ?>  \n"
+      },
+      {
+        "query": ".cart_product_description",
+        "mode": "inner",
+        "html": "<?= $presentation->pivot->comment ?>"
+      },
+      {
+        "query": ".cart_product_price",
+        "mode": "inner",
+        "html": "$<?= number_format(($presentation->pivot->price->amount ?? 0) * $presentation->pivot->quantity,2) ?>"
+      },
+      {
+        "query": ".cart_product_quantity",
+        "mode": "inner",
+        "html": "$<?= number_format(($presentation->pivot->price->amount ?? 0),2) ?> x <?= $presentation->pivot->quantity ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

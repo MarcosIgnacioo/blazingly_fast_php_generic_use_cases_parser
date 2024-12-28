@@ -1,0 +1,80 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../../app/config.php\";    \n\t\tinclude_once \"../../app/AuthController.php\";\n\n\t\t$authController = new AuthController();\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$orders = array_reverse($authController->getOrders($_SESSION['client_id']));\n\t?>\n\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "a[href=\"/login\"]",
+    "select_all": true,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "href",
+          "Value": "/clients?action=logout"
+        }
+      }
+    ],
+    "html_changes": null
+  },
+  {
+    "query": ".table-text table tbody",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "\n\t\t<?php if (isset($orders) \u0026\u0026 count($orders)) : ?>\n\t\t<?php foreach ($orders as $order) : ?>\n\t\t<tr>\n\t\t\t<td style=\"width: 17.42%;\"><div style=\"text-align: center;\">#<?= $order->folio ?></div></td>\n\t\t\t<td style=\"width: 19.2363%;\">\n\t\t\t\t<div style=\"text-align: center;\"><?= (new DateTime($order->order_date))->format('F d, Y') ?> <span style=\"white-space: pre;\" id=\"isPasted\">\u0026nbsp; \u0026nbsp;\u0026nbsp;</span>\u0026nbsp;</div>\n\t\t\t</td>\n\t\t\t<td style=\"width: 19.1538%;\"><div style=\"text-align: center;\"><?= $order->order_status->name ?></div></td>\n\t\t\t<td style=\"width: 20%; text-align: center;\">\n\t\t\t\t<div style=\"text-align: center;\">\n\t\t\t\t\t$ <?= number_format($order->total,2) ?> <br>\n\t\t\t\t\t<small>\n\t\t\t\t\t\tpor <?= count($order->presentations) ?> artículos\n\t\t\t\t\t</small>\n\t\t\t\t</div>\n\t\t\t</td>\n\t\t\t<td style=\"width: 24.1899%;\">\n\t\t\t\t<div style=\"text-align: center;\">\n\t\t\t\t\t<?php if($order->order_status->id == 2): ?>\n\t\t\t\t\t\t<a href=\"<?= BASE_PATH ?>tienda/payment/<?= $order->folio ?>/\">\n\t\t\t\t\t\t\tCompletar el pago\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<br>\n\t\t\t\t\t<?php endif ?>\n\t\t\t\t\t<a href=\"<?= BASE_PATH ?>order/<?= $order->folio ?>/\">\n\t\t\t\t\t\tDetalles\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t</td>\n\t\t</tr>\n\t\t<?php endforeach ?>\n\t\t<?php endif ?>\n\t\t",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n\t<?php if(isset($_GET['payment-ok'])): ?>\n\t\t<script>\n\t\t\tdocument.addEventListener('DOMContentLoaded', ()=>{\n\t\t\t\tSwal.fire({\n\t\t\t\t\ttitle: \"¡Hecho!\",\n\t\t\t\t\ttext: \"El pago se ha procesado correctamente\",\n\t\t\t\t\ticon: \"success\"\n\t\t\t\t});\n\t\t\t});\n\t\t</script>\n\t<?php endif ?>\n\t<?php if(isset($_GET['payment-error'])): ?>\n\t\t<script>\n\t\t\tdocument.addEventListener('DOMContentLoaded', ()=>{\n\t\t\t\tSwal.fire({\n\t\t\t\t\ttitle: \"Error\",\n\t\t\t\t\ttext: \"Ha ocurrido un error al procesar el pago\",\n\t\t\t\t\ticon: \"error\"\n\t\t\t\t});\n\t\t\t});\n\t\t</script>\n\t<?php endif ?>\n",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

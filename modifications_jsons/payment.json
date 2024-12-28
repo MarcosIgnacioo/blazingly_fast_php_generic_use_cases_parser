@@ -1,0 +1,274 @@
+[
+  {
+    "query": "html",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "\n\t<?php \n\t\tinclude_once \"../app/config.php\";\n\t\tinclude_once \"../app/ProductsController.php\";\n\t\tinclude_once \"../app/ShopController.php\";\n\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$shopController = new ShopController();\n\t\t$productsController = new ProductsController();\n\n\t\t$order = $shopController->getDataOrder($_GET['folio']); \n\t?>\n",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t    <script type=\"text/javascript\">\n\t\t\tconst order_folio = '<?= $_GET['folio'] ?>'\n            document.querySelector('.payment_form').addEventListener('submit', validatePayment);\n        </script>\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": ".cart_item_row",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t\t\t<div class=\"ed-element ed-separator\"><hr class=\"bg-primary\" /></div>\n\t\t\t<?php endforeach ?>\n\t\t<?php endif ?> \n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($order->presentations) \u0026\u0026 count($order->presentations)): ?>\n\t\t\t<?php foreach ($order->presentations as $presentation): ?>                 \n\t\t",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".cart_product_name",
+        "mode": "inner",
+        "html": "\n\t\t\t\t<?php if(isset($presentation->product)): ?>\n\t\t\t\t\t<a href=\"<?= BASE_PATH ?>shop/details/<?= $presentation->product->slug; ?>/\">\n\t\t\t\t\t\t<?= $presentation->product->name ?>  \n\t\t\t\t\t</a>\n\t\t\t\t<?php endif ?>\n"
+      },
+      {
+        "query": ".cart_product_price",
+        "mode": "inner",
+        "html": "$<?= number_format(($presentation->pivot->price->amount ?? 0) * $presentation->pivot->quantity,2) ?>"
+      },
+      {
+        "query": ".cart_product_quantity",
+        "mode": "inner",
+        "html": "$<?= number_format(($presentation->pivot->price->amount ?? 0),2) ?> x <?= $presentation->pivot->quantity ?>"
+      }
+    ]
+  },
+  {
+    "query": "",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".card_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "numero_tarjeta"
+        }
+      },
+      {
+        "query": ".card_exp_date input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "fecha_exp"
+        }
+      },
+      {
+        "query": ".card_company select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "marca_tarjeta"
+        }
+      },
+      {
+        "query": ".card_type select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "tipo_tarjeta"
+        }
+      },
+      {
+        "query": ".address_city input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "ciudad"
+        }
+      },
+      {
+        "query": ".address_city input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->city ?>"
+        }
+      },
+      {
+        "query": ".address_postal_code input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "codigo_postal"
+        }
+      },
+      {
+        "query": ".address_postal_code input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->postal_code ?>"
+        }
+      },
+      {
+        "query": ".address_first_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "nombre"
+        }
+      },
+      {
+        "query": ".address_first_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->first_name ?>"
+        }
+      },
+      {
+        "query": ".address_phone_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "numero_celular"
+        }
+      },
+      {
+        "query": ".address_phone_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->phone_number ?>"
+        }
+      },
+      {
+        "query": ".address_state input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "estado"
+        }
+      },
+      {
+        "query": ".address_state input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->state ?>"
+        }
+      },
+      {
+        "query": ".address_street_and_use_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "calle"
+        }
+      },
+      {
+        "query": ".address_street_and_use_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->street_and_use_number ?>"
+        }
+      },
+      {
+        "query": ".address_last_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "apellido"
+        }
+      },
+      {
+        "query": ".address_last_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->address->last_name ?>"
+        }
+      },
+      {
+        "query": ".address_email input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "name",
+          "Value": "correo"
+        }
+      },
+      {
+        "query": ".address_email input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "value",
+          "Value": "<?= $order->client->email ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".card_company select",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\t<option value=\"\" selected disabled>Selecciona una opción</option>\n\t\t\t\t\t<option value=\"VISA\">Visa</option>\n\t\t\t\t\t<option value=\"MC\">Mastercard</option>\n\t\t\t"
+      },
+      {
+        "query": ".card_type select",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\t<option value=\"\" selected disabled>Selecciona una opción</option>\n\t\t\t\t\t<option value=\"CR\">Crédito</option>\n\t\t\t\t\t<option value=\"DB\">Débito</option>\n\t\t\t"
+      },
+      {
+        "query": ".checkout_subtotal",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->total),2) ?>"
+      },
+      {
+        "query": ".checkout_shipping_cost",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->shipping_cost ?? 0),2) ?>"
+      },
+      {
+        "query": ".checkout_total",
+        "mode": "inner",
+        "html": "$<?= number_format(($order->total),2) ?>"
+      }
+    ]
+  },
+  {
+    "query": ".remove_item_on_update",
+    "select_all": false,
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "Name": "style",
+          "Value": "display: none;"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]
