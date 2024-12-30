@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": ".ed-gallery-thumb",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "\n\t\t\t<a href=\"<?= $image->full_path ?>\" target=\"_blank\" title=\"Caption\">\n\t\t\t\t\t\t<img\n\t\t\t\t\t\t\t\tsrc=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\talt=\"Caption\"\n\t\t\t\t\t\t\t\tsrcset=\"\n\t\t\t\t\t\t\t\t\t\tdata:image/svg+xml,\n\t\t\t\t\t\t\t\t\t\t%3Csvg%20width='800'%20viewBox='0%200%20800%20800'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='800'%20height='800'%20style='fill:%20%23F7F7F7'%20/%3E%3C/svg%3E\n\t\t\t\t\t\t\t\t\"\n\t\t\t\t\t\t\t\tdata-src=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\tclass=\"ed-lazyload lazyload\"\n\t\t\t\t\t\t\t\tdata-srcset=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t/>\n\t\t\t\t</a>\n\t\t",
@@ -25,7 +23,6 @@
   },
   {
     "query": ".product_item_recomendation",
-    "select_all": true,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -37,40 +34,40 @@
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "<?= $product->url ?>"
+          "name": "href",
+          "value": "<?= $product->url ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "src",
-          "Value": "<?= $product->thumbnail_path ?>"
+          "name": "src",
+          "value": "<?= $product->thumbnail_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "srcset",
-          "Value": ""
+          "name": "srcset",
+          "value": ""
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "alt",
-          "Value": "<?= $product->name ?>"
+          "name": "alt",
+          "value": "<?= $product->name ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "title",
-          "Value": "<?= $product->name ?>"
+          "name": "title",
+          "value": "<?= $product->name ?>"
         }
       }
     ],
@@ -78,7 +75,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -90,40 +86,40 @@
         "query": ".background-image-holder",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "background-image: 'url('<?= ($backgroud != '') ? $backgroud : '/images/0/9983852/Graficos_BolsasCafe_DIABLO.svg' ?>');'"
+          "name": "style",
+          "value": "background-image: 'url('<?= ($backgroud != '') ? $backgroud : '/images/0/9983852/Graficos_BolsasCafe_DIABLO.svg' ?>');'"
         }
       },
       {
         "query": ".sizes_items_details select",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onchange",
-          "Value": "updateSelection(this, 'cafe')"
+          "name": "onchange",
+          "value": "updateSelection(this, 'cafe')"
         }
       },
       {
         "query": ".quantity_items_product select",
         "mode": "append_attribute",
         "attribute": {
-          "Name": "class",
-          "Value": "cantidad_producto"
+          "name": "class",
+          "value": "cantidad_producto"
         }
       },
       {
         "query": ".molienda_container select",
         "mode": "append_attribute",
         "attribute": {
-          "Name": "class",
-          "Value": "feature_product"
+          "name": "class",
+          "value": "feature_product"
         }
       },
       {
         "query": ".boton_add_to_cart a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onclick",
-          "Value": "QuickAdd(this)"
+          "name": "onclick",
+          "value": "QuickAdd(this)"
         }
       }
     ],
@@ -187,7 +183,6 @@
   },
   {
     "query": "BODY",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -199,7 +194,6 @@
   },
   {
     "query": "HEAD",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",

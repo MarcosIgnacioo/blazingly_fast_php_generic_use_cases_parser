@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -51,7 +49,6 @@
   },
   {
     "query": ".cart_item_row",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -89,7 +86,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -101,8 +97,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

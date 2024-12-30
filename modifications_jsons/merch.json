@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": ".product_item_merch",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,40 +23,40 @@
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "<?= $product->url ?>"
+          "name": "href",
+          "value": "<?= $product->url ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "src",
-          "Value": "<?= $product->thumbnail_path ?>"
+          "name": "src",
+          "value": "<?= $product->thumbnail_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "srcset",
-          "Value": ""
+          "name": "srcset",
+          "value": ""
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "alt",
-          "Value": "<?= $product->name ?>"
+          "name": "alt",
+          "value": "<?= $product->name ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "title",
-          "Value": "<?= $product->name ?>"
+          "name": "title",
+          "value": "<?= $product->name ?>"
         }
       }
     ],
@@ -77,7 +75,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -89,8 +86,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

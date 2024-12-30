@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "append_scripts_to_end_of_body",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,7 +23,6 @@
   },
   {
     "query": ".cart_item_row",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -58,7 +55,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": true,
     "delete_siblings": false,
     "inner_html": "",
@@ -70,80 +66,80 @@
         "query": ".submit_checkout",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onclick",
-          "Value": "document.querySelector('.checkout_form')?.dispatchEvent(new Event('submit', { cancelable: true }))"
+          "name": "onclick",
+          "value": "document.querySelector('.checkout_form')?.dispatchEvent(new Event('submit', { cancelable: true }))"
         }
       },
       {
         "query": ".checkout_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "name"
+          "name": "name",
+          "value": "name"
         }
       },
       {
         "query": ".checkout_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "email"
+          "name": "name",
+          "value": "email"
         }
       },
       {
         "query": ".checkout_phone input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "phone"
+          "name": "name",
+          "value": "phone"
         }
       },
       {
         "query": ".checkout_street_and_use_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "street_and_use_number"
+          "name": "name",
+          "value": "street_and_use_number"
         }
       },
       {
         "query": ".checkout_street_and_use_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "street_and_use_number"
+          "name": "name",
+          "value": "street_and_use_number"
         }
       },
       {
         "query": ".checkout_estate select",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "estate"
+          "name": "name",
+          "value": "estate"
         }
       },
       {
         "query": ".checkout_city select",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "city"
+          "name": "name",
+          "value": "city"
         }
       },
       {
         "query": ".checkout_postal_code input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "postal_code"
+          "name": "name",
+          "value": "postal_code"
         }
       },
       {
         "query": ".checkout_references textarea",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "references"
+          "name": "name",
+          "value": "references"
         }
       }
     ],
@@ -151,7 +147,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -163,8 +158,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -46,7 +44,6 @@
   },
   {
     "query": ".tallas_presentations",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -58,40 +55,40 @@
         "query": "a",
         "mode": "append_attribute",
         "attribute": {
-          "Name": "class",
-          "Value": "presentations"
+          "name": "class",
+          "value": "presentations"
         }
       },
       {
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onclick",
-          "Value": "updateSelection(this,'merch')"
+          "name": "onclick",
+          "value": "updateSelection(this,'merch')"
         }
       },
       {
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-id",
-          "Value": "<?= $presentation->id ?>"
+          "name": "data-id",
+          "value": "<?= $presentation->id ?>"
         }
       },
       {
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-price",
-          "Value": "<?= $presentation->current_price->amount ?>"
+          "name": "data-price",
+          "value": "<?= $presentation->current_price->amount ?>"
         }
       },
       {
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-product",
-          "Value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
+          "name": "data-product",
+          "value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
         }
       }
     ],
@@ -105,7 +102,6 @@
   },
   {
     "query": ".quantity_items_details",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -117,8 +113,8 @@
         "query": "select",
         "mode": "append_attribute",
         "attribute": {
-          "Name": "class",
-          "Value": "cantidad_producto"
+          "name": "class",
+          "value": "cantidad_producto"
         }
       }
     ],
@@ -132,7 +128,6 @@
   },
   {
     "query": ".button_add_big_product",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -144,8 +139,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onclick",
-          "Value": "QuickAdd(this)"
+          "name": "onclick",
+          "value": "QuickAdd(this)"
         }
       }
     ],
@@ -153,7 +148,6 @@
   },
   {
     "query": ".ed-gallery-items li",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -165,32 +159,32 @@
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "<?= $image->full_path ?>"
+          "name": "href",
+          "value": "<?= $image->full_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "src",
-          "Value": "<?= $image->full_path ?>"
+          "name": "src",
+          "value": "<?= $image->full_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-src",
-          "Value": "<?= $image->full_path ?>"
+          "name": "data-src",
+          "value": "<?= $image->full_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-srcset",
-          "Value": "<?= $image->full_path ?>"
+          "name": "data-srcset",
+          "value": "<?= $image->full_path ?>"
         }
       }
     ],
@@ -198,7 +192,6 @@
   },
   {
     "query": ".product_item_recomendation",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -210,32 +203,40 @@
         "query": "a",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "<?= $image->full_path ?>"
+          "name": "href",
+          "value": "<?= $image->full_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "src",
-          "Value": "<?= $product->thumbnail_path ?>"
+          "name": "src",
+          "value": "<?= $product->thumbnail_path ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "alt",
-          "Value": "<?= $product->name ?>"
+          "name": "alt",
+          "value": "<?= $product->name ?>"
         }
       },
       {
         "query": "img",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-srcset",
-          "Value": "<?= $image->full_path ?>"
+          "name": "data-srcset",
+          "value": "<?= $image->full_path ?>"
+        }
+      },
+      {
+        "query": "img",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "srcset",
+          "value": "<?= $image->full_path ?>"
         }
       }
     ],
@@ -249,7 +250,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -261,8 +261,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -36,7 +34,6 @@
   },
   {
     "query": ".product_item_cart",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -48,56 +45,56 @@
         "query": "",
         "mode": "append_attribute",
         "attribute": {
-          "Name": "class",
-          "Value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
+          "name": "class",
+          "value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
         }
       },
       {
         "query": ".cart_product_quantity",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $product->cantidad ?>"
+          "name": "value",
+          "value": "<?= $product->cantidad ?>"
         }
       },
       {
         "query": ".cart_product_delete",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $product->cantidad ?>"
+          "name": "value",
+          "value": "<?= $product->cantidad ?>"
         }
       },
       {
         "query": ".cart_product_delete",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "onclick",
-          "Value": "removeItemCart(this)"
+          "name": "onclick",
+          "value": "removeItemCart(this)"
         }
       },
       {
         "query": ".cart_product_delete",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-id",
-          "Value": "<?= $product->id ?>"
+          "name": "data-id",
+          "value": "<?= $product->id ?>"
         }
       },
       {
         "query": ".cart_product_delete",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "data-parent",
-          "Value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
+          "name": "data-parent",
+          "value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
         }
       },
       {
         "query": ".cart_product_delete",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "role",
-          "Value": "button"
+          "name": "role",
+          "value": "button"
         }
       }
     ],
@@ -131,7 +128,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -143,8 +139,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

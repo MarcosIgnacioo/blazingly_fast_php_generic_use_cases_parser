@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "a[href=\"/login\"]",
-    "select_all": true,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,8 +23,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "/clients?action=logout"
+          "name": "href",
+          "value": "/clients?action=logout"
         }
       }
     ],
@@ -34,7 +32,6 @@
   },
   {
     "query": ".header_welcome",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "Hola <?= $_SESSION['name'] ?> (no eres <?= $_SESSION['name'] ?>? <a href=\"/clients?action=logout\">Cerrar sesión</a> )",

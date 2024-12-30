@@ -36,8 +36,7 @@ var devilModifications = []Modification{
 	},
 
 	Modification{
-		Query:     `.product_item_recomendation`,
-		SelectAll: true,
+		Query: `.product_item_recomendation`,
 		PrependHTML: `
 		<?php if (isset($grand_product->related_products) && count($grand_product->related_products)): ?>
 			<?php foreach ($grand_product->related_products as $product): ?>

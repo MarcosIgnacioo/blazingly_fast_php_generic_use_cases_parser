@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "a[href=\"/login\"]",
-    "select_all": true,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,8 +23,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "/clients?action=logout"
+          "name": "href",
+          "value": "/clients?action=logout"
         }
       }
     ],
@@ -34,7 +32,6 @@
   },
   {
     "query": ".table-text table tbody",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "\n\t\t<?php if (isset($orders) \u0026\u0026 count($orders)) : ?>\n\t\t<?php foreach ($orders as $order) : ?>\n\t\t<tr>\n\t\t\t<td style=\"width: 17.42%;\"><div style=\"text-align: center;\">#<?= $order->folio ?></div></td>\n\t\t\t<td style=\"width: 19.2363%;\">\n\t\t\t\t<div style=\"text-align: center;\"><?= (new DateTime($order->order_date))->format('F d, Y') ?> <span style=\"white-space: pre;\" id=\"isPasted\">\u0026nbsp; \u0026nbsp;\u0026nbsp;</span>\u0026nbsp;</div>\n\t\t\t</td>\n\t\t\t<td style=\"width: 19.1538%;\"><div style=\"text-align: center;\"><?= $order->order_status->name ?></div></td>\n\t\t\t<td style=\"width: 20%; text-align: center;\">\n\t\t\t\t<div style=\"text-align: center;\">\n\t\t\t\t\t$ <?= number_format($order->total,2) ?> <br>\n\t\t\t\t\t<small>\n\t\t\t\t\t\tpor <?= count($order->presentations) ?> artículos\n\t\t\t\t\t</small>\n\t\t\t\t</div>\n\t\t\t</td>\n\t\t\t<td style=\"width: 24.1899%;\">\n\t\t\t\t<div style=\"text-align: center;\">\n\t\t\t\t\t<?php if($order->order_status->id == 2): ?>\n\t\t\t\t\t\t<a href=\"<?= BASE_PATH ?>tienda/payment/<?= $order->folio ?>/\">\n\t\t\t\t\t\t\tCompletar el pago\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<br>\n\t\t\t\t\t<?php endif ?>\n\t\t\t\t\t<a href=\"<?= BASE_PATH ?>order/<?= $order->folio ?>/\">\n\t\t\t\t\t\tDetalles\n\t\t\t\t\t</a>\n\t\t\t\t</div>\n\t\t\t</td>\n\t\t</tr>\n\t\t<?php endforeach ?>\n\t\t<?php endif ?>\n\t\t",
@@ -46,7 +43,6 @@
   },
   {
     "query": "append_scripts_to_end_of_body",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -58,7 +54,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -70,8 +65,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "append_scripts_to_end_of_body",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,7 +23,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -37,80 +34,80 @@
         "query": ".login_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "email"
+          "name": "name",
+          "value": "email"
         }
       },
       {
         "query": ".login_password input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password"
+          "name": "name",
+          "value": "password"
         }
       },
       {
         "query": ".login_password input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       },
       {
         "query": ".register_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "email"
+          "name": "name",
+          "value": "email"
         }
       },
       {
         "query": ".register_password input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password"
+          "name": "name",
+          "value": "password"
         }
       },
       {
         "query": ".register_password input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       },
       {
         "query": ".register_password_confirmation input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password_confirmation"
+          "name": "name",
+          "value": "password_confirmation"
         }
       },
       {
         "query": ".register_password_confirmation input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       },
       {
         "query": ".register_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "name"
+          "name": "name",
+          "value": "name"
         }
       },
       {
         "query": ".register_phone input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "phone"
+          "name": "name",
+          "value": "phone"
         }
       }
     ],
@@ -118,7 +115,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -130,8 +126,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

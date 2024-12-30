@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "a[href=\"/login\"]",
-    "select_all": true,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,8 +23,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "href",
-          "Value": "/clients?action=logout"
+          "name": "href",
+          "value": "/clients?action=logout"
         }
       }
     ],
@@ -34,7 +32,6 @@
   },
   {
     "query": "append_scripts_to_end_of_body",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -46,7 +43,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -58,120 +54,120 @@
         "query": ".details_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "email"
+          "name": "name",
+          "value": "email"
         }
       },
       {
         "query": ".details_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $_SESSION['email'] ?>"
+          "name": "value",
+          "value": "<?= $_SESSION['email'] ?>"
         }
       },
       {
         "query": ".details_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "name"
+          "name": "name",
+          "value": "name"
         }
       },
       {
         "query": ".details_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $_SESSION['name'] ?>"
+          "name": "value",
+          "value": "<?= $_SESSION['name'] ?>"
         }
       },
       {
         "query": ".details_lastname input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "lastname"
+          "name": "name",
+          "value": "lastname"
         }
       },
       {
         "query": ".details_lastname input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $_SESSION['lastname'] ?>"
+          "name": "value",
+          "value": "<?= $_SESSION['lastname'] ?>"
         }
       },
       {
         "query": ".details_phone input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "phone",
-          "Value": "phone"
+          "name": "phone",
+          "value": "phone"
         }
       },
       {
         "query": ".details_phone input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $_SESSION['phone'] ?>"
+          "name": "value",
+          "value": "<?= $_SESSION['phone'] ?>"
         }
       },
       {
         "query": ".details_phone input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "phone"
+          "name": "name",
+          "value": "phone"
         }
       },
       {
         "query": ".details_password_current input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password_current"
+          "name": "name",
+          "value": "password_current"
         }
       },
       {
         "query": ".details_password_current input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       },
       {
         "query": ".details_password_1 input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password_1"
+          "name": "name",
+          "value": "password_1"
         }
       },
       {
         "query": ".details_password_1 input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       },
       {
         "query": ".details_password_2 input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "password_2"
+          "name": "name",
+          "value": "password_2"
         }
       },
       {
         "query": ".details_password_2 input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "type",
-          "Value": "password"
+          "name": "type",
+          "value": "password"
         }
       }
     ],

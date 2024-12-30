@@ -77,8 +77,7 @@ var IDS map[string]string = map[string]string{
 }
 
 var anchorLoginModification = Modification{
-	Query:     `a[href="/login"]`,
-	SelectAll: true,
+	Query: `a[href="/login"]`,
 	AttributesChanges: []AttributeChange{
 		AttributeChange{
 			Mode: REPLACE_ATTRIBUTE,

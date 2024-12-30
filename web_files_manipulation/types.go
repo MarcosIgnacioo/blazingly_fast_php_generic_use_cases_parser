@@ -50,8 +50,8 @@ type Instruction struct {
 }
 
 type Attribute struct {
-	Name  string
-	Value string
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type TagAttribute struct {
@@ -114,7 +114,6 @@ const (
 // if query is empty or not initialized then the other instructions (AttributesChanges and HTMLChanges) use the whole document as the base search
 type Modification struct {
 	Query             string            `json:"query"`
-	SelectAll         bool              `json:"select_all"`
 	ChangeAll         bool              `json:"change_all"`
 	DeleteSiblings    bool              `json:"delete_siblings"`
 	InnerHTML         string            `json:"inner_html"`

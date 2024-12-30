@@ -1,7 +1,6 @@
 [
   {
     "query": "html",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -13,7 +12,6 @@
   },
   {
     "query": "append_scripts_to_end_of_body",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -25,7 +23,6 @@
   },
   {
     "query": ".cart_item_row",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -53,7 +50,6 @@
   },
   {
     "query": "",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -65,160 +61,160 @@
         "query": ".card_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "numero_tarjeta"
+          "name": "name",
+          "value": "numero_tarjeta"
         }
       },
       {
         "query": ".card_exp_date input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "fecha_exp"
+          "name": "name",
+          "value": "fecha_exp"
         }
       },
       {
         "query": ".card_company select",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "marca_tarjeta"
+          "name": "name",
+          "value": "marca_tarjeta"
         }
       },
       {
         "query": ".card_type select",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "tipo_tarjeta"
+          "name": "name",
+          "value": "tipo_tarjeta"
         }
       },
       {
         "query": ".address_city input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "ciudad"
+          "name": "name",
+          "value": "ciudad"
         }
       },
       {
         "query": ".address_city input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->city ?>"
+          "name": "value",
+          "value": "<?= $order->address->city ?>"
         }
       },
       {
         "query": ".address_postal_code input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "codigo_postal"
+          "name": "name",
+          "value": "codigo_postal"
         }
       },
       {
         "query": ".address_postal_code input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->postal_code ?>"
+          "name": "value",
+          "value": "<?= $order->address->postal_code ?>"
         }
       },
       {
         "query": ".address_first_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "nombre"
+          "name": "name",
+          "value": "nombre"
         }
       },
       {
         "query": ".address_first_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->first_name ?>"
+          "name": "value",
+          "value": "<?= $order->address->first_name ?>"
         }
       },
       {
         "query": ".address_phone_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "numero_celular"
+          "name": "name",
+          "value": "numero_celular"
         }
       },
       {
         "query": ".address_phone_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->phone_number ?>"
+          "name": "value",
+          "value": "<?= $order->address->phone_number ?>"
         }
       },
       {
         "query": ".address_state input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "estado"
+          "name": "name",
+          "value": "estado"
         }
       },
       {
         "query": ".address_state input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->state ?>"
+          "name": "value",
+          "value": "<?= $order->address->state ?>"
         }
       },
       {
         "query": ".address_street_and_use_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "calle"
+          "name": "name",
+          "value": "calle"
         }
       },
       {
         "query": ".address_street_and_use_number input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->street_and_use_number ?>"
+          "name": "value",
+          "value": "<?= $order->address->street_and_use_number ?>"
         }
       },
       {
         "query": ".address_last_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "apellido"
+          "name": "name",
+          "value": "apellido"
         }
       },
       {
         "query": ".address_last_name input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->address->last_name ?>"
+          "name": "value",
+          "value": "<?= $order->address->last_name ?>"
         }
       },
       {
         "query": ".address_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "name",
-          "Value": "correo"
+          "name": "name",
+          "value": "correo"
         }
       },
       {
         "query": ".address_email input",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "value",
-          "Value": "<?= $order->client->email ?>"
+          "name": "value",
+          "value": "<?= $order->client->email ?>"
         }
       }
     ],
@@ -252,7 +248,6 @@
   },
   {
     "query": ".remove_item_on_update",
-    "select_all": false,
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
@@ -264,8 +259,8 @@
         "query": "",
         "mode": "replace_attribute",
         "attribute": {
-          "Name": "style",
-          "Value": "display: none;"
+          "name": "style",
+          "value": "display: none;"
         }
       }
     ],

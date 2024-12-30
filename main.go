@@ -7,29 +7,32 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 
 	// "strings"
 
 	"github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/web_files_manipulation"
 	"github.com/sunshineplan/node"
+	"github.com/tidwall/pretty"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
 )
 
-// func mkjsons() {
-// 	os.Mkdir("modifications_jsons", 0775)
-// 	for fileName, jsonContent := range web_files_manipulation.JSONED {
-// 		f, _ := os.Create(fmt.Sprintf("modifications_jsons/%s.json", fileName))
-// 		json, _ := json.Marshal(jsonContent)
-// 		json = pretty.Pretty(json)
-// 		jsonString := string(json)
-// 		jsonString = strings.ReplaceAll(jsonString, `\u003e`, ">")
-// 		jsonString = strings.ReplaceAll(jsonString, `\u003c`, "<")
-// 		f.WriteString(jsonString)
-// 	}
-// }
+func mkjsons() {
+	os.Mkdir("modifications_jsons", 0775)
+	for fileName, jsonContent := range web_files_manipulation.JSONED {
+		f, _ := os.Create(fmt.Sprintf("modifications_jsons/%s.json", fileName))
+		json, _ := json.Marshal(jsonContent)
+		json = pretty.Pretty(json)
+		jsonString := string(json)
+		jsonString = strings.ReplaceAll(jsonString, `\u003e`, ">")
+		jsonString = strings.ReplaceAll(jsonString, `\u003c`, "<")
+		f.WriteString(jsonString)
+	}
+}
 
 func main() {
+	// mkjsons()
 	newRun()
 	// p()
 	// web_files_manipulation.InitNewAPI("app")
