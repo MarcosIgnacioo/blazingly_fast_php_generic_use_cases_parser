@@ -398,6 +398,10 @@ func constructHTML(parent *node.Node, targetDiv node.Node, instruction Instructi
 }
 
 func buildPHPFile(file *File, doc node.Node) {
+	removingDivs := QuerySelectorAll(doc, ".remove_item_on_update")
+	for _, div := range removingDivs {
+		DeleteNodeFromHTMLTree(div)
+	}
 	phpFileName := strings.Replace(file.filePath, "html", "php", -1)
 	os.Rename(file.filePath, phpFileName)
 	file.filePath = phpFileName
@@ -1113,7 +1117,7 @@ func Postprocess() {
 
 	bundleJsName := GetFileNameByRegex("doce40BUILD/webcard/static/", `app\.bundle\..*\.js`)
 	p("Quitando contenido de funcion de js, por favor espere...")
-	cmd = exec.Command("./macos_js_manipulator", bundleJsName)
+	cmd = exec.Command("./js_manipulator", bundleJsName)
 	err = cmd.Run()
 	if err != nil {
 		p(err)
