@@ -28,7 +28,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?> \n\t\t",
-    "prepend_html": "\n\t\t<?php if (isset($grand_product->related_products) \u0026\u0026 count($grand_product->related_products)): ?>\n\t\t\t<?php foreach ($grand_product->related_products as $product): ?>\n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if (isset($grand_product->related_products) \u0026\u0026 count($grand_product->related_products)): ?>\n\t\t\t<?php foreach ($grand_product->related_products as $product): ?>\n\t\t\t\t<?php $product->categories = $grand_product->categories; ?>\n\t\t\t\t<?php $product = $productsController->getQuickView($product) ?>\n\t\t",
     "attributes_changes": [
       {
         "query": "a",
@@ -170,15 +170,16 @@
         "html": "\n\t\t\t\t<?php if ($perfil_de_sabor!=\"\"): ?>\n\t\t\t\t\t<img src=\"<?= $perfil_de_sabor ?>\" alt=\"\" />\n        <?php else: ?>\n\t\t\t\t\t<img src=\"/images/250/10441024/escala_tueste.png\" alt=\"\" />\n        <?php endif ?> \n        "
       },
       {
-        "query": ".item_recomendation_name",
-        "mode": "outer",
-        "html": "\n\t\t\t\t<a href=\"<?= $product->url ?>\">\n\t\t\t\t\t\t\t<img src=\"<?= $product->thumbnail_path ?>\" alt=\"<?= $product->name ?>\"  />\n\t\t\t\t</a>\n\t\t\t\t<a href=\"<?= $product->url ?>\" title=\"\"class=\"item_recomendation_name\" title=\"\"><?= $product->name ?></a>\n        "
-      },
-      {
         "query": ".item_recomendation_price",
         "mode": "inner",
         "html": "\n\t\t\t\t\tDESDE $<?= $product->price ?>\n        "
+      },
+{
+        "query": ".item_recomendation_name",
+        "mode": "inner",
+        "html": "\n\t\t\t\t\t<?= $product->name ?>\n        "
       }
+
     ]
   },
   {

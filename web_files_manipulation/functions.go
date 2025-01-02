@@ -1036,16 +1036,24 @@ func Preprocess() {
 	// 	InnerHTML: `x<?= $product->cantidad ?>`,
 	// }
 
+	totalModification := Modification{
+		InnerHTML: `$<?= number_format($total, 2) ?>`,
+	}
+
 	productCartItem := QuerySelector(doc, ".product_item_cart")
+	separator := QuerySelector(doc, `hr[class="bg-primary"]`)
+	subTotalCart := QuerySelector(doc, ".resumen_carrito_nav")
 	imgCartItem := QuerySelector(productCartItem, "img")
 	nameCartItem := QuerySelector(productCartItem, ".name_item_carrito_nav")
 	priceCartItem := QuerySelector(productCartItem, ".price_item_carrito_nav")
+	totalCart := QuerySelector(doc, ".total_item_carrito_nav")
 	// quantittyCartItem := QuerySelector(productCartItem, ".quantity_item_carrito_nav")
 	// featureCartItem := QuerySelector(productCartItem, "")
 
 	HandleHTMLModifications(imgModification, imgCartItem)
 	HandleHTMLModifications(priceModification, priceCartItem)
 	HandleHTMLModifications(nameModification, nameCartItem)
+	HandleHTMLModifications(totalModification, totalCart)
 
 	err = os.Mkdir(f("%s/layouts", ROOT_APP_DIR), 0775)
 	mobileTemplate, err := os.Create(f("%s/layouts/cart_mobile.template.php", ROOT_APP_DIR))
@@ -1063,10 +1071,12 @@ func Preprocess() {
 				<?php foreach ($_SESSION['cart'] as $product): ?>
 					<span id="cart_container_mobile"></span>
 						%s
+						%s
 				<?php $total += ($product->cantidad*$product->price) ?> 
 			<?php endforeach ?>
     <?php endif ?>
-		`, productCartItem.HTML()))
+		%s
+		`, productCartItem.HTML(), separator.Parent().HTML(), subTotalCart.HTML()))
 	if err != nil {
 		panik("error creating cart_mobile template file")
 	}

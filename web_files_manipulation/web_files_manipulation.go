@@ -20,7 +20,12 @@ func prepareHTMLForFile(doc node.Node) []byte {
 	// var lessThan = regexp.MustCompile(`(\?="*.)(&lt;)(?=.*")`)
 	// fixedGt := greaterThan.ReplaceAll([]byte(html), []byte(">"))
 	// finalHtml := lessThan.ReplaceAll(fixedGt, []byte("<"))
-	coolerHtml := strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1)
+	coolerHtml := strings.Replace(strings.Replace(strings.Replace(html, "&lt;", "<", -1), "&gt;", ">", -1), "&#39;", "'", -1)
+	// re := regexp.MustCompile(`data-([^=]+)="([^"]+)"`)
+	// coolerHtml = re.ReplaceAllString(coolerHtml, `data-$1='$2'`)
+	// re := regexp.MustCompile(`data-[^=]+="([^"]+)"`)
+	// Replace matches with single quotes
+	// coolerHtml = re.ReplaceAllString(coolerHtml, `data-$1='$1'`)
 	return []byte(coolerHtml)
 }
 

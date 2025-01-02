@@ -50,54 +50,12 @@
     "outer_html": "",
     "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
     "prepend_html": "\n\t\t\t<?php if (isset($grand_product->presentations) \u0026\u0026 count($grand_product->presentations)): ?>\n\t\t\t\t<?php foreach ($grand_product->presentations as $presentation): ?>\n\t\t",
-    "attributes_changes": [
-      {
-        "query": "a",
-        "mode": "append_attribute",
-        "attribute": {
-          "name": "class",
-          "value": "presentations"
-        }
-      },
-      {
-        "query": "a",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "onclick",
-          "value": "updateSelection(this,'merch')"
-        }
-      },
-      {
-        "query": "a",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "data-id",
-          "value": "<?= $presentation->id ?>"
-        }
-      },
-      {
-        "query": "a",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "data-price",
-          "value": "<?= $presentation->current_price->amount ?>"
-        }
-      },
-      {
-        "query": "a",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "data-product",
-          "value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
-        }
-      }
-    ],
+    "attributes_changes": null,
     "html_changes": [
       {
         "query": "a",
-        "mode": "inner",
-        "html": "<?= $presentation->description ?>"
-      }
+        "mode": "outer",
+        "html": "<a href=\"#\" onclick=\"updateSelection(this,'merch')\" data-id=\"<?= $presentation->id ?>\"data-price=\"<?= $presentation->current_price->amount ?>\"data-product='<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>' class=\"button center button-variant-primary bg-background color-default border-color-primary bg-active-primary color-active-background border-color-active-primary presentations\"><?= $presentation->description ?></a>" }
     ]
   },
   {
@@ -141,6 +99,14 @@
         "attribute": {
           "name": "onclick",
           "value": "QuickAdd(this)"
+        }
+      },
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "data-product",
+          "value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
         }
       }
     ],
@@ -267,5 +233,16 @@
       }
     ],
     "html_changes": null
+  },
+  {
+      "query": "append_scripts_to_end_of_body",
+      "change_all": false,
+      "delete_siblings": false,
+      "inner_html": "",
+      "outer_html": "",
+      "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.getElementsByClassName('presentations')[0].click()\n\t\t</script>\n\t\t",
+      "prepend_html": "",
+      "attributes_changes": null,
+      "html_changes": null
   }
 ]
