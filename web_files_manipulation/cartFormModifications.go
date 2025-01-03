@@ -106,18 +106,11 @@ var cartFormModifications = []Modification{
 				`name="references"`,
 			),
 		},
-	},
-
-	Modification{
-		Query: ".remove_item_on_update",
-		AttributesChanges: []AttributeChange{
-			AttributeChange{
-				Query: "",
-				Mode:  REPLACE_ATTRIBUTE,
-				Attribute: Attribute{
-					Name:  "style",
-					Value: `display: none;`,
-				},
+		HTMLChanges: []HTMLChange{
+			HTMLChange{
+				Query: ".cart_item_separator| .cart_item_row",
+				Mode:  MOVE_TO_HTML,
+				HTML:  "",
 			},
 		},
 	},

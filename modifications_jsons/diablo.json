@@ -115,7 +115,7 @@
         }
       },
       {
-        "query": ".boton_add_to_cart a",
+        "query": ".boton_add_to_cart",
         "mode": "replace_attribute",
         "attribute": {
           "name": "onclick",

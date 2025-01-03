@@ -46,7 +46,7 @@
         "mode": "append_attribute",
         "attribute": {
           "name": "class",
-          "value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?>"
+          "value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?> cart_item_row"
         }
       },
       {

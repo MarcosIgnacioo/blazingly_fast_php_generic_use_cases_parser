@@ -15,8 +15,8 @@ import (
 func InitNewAPI(sourceDirectory string) {
 	jsonDir := "modifications_jsons"
 	_, jsonFiles := GetDiretoriesAndFilesFromDirectory(jsonDir)
-	modifications := map[string][]Modification{}
 
+	modifications := map[string][]Modification{}
 	for _, jsonFile := range jsonFiles {
 		var modificationsJson, modJsonErr = os.ReadFile(fmt.Sprintf("%s/%s", jsonDir, jsonFile))
 		if modJsonErr != nil {
@@ -34,6 +34,7 @@ func InitNewAPI(sourceDirectory string) {
 		modifications[modificationName] = modificationsArray
 		// modifications[modificationName] = []Modification{}
 	}
+
 	// p(modifications)
 	// panik("xd")
 
@@ -166,12 +167,35 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 						} else {
 							AttributesChanges(modification, targetContainer)
 						}
+						removing := QuerySelectorAll(doc, ".remove_on_update")
+						// cartSeparator := QuerySelector(doc, ".cart_item_separator")
+						// if cartSeparator != nil {
+						// 	DeleteNodeFromHTMLTree(cartSeparator)
+						// 	p(targetContainer.HTML())
+						// 	// AppendHTMLToNode(cartSeparator.HTML(), targetContainer)
+						// }
+						RemoveOnUpdate(removing)
 						HandleContainerHTMLChanges(modification, targetContainer)
 					}
 				}
 			}
 		} else {
 			InsertConfig(doc, file.nestedLevel)
+		}
+		cartSeparatorsToDelete := QuerySelectorAll(doc, ".cart_item_separator")
+		cartSeparator := QuerySelector(doc, ".ed-separator")
+		cartItemRows := QuerySelectorAll(doc, ".cart_item_row")
+
+		for _, cartSeparatorToDelete := range cartSeparatorsToDelete {
+			if cartSeparatorToDelete != nil {
+				DeleteNodeFromHTMLTree(cartSeparatorToDelete)
+			}
+		}
+		if len(cartItemRows) != 0 {
+			for _, row := range cartItemRows {
+				DeleteNodeFromHTMLTree(cartSeparator)
+				AppendHTMLToNode(cartSeparator.HTML(), row)
+			}
 		}
 		buildPHPFile(file, doc)
 	}

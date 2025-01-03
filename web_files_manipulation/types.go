@@ -143,6 +143,7 @@ const (
 	PREPEND_HTML      = "prepend"
 	REPLACE_ATTRIBUTE = "replace_attribute"
 	APPEND_ATTRIBUTE  = "append_attribute"
+	MOVE_TO_HTML      = "move_to"
 )
 
 // if query is empty or not initialized the upper query from the modfication is used as the targeting container

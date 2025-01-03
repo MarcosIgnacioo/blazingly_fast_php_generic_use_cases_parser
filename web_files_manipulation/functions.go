@@ -540,9 +540,9 @@ func QuerySelector(document node.Node, query string) node.Node {
 	}
 
 	if len(elements) == 0 {
-		p(document.HTML())
-		panic(fmt.Sprintf(" elements is nil when trying to select\nthis query: `%s`\nprobably forgot to put a `.` for the className", query))
-		// return nil
+		// p(document.HTML())
+		// panic(fmt.Sprintf(" elements is nil when trying to select\nthis query: `%s`\nprobably forgot to put a `.` for the className", query))
+		return nil
 	}
 	needleElement := elements[0]
 	for i := 1; i < len(queries); i++ {
@@ -767,6 +767,30 @@ func ReplaceOuterHTMLFromNode(outerHTML string, tag node.Node) {
 	tag.Parent().Raw().RemoveChild(tag.Raw())
 }
 
+func MoveThisHTMLToThatHTML(doc node.Node, query string) {
+	htmls := strings.Split(query, "|")
+	if len(htmls) != 2 {
+		panik("syntax error when trying to move htmls %v", htmls)
+		return
+	}
+	destHTMLS := QuerySelectorAll(doc, htmls[1])
+	if len(destHTMLS) == 0 {
+		panik("destHTMLS len is 0")
+		return
+	}
+	movingQueries := strings.Split(htmls[0], "&")
+	for _, movingQuery := range movingQueries {
+		sourceHTML := QuerySelector(doc, movingQuery)
+		if sourceHTML == nil {
+			panik("sourceHTML is nil in `%s`", movingQuery)
+		}
+		for _, destinyHTML := range destHTMLS {
+			AppendHTMLToNode(sourceHTML.HTML(), destinyHTML)
+		}
+		DeleteNodeFromHTMLTree(sourceHTML)
+	}
+}
+
 func HandleHTMLModifications(modification Modification, target node.Node) {
 	if modification.InnerHTML != "" {
 		ReplaceInnerHTMLFromNode(modification.InnerHTML, target)
@@ -952,6 +976,11 @@ func HandleContainerHTMLChanges(modification Modification, target node.Node) {
 			{
 				htmlChangeFn = PrependHTMLToNode
 			}
+		case MOVE_TO_HTML:
+			{
+				MoveThisHTMLToThatHTML(target, htmlChange.Query)
+				return
+			}
 		}
 		StoreID(target, htmlChange.Query)
 		htmlChangeFn(htmlChange.HTML, tagToChange)
@@ -967,6 +996,15 @@ func StoreID(targetContainer node.Node, firstClass string) {
 
 func IsBlank(text string) bool {
 	return len(strings.TrimSpace(text)) == 0
+}
+
+func RemoveOnUpdate(removing []node.Node) {
+	if len(removing) == 0 {
+		return
+	}
+	for _, remv := range removing {
+		DeleteNodeFromHTMLTree(remv)
+	}
 }
 
 func DeleteNodeFromHTMLTree(deletingNode node.Node) {
@@ -1024,17 +1062,17 @@ func Preprocess() {
 		InnerHTML: `<?= $product->name ?>`,
 	}
 
-	// featureModification := Modification{
-	// 	InnerHTML: `<?= $product->feature ?>`,
-	// }
+	descriptionModification := Modification{
+		InnerHTML: `<?= $product->feature ?>`,
+	}
 
 	priceModification := Modification{
 		InnerHTML: `$<?= number_format($product->price,2) ?>`,
 	}
 
-	// quantityModification := Modification{
-	// 	InnerHTML: `x<?= $product->cantidad ?>`,
-	// }
+	quantityModification := Modification{
+		InnerHTML: `x<?= $product->cantidad ?>`,
+	}
 
 	totalModification := Modification{
 		InnerHTML: `$<?= number_format($total, 2) ?>`,
@@ -1045,6 +1083,8 @@ func Preprocess() {
 	subTotalCart := QuerySelector(doc, ".resumen_carrito_nav")
 	imgCartItem := QuerySelector(productCartItem, "img")
 	nameCartItem := QuerySelector(productCartItem, ".name_item_carrito_nav")
+	descriptionCartItem := QuerySelector(productCartItem, ".description_item_carrito_nav")
+	quantityCartItem := QuerySelector(productCartItem, ".quantity_item_carrito_nav")
 	priceCartItem := QuerySelector(productCartItem, ".price_item_carrito_nav")
 	totalCart := QuerySelector(doc, ".total_item_carrito_nav")
 	// quantittyCartItem := QuerySelector(productCartItem, ".quantity_item_carrito_nav")
@@ -1053,6 +1093,9 @@ func Preprocess() {
 	HandleHTMLModifications(imgModification, imgCartItem)
 	HandleHTMLModifications(priceModification, priceCartItem)
 	HandleHTMLModifications(nameModification, nameCartItem)
+	HandleHTMLModifications(quantityModification, quantityCartItem)
+	HandleHTMLModifications(descriptionModification, descriptionCartItem)
+
 	HandleHTMLModifications(totalModification, totalCart)
 
 	err = os.Mkdir(f("%s/layouts", ROOT_APP_DIR), 0775)
@@ -1066,10 +1109,10 @@ func Preprocess() {
 				include_once "../app/config.php";
 			}
 		?>
+		<span id="cart_container_mobile"></span>
     <?php $total = 0; ?>
 			<?php if (isset($_SESSION['cart']) && count($_SESSION['cart'])): ?> 
 				<?php foreach ($_SESSION['cart'] as $product): ?>
-					<span id="cart_container_mobile"></span>
 						%s
 						%s
 				<?php $total += ($product->cantidad*$product->price) ?> 

@@ -28,7 +28,7 @@
       {
         "query": ".order_subtotal",
         "mode": "inner",
-        "html": "$<?= number_format(($order->total),2) ?>"
+        "html": "$<?= number_format(($order->total - $order->shipping_cost ?? 0),2) ?>"
       },
       {
         "query": ".order_shipping_cost",
