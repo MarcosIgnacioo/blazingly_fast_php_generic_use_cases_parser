@@ -184,6 +184,10 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 		}
 		cartSeparatorsToDelete := QuerySelectorAll(doc, ".cart_item_separator")
 		cartSeparator := QuerySelector(doc, ".ed-separator")
+		header := QuerySelector(doc, ".preset-columns-three-v2-tabla-carrito")
+		if header != nil {
+			AppendHTMLToNode(cartSeparator.HTML(), header)
+		}
 		cartItemRows := QuerySelectorAll(doc, ".cart_item_row")
 
 		for _, cartSeparatorToDelete := range cartSeparatorsToDelete {

@@ -50,7 +50,7 @@
         }
       },
       {
-        "query": ".cart_product_quantity",
+        "query": ".cart_product_quantity input",
         "mode": "replace_attribute",
         "attribute": {
           "name": "value",

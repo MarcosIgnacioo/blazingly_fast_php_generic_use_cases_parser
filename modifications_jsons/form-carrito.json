@@ -111,7 +111,7 @@
         }
       },
       {
-        "query": ".checkout_estate select",
+        "query": ".checkout_estate input",
         "mode": "replace_attribute",
         "attribute": {
           "name": "name",
@@ -119,7 +119,7 @@
         }
       },
       {
-        "query": ".checkout_city select",
+        "query": ".checkout_city input",
         "mode": "replace_attribute",
         "attribute": {
           "name": "name",
