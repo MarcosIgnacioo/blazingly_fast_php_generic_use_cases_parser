@@ -110,6 +110,10 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 					// HARDCODED more like HARDCORE jajjajjajjajajajjajajjajajjajajajja
 					{
 						targetContainer = QuerySelector(doc, query)
+						if targetContainer == nil {
+							panik("targetContainer is nil in this query `%s` \n at this file `%s`", query, file.filePath)
+						}
+						p("before we crash")
 						sizesParent := targetContainer.Parent()
 						// THIS COULD INCREMENT IN A FUTURE
 						notAirChildren := make([]node.Node, 2)

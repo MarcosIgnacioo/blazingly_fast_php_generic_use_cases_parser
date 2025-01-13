@@ -791,6 +791,13 @@ func MoveThisHTMLToThatHTML(doc node.Node, query string) {
 	}
 }
 
+func AppendChildHTMLToNode(text string, where node.Node) {
+	if where == nil {
+		panic("where nil in appendingHMTL")
+	}
+	where.Raw().AppendChild(newTextHtmlNode(text))
+}
+
 func HandleHTMLModifications(modification Modification, target node.Node) {
 	if modification.InnerHTML != "" {
 		ReplaceInnerHTMLFromNode(modification.InnerHTML, target)
@@ -975,6 +982,10 @@ func HandleContainerHTMLChanges(modification Modification, target node.Node) {
 		case PREPEND_HTML:
 			{
 				htmlChangeFn = PrependHTMLToNode
+			}
+		case APPEND_CHILD:
+			{
+				htmlChangeFn = AppendChildHTMLToNode
 			}
 		case MOVE_TO_HTML:
 			{

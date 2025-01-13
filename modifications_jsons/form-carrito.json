@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\t\t$productsController = new ProductsController(); \n\t?>\n\t",
+    "prepend_html": "\t<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\t\tinclude_once \"../app/AuthController.php\";\n\t\t$productsController = new ProductsController(); \n\t\t$authController = new AuthController(); \n\n  \t $tax_regimes = $authController->getTaxRegimes();\n   \t$usos_cfdi = $authController->getUsosCfdi();  \n\t?>",
     "attributes_changes": null,
     "html_changes": null
   },
@@ -16,7 +16,7 @@
     "delete_siblings": false,
     "inner_html": "",
     "outer_html": "",
-    "append_html": "\n\t    <script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>\n        <script type=\"text/javascript\">\n            document.querySelector('.checkout_form').addEventListener('submit', validateOrder);\n        </script>\n\t\t",
+    "append_html": "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script> \n<script type=\"text/javascript\"> \n  \t     document.querySelector('.checkout_form').addEventListener('submit', validateOrder);\n   \t    let state = 'none'\n   \t    function changeBillingState(){\n   \t      document.querySelector('.billing_company_name').style.display = state\n   \t      document.querySelector('.billing_document_number').style.display = state\n   \t      document.querySelector('.billing_postal_code').style.display = state\n   \t      document.querySelector('.billing_tax_regime_id').style.display = state\n   \t      document.querySelector('.billing_uso_cfdi_id').style.display = state\n   \t    }\n\n   \t    changeBillingState()\n\n   \t    document.querySelector('input[name=\"add_billing_data\"]').addEventListener('change', (e)=>{\n\n   \t      e.target.value = (e.target.value == 0) ? 1 : 0\n\n   \t      state = (state == 'none') ? 'block' : 'none'\n\n   \t      changeBillingState()\n   \t    });\n   \t</script>\n```\n",
     "prepend_html": "",
     "attributes_changes": null,
     "html_changes": null
@@ -141,6 +141,54 @@
           "name": "name",
           "value": "references"
         }
+      },
+      {
+        "query": ".add_billing_data input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "add_billing_data"
+        }
+      },
+      {
+        "query": ".billing_company_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "company_name"
+        }
+      },
+      {
+        "query": ".billing_document_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "document_number"
+        }
+      },
+      {
+        "query": ".billing_tax_regime_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "tax_regime_id"
+        }
+      },
+      {
+        "query": ".billing_postal_code input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "tax_regime_id"
+        }
+      },
+      {
+        "query": ".billing_uso_cfdi_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "uso_cfdi_id"
+        }
       }
     ],
     "html_changes": [
@@ -153,6 +201,16 @@
         "query": ".checkout_total",
         "mode": "inner",
         "html": "$<?= number_format( $total ,2) ?>"
+      },
+      {
+        "query": ".billing_tax_regime_id select",
+        "mode": "inner",
+        "html": "<option value=\"\" selected=\"selected\">\n   \tSeleccione una opción\n</option>\n<?php if (isset($tax_regimes) && count($tax_regimes)): ?>\n<?php foreach ($tax_regimes as $tax_regime): ?> \n<option value=\"<?= $tax_regime->id ?>\">\n   \t<?= $tax_regime->key ?> - <?= $tax_regime->description ?>\n</option>\n<?php endforeach ?>\n<?php endif ?>"
+      },
+      {
+        "query": ".billing_uso_cfdi_id select",
+        "mode": "inner",
+        "html": "<option value=\"\" selected=\"selected\">\n   \tSeleccione una opción\n</option>\n<?php if (isset($usos_cfdi) && count($usos_cfdi)): ?>\n   \t    <?php foreach ($usos_cfdi as $uso_cfdi): ?> \n<option value=\"<?= $uso_cfdi->id ?>\">\n   \t<?= $uso_cfdi->key ?> - <?= $uso_cfdi->description ?>\n</option>\n<?php endforeach ?>\n<?php endif ?>"
       }
     ]
   },

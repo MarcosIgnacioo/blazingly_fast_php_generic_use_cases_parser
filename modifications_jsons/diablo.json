@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n<?php\n\n  include_once \"../../../app/config.php\"; \n  include_once \"../../../app/ProductsController.php\";\n  include_once \"../../../app/CategoriesController.php\";\n\n  $productsController = new ProductsController(); \n  $categoriesController = new CategoriesController(); \n\n  if(isset($_GET['slug'])) {\n\n    $grand_product = $productsController -> getBySlug($_GET['slug']); \n\n  }else{\n    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n  }\n\n  if (is_null($grand_product)) {\n    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n  } \n\n  $features = $productsController ->getFeatures($grand_product,\"molienda\");\n  $backgroud = $productsController ->getFile($grand_product,\"background_\".$_GET['slug']);\n  $stock = $productsController ->getStock($grand_product->presentations);;\n\n\n  $tueste = $productsController ->getFile($grand_product,\"tueste_\".$_GET['slug']);\n\n  $perfil_de_sabor = $productsController ->getFile($grand_product,\"perfil_de_sabor_\".$_GET['slug']); \n\n?>\n",
+    "prepend_html": "<?php\t\ninclude_once\"../../../app/config.php\";\n\tinclude_once\"../../../app/ProductsController.php\";\n\tinclude_once\"../../../app/CategoriesController.php\";\n\n\t$productsController=new ProductsController();\n\t$categoriesController=new CategoriesController();\n\n\tif(isset($_GET['slug'])){\n\t$grand_product=$productsController->getBySlug($_GET['slug']);\n\t}else{\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\tif(is_null($grand_product)){\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\t$cover_product=$productsController->getFile($grand_product,'transparent_'.$_GET['slug'])?$productsController->getFile($grand_product,'transparent_'.$_GET['slug']):$productsController->getCover($grand_product);\n\n\t$features=$productsController->getFeatures($grand_product,\"molienda\");\n\t$backgroud=$productsController->getFile($grand_product,\"background_\".$_GET['slug']);\n\t$stock=$productsController->getStock($grand_product->presentations);;\n\n\n\t$tueste=$productsController->getFile($grand_product,\"tueste_\".$_GET['slug']);\n\n\t$perfil_de_sabor=$productsController->getFile($grand_product,\"perfil_de_sabor_\".$_GET['slug']);\n\n?>",
     "attributes_changes": null,
     "html_changes": null
   },
@@ -127,7 +127,7 @@
       {
         "query": ".cover_product_details",
         "mode": "inner",
-        "html": "<img src=\"<?= $productsController->getCover($grand_product) ?>\" alt=\"<?= $grand_product->name ?>\"/>"
+        "html": "<img src=\"<?= $cover_product ?>\" alt=\"<?= $grand_product->name ?>\"/>"
       },
       {
         "query": ".product_title_details",
@@ -174,12 +174,11 @@
         "mode": "inner",
         "html": "\n\t\t\t\t\tDESDE $<?= $product->price ?>\n        "
       },
-{
+      {
         "query": ".item_recomendation_name",
         "mode": "inner",
         "html": "\n\t\t\t\t\t<?= $product->name ?>\n        "
       }
-
     ]
   },
   {

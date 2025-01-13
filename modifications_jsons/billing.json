@@ -1,0 +1,160 @@
+[
+  {
+    "query": "html",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "<?php\n\tinclude_once\"../../app/config.php\";\n\tinclude_once\"../../app/AuthController.php\";\n\n\tif(!isset($_SESSION['client_id'])){\n\theader(\"Location:\".BASE_PATH.'login');\n\t}\n\n\t$authController=newAuthController();\n\t$billing_data=$authController->getBillingData($_SESSION['client_id']);\n\t$tax_regimes=$authController->getTaxRegimes();\n\t$usos_cfdi=$authController->getUsosCfdi();\n?>",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".billing_company_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "company_name"
+        }
+      },
+      {
+        "query": ".billing_company_name input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "<?= $billing_data?->company_name ?>"
+        }
+      },
+      {
+        "query": ".billing_document_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": ""
+        }
+      },
+      {
+        "query": ".billing_document_number input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "<?= $billing_data?->document_number ?>"
+        }
+      },
+      {
+        "query": ".billing_postal_code",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "postal_code"
+        }
+      },
+      {
+        "query": ".billing_postal_code",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "<?= $billing_data?->address?->postal_code ?>"
+        }
+      },
+      {
+        "query": ".billing_uso_cfdi_id",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "uso_cfdi_id"
+        }
+      },
+      {
+        "query": ".billing_tax_regime_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "tax_regime_id"
+        }
+      },
+      {
+        "query": ".billing_tax_regime_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "<?= $billing_data?->uso_cfdi_id ?>"
+        }
+      },
+      {
+        "query": ".billing_uso_cfdi_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "name",
+          "value": "uso_cfdi_id"
+        }
+      },
+      {
+        "query": ".billing_uso_cfdi_id select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "<?= $billing_data?->uso_cfdi_id ?>"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".billing_form",
+        "mode": "append_child",
+        "html": "<input type=\"hidden\" name=\"id\" value=\"<?= $billing_data?->id ?>\">"
+      },
+      {
+        "query": ".billing_tax_regime_id select",
+        "mode": "inner",
+        "html": "<option value=\"\" selected=\"selected\">\n   \tSeleccione una opción\n</option>\n<?php if (isset($tax_regimes) && count($tax_regimes)): ?>\n<?php foreach ($tax_regimes as $tax_regime): ?> \n<option value=\"<?= $tax_regime->id ?>\" <?= $billing_data->tax_regime_id == $tax_regime->id ? 'selected' : '' ?> >\n   \t<?= $tax_regime->key ?> - <?= $tax_regime->description ?>\n</option>\n<?php endforeach ?>\n<?php endif ?>"
+      },
+      {
+        "query": ".billing_uso_cfdi_id select",
+        "mode": "inner",
+        "html": "<option value=\"\" selected=\"selected\">\n   \tSeleccione una opción\n</option>\n<?php if (isset($usos_cfdi) && count($usos_cfdi)): ?>\n   \t    <?php foreach ($usos_cfdi as $uso_cfdi): ?> \n<option value=\"<?= $uso_cfdi->id ?>\" <?= $billing_data->uso_cfdi_id == $uso_cfdi->id ? 'selected' : '' ?> >\n   \t<?= $uso_cfdi->key ?> - <?= $uso_cfdi->description ?>\n</option>\n<?php endforeach ?>\n<?php endif ?>\n"
+      }
+    ]
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "<script type=\"text/javascript\"> document.querySelector('.billing_form').addEventListener('submit', validateBilling); </script>\n",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "a[href=\"/login\"]",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": "",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "href",
+          "value": "/clients?action=logout"
+        }
+      }
+    ],
+    "html_changes": null
+  }
+]

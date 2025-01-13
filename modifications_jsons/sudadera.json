@@ -43,22 +43,6 @@
     ]
   },
   {
-    "query": ".tallas_presentations",
-    "change_all": false,
-    "delete_siblings": false,
-    "inner_html": "",
-    "outer_html": "",
-    "append_html": "\n\t\t\t<?php endforeach ?>\n    <?php endif ?>\n\t\t",
-    "prepend_html": "\n\t\t\t<?php if (isset($grand_product->presentations) \u0026\u0026 count($grand_product->presentations)): ?>\n\t\t\t\t<?php foreach ($grand_product->presentations as $presentation): ?>\n\t\t",
-    "attributes_changes": null,
-    "html_changes": [
-      {
-        "query": "a",
-        "mode": "outer",
-        "html": "<a href=\"#\" onclick=\"updateSelection(this,'merch')\" data-id=\"<?= $presentation->id ?>\"data-price=\"<?= $presentation->current_price->amount ?>\"data-product='<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>' class=\"button center button-variant-primary bg-background color-default border-color-primary bg-active-primary color-active-background border-color-active-primary presentations\"><?= $presentation->description ?></a>" }
-    ]
-  },
-  {
     "query": ".quantity_items_details",
     "change_all": false,
     "delete_siblings": false,
@@ -235,14 +219,14 @@
     "html_changes": null
   },
   {
-      "query": "append_scripts_to_end_of_body",
-      "change_all": false,
-      "delete_siblings": false,
-      "inner_html": "",
-      "outer_html": "",
-      "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.getElementsByClassName('presentations')[0].click()\n\t\t</script>\n\t\t",
-      "prepend_html": "",
-      "attributes_changes": null,
-      "html_changes": null
+    "query": "append_scripts_to_end_of_body",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.getElementsByClassName('presentations')[0].click()\n\t\t</script>\n\t\t",
+    "prepend_html": "",
+    "attributes_changes": null,
+    "html_changes": null
   }
 ]
