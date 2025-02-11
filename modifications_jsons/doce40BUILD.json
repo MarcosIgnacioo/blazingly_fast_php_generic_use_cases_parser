@@ -52,7 +52,7 @@
         "mode": "replace_attribute",
         "attribute": {
           "name": "src",
-          "value": "<?= $cafe->cover->full_path ?>"
+          "value": "<?= $product->thumbnail_path ?>"
         }
       },
       {
