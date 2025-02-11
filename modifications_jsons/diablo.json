@@ -6,9 +6,41 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "<?php\t\ninclude_once\"../../../app/config.php\";\n\tinclude_once\"../../../app/ProductsController.php\";\n\tinclude_once\"../../../app/CategoriesController.php\";\n\n\t$productsController=new ProductsController();\n\t$categoriesController=new CategoriesController();\n\n\tif(isset($_GET['slug'])){\n\t$grand_product=$productsController->getBySlug($_GET['slug']);\n\t}else{\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\tif(is_null($grand_product)){\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\t$cover_product=$productsController->getFile($grand_product,'transparent_'.$_GET['slug'])?$productsController->getFile($grand_product,'transparent_'.$_GET['slug']):$productsController->getCover($grand_product);\n\n\t$features=$productsController->getFeatures($grand_product,\"molienda\");\n\t$backgroud=$productsController->getFile($grand_product,\"background_\".$_GET['slug']);\n\t$stock=$productsController->getStock($grand_product->presentations);;\n\n\n\t$tueste=$productsController->getFile($grand_product,\"tueste_\".$_GET['slug']);\n\n\t$perfil_de_sabor=$productsController->getFile($grand_product,\"perfil_de_sabor_\".$_GET['slug']);\n\n?>",
+    "prepend_html": "<?php\t\ninclude_once\"../../../app/config.php\";\n\tinclude_once\"../../../app/ProductsController.php\";\n\tinclude_once\"../../../app/CategoriesController.php\";\n\n\t$productsController=new ProductsController();\n\t$categoriesController=new CategoriesController();\n\n\tif(isset($_GET['slug'])){\n\t$grand_product=$productsController->getBySlug($_GET['slug']);\n\t}else{\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\tif(is_null($grand_product)){\n\theader(\"Location:\".$_SERVER['HTTP_REFERER']);\n\t}\n\n\t$cover_product=$productsController->getFile($grand_product,'transparent_'.$_GET['slug'])?$productsController->getFile($grand_product,'transparent_'.$_GET['slug']):$productsController->getCover($grand_product);\n\n\t$features=$productsController->getFeatures($grand_product,\"molienda\");\n\t$backgroud=$productsController->getFile($grand_product,\"background_\".$_GET['slug']);\n\t$stock=$productsController->getStock($grand_product->presentations);;\n\n\n\t$tueste=$productsController->getFile($grand_product,\"tueste_\".$_GET['slug']);\n\n\t$perfil_de_sabor=$productsController->getFile($grand_product,\"perfil_de_sabor_\".$_GET['slug']);\n\n $historia=$productsController->getFeatures($grand_product,\"historia\", true); \n $info_historia=$productsController->getFeatures($grand_product,\"info_historia\", true);?>",
     "attributes_changes": null,
     "html_changes": null
+  },
+  {
+    "query": ".history_container",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "<?php endif ?>",
+    "prepend_html": "<?php if(isset($historia) && $historia != null): ?>",
+    "attributes_changes": null,
+    "html_changes": [
+      {
+        "query": ".product_history_text",
+        "mode": "inner",
+        "html": "<?= html_entity_decode($historia) ?>"
+      },
+      {
+        "query": ".features_history",
+        "mode": "prepend",
+        "html": "<?php if(isset($info_historia) && $info_historia != null): ?>"
+      },
+      {
+        "query": ".features_history",
+        "mode": "append",
+        "html": "<?php endif ?>"
+      },
+      {
+        "query": ".features_history",
+        "mode": "inner",
+        "html": "<?= html_entity_decode($info_historia) ?>"
+      }
+    ]
   },
   {
     "query": ".ed-gallery-thumb",
