@@ -233,7 +233,7 @@
     "delete_siblings": false,
     "inner_html": "",
     "outer_html": "",
-    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.querySelectorAll('.option_items_details select option')[0].click()\n\t\t</script>\n\t\t",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\t document.querySelector('.button_add_big_product').dataset.product = document.querySelectorAll('.option_items_details select option')[0].dataset.product \n\t\t</script>\n\t\t",
     "prepend_html": "",
     "attributes_changes": null,
     "html_changes": null
