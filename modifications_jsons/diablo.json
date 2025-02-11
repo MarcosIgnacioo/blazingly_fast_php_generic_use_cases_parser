@@ -49,7 +49,7 @@
     "inner_html": "\n\t\t\t<a href=\"<?= $image->full_path ?>\" target=\"_blank\" title=\"Caption\">\n\t\t\t\t\t\t<img\n\t\t\t\t\t\t\t\tsrc=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\talt=\"Caption\"\n\t\t\t\t\t\t\t\tsrcset=\"\n\t\t\t\t\t\t\t\t\t\tdata:image/svg+xml,\n\t\t\t\t\t\t\t\t\t\t%3Csvg%20width='800'%20viewBox='0%200%20800%20800'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='800'%20height='800'%20style='fill:%20%23F7F7F7'%20/%3E%3C/svg%3E\n\t\t\t\t\t\t\t\t\"\n\t\t\t\t\t\t\t\tdata-src=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t\t\tclass=\"ed-lazyload lazyload\"\n\t\t\t\t\t\t\t\tdata-srcset=\"<?= $image->full_path ?>\"\n\t\t\t\t\t\t/>\n\t\t\t\t</a>\n\t\t",
     "outer_html": "",
     "append_html": "\n\t\t\t\t\t<?php endif ?>\n\t\t\t\t<?php endforeach ?> \n\t\t\t<?php endif ?>\n\t\t",
-    "prepend_html": "\n\t <?php if (isset($grand_product) \u0026\u0026 isset($grand_product->images)): ?>\n\t\t\t<?php foreach ($grand_product->images as $image): ?>  \n        <?php if (!$image->is_cover): ?> \n\t\t",
+    "prepend_html": "\n\t <?php if (isset($grand_product) \u0026\u0026 isset($grand_product->images)): ?>\n\t\t\t<?php foreach ($grand_product->images as $image): ?>  \n        <?php if (!$image->is_cover && !$image->is_thumbnail): ?>  \n\t\t",
     "attributes_changes": null,
     "html_changes": null
   },
