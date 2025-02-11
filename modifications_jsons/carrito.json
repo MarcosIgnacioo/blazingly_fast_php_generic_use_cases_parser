@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\n\t\t$productsController = new ProductsController(); \n\t?>\n\t",
+    "prepend_html": "<?php\n\t\tinclude_once \"../app/config.php\"; \n\t\tinclude_once \"../app/ProductsController.php\";\n\n\t\t$productsController = new ProductsController(); \n\t?>\n\t",
     "attributes_changes": null,
     "html_changes": null
   },
@@ -18,7 +18,16 @@
     "outer_html": "",
     "append_html": "",
     "prepend_html": "",
-    "attributes_changes": null,
+    "attributes_changes": [
+      {
+        "query": ".update_cart_btn",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "onclick",
+          "value": "updateCart()"
+        }
+      }
+    ],
     "html_changes": [
       {
         "query": ".cart_subtotal",
@@ -47,6 +56,14 @@
         "attribute": {
           "name": "class",
           "value": "item_<?= $product->id ?>_<?= str_replace(' ', '', $product->feature) ?> cart_item_row"
+        }
+      },
+      {
+        "query": ".cart_product_quantity input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "data-id",
+          "value": "<?=$product->id?>"
         }
       },
       {
