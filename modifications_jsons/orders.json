@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n\t<?php\n\t\tinclude_once \"../../app/config.php\";    \n\t\tinclude_once \"../../app/AuthController.php\";\n\n\t\t$authController = new AuthController();\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$orders = array_reverse($authController->getOrders($_SESSION['client_id']));\n\t?>\n\t",
+    "prepend_html": "<?php\n\t\tinclude_once \"../../app/config.php\";    \n\t\tinclude_once \"../../app/AuthController.php\";\n\n\t\t$authController = new AuthController();\n\t\tif (!isset($_SESSION['client_id'])) {\n\t\t\theader(\"Location:\" . BASE_PATH . 'login/');\n\t\t}\n\n\t\t$orders = array_reverse($authController->getOrders($_SESSION['client_id']));\n\t?>\n\t",
     "attributes_changes": null,
     "html_changes": null
   },

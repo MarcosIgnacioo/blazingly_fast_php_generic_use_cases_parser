@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n<?php\n\n\t  include_once \"../../app/config.php\"; \n\t  include_once \"../../app/ProductsController.php\";\n\t  include_once \"../../app/CategoriesController.php\";\n\n\t  $productsController = new ProductsController(); \n\t  \n\t  $products = $productsController -> getByCategory('accesorios');\n\n\t?>\n",
+    "prepend_html": "<?php\n\t include_once \"../../app/config.php\"; \n\t  include_once \"../../app/ProductsController.php\";\n\t  include_once \"../../app/CategoriesController.php\";\n\n\t  $productsController = new ProductsController(); \n\t  \n\t  $products = $productsController -> getByCategory('accesorios');\n\n\t?>\n",
     "attributes_changes": null,
     "html_changes": null
   },

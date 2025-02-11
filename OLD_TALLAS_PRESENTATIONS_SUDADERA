@@ -15,3 +15,14 @@
       }
     ]
   },
+  {
+    "query": ".button_add_big_product",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "<a href=\"#\" onclick=\"QuickAdd(this)\" class=\"button center button-variant-primary button-xlarge color-background bg-active-background color-active-default border-color-active-primary button_add_big_product\" style=\"background-color: rgb(72, 79, 71);\" data-product='<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>'>Agregar al carrito</a>",
+    "append_html": "\n    <?php else: ?>\n        <h3>\n            Este producto se encuentra agotado\n        </h3>\n    <?php endif ?>\n\t\t",
+    "prepend_html": "\n\t\t<?php if ($stock>0): ?>\n\t\t",
+    "attributes_changes": null,
+    "html_changes": null
+  },

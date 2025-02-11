@@ -16,7 +16,7 @@
     "delete_siblings": false,
     "inner_html": "",
     "outer_html": "",
-    "append_html": "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script> \n<script type=\"text/javascript\"> \n  \t     document.querySelector('.checkout_form').addEventListener('submit', validateOrder);\n   \t    let state = 'none'\n   \t    function changeBillingState(){\n   \t      document.querySelector('.billing_company_name').style.display = state\n   \t      document.querySelector('.billing_document_number').style.display = state\n   \t      document.querySelector('.billing_postal_code').style.display = state\n   \t      document.querySelector('.billing_tax_regime_id').style.display = state\n   \t      document.querySelector('.billing_uso_cfdi_id').style.display = state\n   \t    }\n\n   \t    changeBillingState()\n\n   \t    document.querySelector('input[name=\"add_billing_data\"]').addEventListener('change', (e)=>{\n\n   \t      e.target.value = (e.target.value == 0) ? 1 : 0\n\n   \t      state = (state == 'none') ? 'block' : 'none'\n\n   \t      changeBillingState()\n   \t    });\n   \t</script>\n```\n",
+    "append_html": "<script type=\"text/javascript\">  \n   \t     document.querySelector('.checkout_form').addEventListener('submit', validateOrder); \n \n    \t    let state = 'none' \n    \t    function changeBillingState(){ \n    \t      document.querySelector('.billing_company_name').style.display = state; \n    \t      document.querySelector('.billing_document_number').style.display = state; \n    \t      document.querySelector('.billing_postal_code').style.display = state; \n    \t      document.querySelector('.billing_tax_regime_id').style.display = state; \n    \t      document.querySelector('.billing_uso_cfdi_id').style.display = state; \n    \t      document.querySelector('.no_billing_message').style.display = (state == 'none') ? 'block' : 'none' \n    \t    } \n \n    \t    changeBillingState() \n \n    \t    document.querySelectorAll('input[name=\"add_billing_data\"]').forEach(element => { \n          element.addEventListener('change', (e)=>{ \n            state = (e.target.value == 0) ? 'none' : 'block' \n            changeBillingState() \n          }); \n        }); \n    \t</script> \n",
     "prepend_html": "",
     "attributes_changes": null,
     "html_changes": null
@@ -159,6 +159,14 @@
         }
       },
       {
+        "query": ".add_billing_data input",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "value",
+          "value": "1"
+        }
+      },
+      {
         "query": ".billing_company_name input",
         "mode": "replace_attribute",
         "attribute": {
@@ -240,6 +248,17 @@
         }
       }
     ],
+    "html_changes": null
+  },
+  {
+    "query": "append_scripts_to_end_of_body",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "<script> \n \tconst radioButtons = document.querySelectorAll('.add_billing_data input') \n \tradioButtons[0].value = \"1\" \n \tradioButtons[1].value = \"0\" \n</script> \n",
+    "prepend_html": "",
+    "attributes_changes": null,
     "html_changes": null
   }
 ]

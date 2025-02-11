@@ -13,7 +13,7 @@ import (
 )
 
 func prepareHTMLForFile(doc node.Node) []byte {
-	html := (doc.HTML())
+	html := doc.HTML()
 	// dangerous
 	// html = gohtml.Format(html)
 	// var greaterThan = regexp.MustCompile(`(\?="*.)(&gt;)(?=.*")`)

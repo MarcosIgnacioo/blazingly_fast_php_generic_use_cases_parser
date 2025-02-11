@@ -74,7 +74,7 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 		// }
 		if modifications[file.fileParentDir] != nil {
 			if err != nil {
-				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s %s", file.filePath))
+				panic(fmt.Sprintf("tried to open this file but for some reason crashed %s", file.filePath))
 			}
 			if err != nil {
 				panic(fmt.Sprintf("error parsing this file", file.filePath))
@@ -88,12 +88,17 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 
 				switch firstClass {
 				case "html":
-					targetContainer = doc.Find(node.Descendant, node.Tag("html"))
-					// we PREPEND the html in this case instead of replacing the innerhtml
-					if modification.PrependHTML == "" {
-						panic(fmt.Sprintf("preppending html for header doesnt exist in file %", file.filePath))
+					{
+						if modification.PrependHTML == "" {
+							panic(fmt.Sprintf("preppending html for header doesnt exist in file %s", file.filePath))
+						}
+						// esta es la forma correcta de hacerlo en vez de pasarme el header
+						// pero ya puse la otra jajajaj y me da hueva cambiarlo
+						// si la otra da problemas o lo que sea pues ya lo hago de esta manera
+						PrependHTMLToNode(modification.PrependHTML, doc.Children()[0])
+						// phpHeader = modification.PrependHTML
+						break
 					}
-					preppendHTMLToNode(modification.PrependHTML, targetContainer)
 				case "HEAD":
 					fallthrough
 				case "BODY":
@@ -186,6 +191,13 @@ func NewAPITrans(directories *arraylist.ArrayList, files *arraylist.ArrayList, m
 		} else {
 			InsertConfig(doc, file.nestedLevel)
 		}
+
+		body := QuerySelector(doc, "body")
+		InsertBeforeLastChild(`<?php if(!isset($_SESSION['cart']) || empty($_SESSION['cart'])): ?>
+    <script>
+    emptyCart()
+    </script>
+<?php endif ?>`, &body)
 		cartSeparatorsToDelete := QuerySelectorAll(doc, ".cart_item_separator")
 		cartSeparator := QuerySelector(doc, ".ed-separator")
 		header := QuerySelector(doc, ".preset-columns-three-v2-tabla-carrito")
