@@ -6,7 +6,7 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n \t<?php\n \t    \n \t  include_once \"../../../app/config.php\"; \n \t  include_once \"../../../app/ProductsController.php\";\n \t  include_once \"../../../app/CategoriesController.php\";\n\n \t  $productsController = new ProductsController(); \n \t  $categoriesController = new CategoriesController(); \n\n \t  if(isset($_GET['slug'])) {\n\n \t    $grand_product = $productsController -> getBySlug($_GET['slug']); \n\n \t  }else{\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  }\n\n \t  if (is_null($grand_product)) {\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  } \n\n \t  $stock = $productsController ->getStock($grand_product->presentations);;\n\n \t?>\n",
+    "prepend_html": "<?php\n \t    \n \t  include_once \"../../../app/config.php\"; \n \t  include_once \"../../../app/ProductsController.php\";\n \t  include_once \"../../../app/CategoriesController.php\";\n\n \t  $productsController = new ProductsController(); \n \t  $categoriesController = new CategoriesController(); \n\n \t  if(isset($_GET['slug'])) {\n\n \t    $grand_product = $productsController -> getBySlug($_GET['slug']); \n\n \t  }else{\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  }\n\n \t  if (is_null($grand_product)) {\n \t    header(\"Location:\".$_SERVER['HTTP_REFERER']);\n \t  } \n\n \t  $stock = $productsController ->getStock($grand_product->presentations);;\n\n \t?>\n",
     "attributes_changes": null,
     "html_changes": null
   },
@@ -43,6 +43,32 @@
     ]
   },
   {
+    "query": ".option_container",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "<?php endif ?>",
+    "prepend_html": "<?php if (isset($grand_product->presentations) && count($grand_product->presentations) > 1 && isset($stock) && $stock > 0): ?>",
+    "attributes_changes": [
+      {
+        "query": ".option_items_details select",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "onchange",
+          "value": "updateSelection(this, 'merch')"
+        }
+      }
+    ],
+    "html_changes": [
+      {
+        "query": ".option_items_details select",
+        "mode": "inner",
+        "html": "<?php foreach ($grand_product->presentations as $presentation): ?>  \n<option data-id=\"<?= $presentation->id ?>\" data-price=\"<?= $presentation->current_price->amount ?>\" data-text=\"<?= $presentation->description ?>\" value=\"<?= $presentation->id ?>\" data-product='<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>' > \n    <?= $presentation->description ?> \n</option>  \n<?php endforeach ?> \n"
+      }
+    ]
+  },
+  {
     "query": ".quantity_items_details",
     "change_all": false,
     "delete_siblings": false,
@@ -73,27 +99,10 @@
     "change_all": false,
     "delete_siblings": false,
     "inner_html": "",
-    "outer_html": "",
+    "outer_html": "<a href=\"#\" onclick=\"QuickAdd(this)\" class=\"button center button-variant-primary button-xlarge color-background bg-active-background color-active-default border-color-active-primary button_add_big_product\" style=\"background-color: rgb(72, 79, 71);\" <?= (isset($grand_product->presentations) && count($grand_product->presentations) == 1) ? 'data-product=\\''.json_encode($productsController->getQuickView($grand_product,$grand_product->presentations[0]?->id)).'\\''.' data-feature_product=\\''.$grand_product->presentations[0]?->description.'\\'' : '' ?> >Agregar al carrito</a> \n",
     "append_html": "\n    <?php else: ?>\n        <h3>\n            Este producto se encuentra agotado\n        </h3>\n    <?php endif ?>\n\t\t",
     "prepend_html": "\n\t\t<?php if ($stock>0): ?>\n\t\t",
-    "attributes_changes": [
-      {
-        "query": "",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "onclick",
-          "value": "QuickAdd(this)"
-        }
-      },
-      {
-        "query": "",
-        "mode": "replace_attribute",
-        "attribute": {
-          "name": "data-product",
-          "value": "<?= json_encode($productsController->getQuickView($grand_product,$presentation->id)) ?>"
-        }
-      }
-    ],
+    "attributes_changes": null,
     "html_changes": null
   },
   {
@@ -224,7 +233,7 @@
     "delete_siblings": false,
     "inner_html": "",
     "outer_html": "",
-    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.getElementsByClassName('presentations')[0].click()\n\t\t</script>\n\t\t",
+    "append_html": "\n\t\t<script type=\"text/javascript\">\n\t\t\t\tdocument.querySelectorAll('.option_items_details select option')[0].click()\n\t\t</script>\n\t\t",
     "prepend_html": "",
     "attributes_changes": null,
     "html_changes": null
