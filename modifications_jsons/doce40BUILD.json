@@ -6,8 +6,28 @@
     "inner_html": "",
     "outer_html": "",
     "append_html": "",
-    "prepend_html": "\n\t<?php\n\t  include_once \"app/config.php\"; \n\t  include_once \"app/ProductsController.php\"; \n\n\t  $productsController = new ProductsController();   \n\n\t  $cafes = $productsController->getByCategory('cafe');\n\t  $merchs = $productsController->getByCategory('merch');\n\t?>\n",
+    "prepend_html": "<?php \n \t  include_once \"app/config.php\";  \n \t  include_once \"app/ProductsController.php\";  \n \n \t  $productsController = new ProductsController();    \n \n \t  $cafes = $productsController->getByCategory('destacados-cafe'); \n \t  $merchs = $productsController->getByCategory('destacados-merch'); \n?> \n",
     "attributes_changes": null,
+    "html_changes": null
+  },
+  {
+    "query": "",
+    "change_all": false,
+    "delete_siblings": false,
+    "inner_html": "",
+    "outer_html": "",
+    "append_html": "",
+    "prepend_html": "",
+    "attributes_changes": [
+      {
+        "query": ".btn_alebrije",
+        "mode": "replace_attribute",
+        "attribute": {
+          "name": "href",
+          "value": "./tienda/cafe/mezcla-alebrije"
+        }
+      }
+    ],
     "html_changes": null
   },
   {
