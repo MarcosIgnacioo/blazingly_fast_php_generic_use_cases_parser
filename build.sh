@@ -11,4 +11,4 @@ sudo cp -r ./doce40BUILD/*  /srv/http/
 echo "removiendo htaccess de srv/http"
 sudo rm /srv/http/.htaccess
 echo "copiando htacces a srv/http"
-sudo cp -r ./.htaccess  /srv/http/
+sudo cp ./htaccess  /srv/http/.htaccess

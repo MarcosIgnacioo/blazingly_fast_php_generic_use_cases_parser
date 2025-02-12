@@ -1,7 +1,7 @@
 package web_files_manipulation
 
 import (
-	"bufio"
+	"context"
 	"fmt"
 	"io"
 	"io/fs"
@@ -13,6 +13,7 @@ import (
 	// "os/exec"
 	"strings"
 
+	popo "github.com/MarcosIgnacioo/blazingly_fast_php_generic_use_cases_parser/copy"
 	"github.com/sunshineplan/node"
 	"github.com/yosssi/gohtml"
 	"golang.org/x/net/html"
@@ -1171,67 +1172,89 @@ func CopyFS(from string, to string) error {
 }
 
 func Postprocess() {
-	fromPattern := "extra_js/*"
-	toDir := f("%s/js", ROOT_APP_DIR)
-	files, err := filepath.Glob(fromPattern)
-	if err != nil {
-		p(err)
-		return
+	os.MkdirAll(fmt.Sprintf("%s/app", ROOT_APP_DIR), 0775)
+	var err error
+	htaccessContent, err := os.ReadFile(".htaccess")
+	os.WriteFile(fmt.Sprintf("%s/.htaccess", ROOT_APP_DIR), htaccessContent, 0755)
+
+	var from_to map[string]string = map[string]string{
+		"js":  ROOT_APP_DIR,
+		"app": ROOT_APP_DIR,
 	}
 
-	for _, file := range files {
-		cmd := exec.Command("cp", "-r", file, toDir)
-		err = cmd.Run()
+	for from, to := range from_to {
+		err = popo.Copy(context.TODO(), from, to)
 		if err != nil {
-			p(err)
+			panic(err.Error() + " " + from + " " + to)
 		}
 	}
-
-	fromPattern = "controllers/*"
-	appDir := f("%s/app", ROOT_APP_DIR)
-	err = os.MkdirAll(appDir, 0775)
-
-	if err != nil {
-		p(err)
-		return
-	}
-
-	files, err = filepath.Glob(fromPattern)
-
-	if err != nil {
-		p(err)
-		return
-	}
-
-	for _, file := range files {
-		cmd := exec.Command("cp", "-r", file, appDir)
-		err = cmd.Run()
-		if err != nil {
-			p(err)
-		}
-	}
-	cmd := exec.Command("cp", "-r", ".htaccess", ROOT_APP_DIR)
-	err = cmd.Run()
 
 	bundleJsName := GetFileNameByRegex("doce40BUILD/webcard/static/", `app\.bundle\..*\.js`)
 	p("Quitando contenido de funcion de js, por favor espere...")
-	cmd = exec.Command("./js_manipulator", bundleJsName)
+	cmd := exec.Command("./js_manipulator", bundleJsName)
 	err = cmd.Run()
 	if err != nil {
 		p(err)
 	}
 	p("Listo!")
+
 }
 
-func ReadWord(br *bufio.Reader, initialState byte) string {
-	curr := initialState
-	word := string(initialState)
-	for (curr >= 'a' && curr <= 'z') || (curr == ':' || curr == '(' || curr == ')' || curr == '{') {
-		curr, _ = br.ReadByte()
-		word += string(curr)
-	}
-	return word
-}
+// func Postprocess() {
+// 	fromPattern := "extra_js/*"
+// 	toDir := f("%s/js", ROOT_APP_DIR)
+// 	files, err := filepath.Glob(fromPattern)
+// 	err = CopyFS(fromPattern, toDir)
+// 	if err != nil {
+// 		p(err)
+// 		return
+// 	}
+//
+// 	fromPattern = "controllers/*"
+// 	appDir := f("%s/app", ROOT_APP_DIR)
+// 	err = os.MkdirAll(appDir, 0775)
+//
+// 	if err != nil {
+// 		p(err)
+// 		return
+// 	}
+//
+// 	files, err = filepath.Glob(fromPattern)
+//
+// 	if err != nil {
+// 		p(err)
+// 		return
+// 	}
+//
+// 	for _, file := range files {
+// 		cmd := exec.Command("cp", "-r", file, appDir)
+// 		err = cmd.Run()
+// 		if err != nil {
+// 			p(err)
+// 		}
+// 	}
+// 	cmd := exec.Command("cp", "-r", ".htaccess", ROOT_APP_DIR)
+// 	err = cmd.Run()
+//
+// 	bundleJsName := GetFileNameByRegex("doce40BUILD/webcard/static/", `app\.bundle\..*\.js`)
+// 	p("Quitando contenido de funcion de js, por favor espere...")
+// 	cmd = exec.Command("./js_manipulator", bundleJsName)
+// 	err = cmd.Run()
+// 	if err != nil {
+// 		p(err)
+// 	}
+// 	p("Listo!")
+// }
+//
+// func ReadWord(br *bufio.Reader, initialState byte) string {
+// 	curr := initialState
+// 	word := string(initialState)
+// 	for (curr >= 'a' && curr <= 'z') || (curr == ':' || curr == '(' || curr == ')' || curr == '{') {
+// 		curr, _ = br.ReadByte()
+// 		word += string(curr)
+// 	}
+// 	return word
+// }
 
 func GetFilesNamesFilteredBy(root string, fn func(string) bool) []string {
 	var files []string
