@@ -1191,7 +1191,7 @@ func Postprocess() {
 
 	bundleJsName := GetFileNameByRegex("doce40BUILD/webcard/static/", `app\.bundle\..*\.js`)
 	p("Quitando contenido de funcion de js, por favor espere...")
-	cmd := exec.Command("./js_manipulator", bundleJsName)
+	cmd := exec.Command("./js_trimmer_windows.exe", bundleJsName)
 	err = cmd.Run()
 	if err != nil {
 		p(err)
